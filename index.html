@@ -54,6 +54,8 @@ function calculate() {
 
   let sum = [0,0,0,0,0,0,0];
 
+  let sum = [0,0,0,0,0,0,0];
+
   selected.forEach(h => {
     herbs[h].forEach((v,i) => sum[i] += v);
   });
@@ -64,8 +66,9 @@ function calculate() {
     `결과 환: ${names[maxIndex]}환`;
 
   document.getElementById("details").innerText =
-    names.map((n,i)=>`${n}: ${sum[i]}`).join("\n");
-}
+    names.map((n,i)=>`${n}: ${sum[i]}`).join("\n") +
+    `\n\n[그룹 카운트] G1:${g1}, G2:${g2}, G3:${g3}`;
+  
 </script>
 </body>
 </html>
