@@ -295,7 +295,10 @@ huntingGrounds.forEach((area) => {
 
     const label = document.createElement('label');
     label.className = 'control-item';
-    label.innerHTML = `<input type="checkbox" id="hunt-${area.name}"> ${area.name}`;
+    label.innerHTML = `
+        <input type="checkbox" id="hunt-${area.name}"> 
+        ${area.name} <span style="font-size:11px; color:#666; margin-left:4px;">(Lv.${area.lv})</span>
+    `;
     huntingListContainer.appendChild(label);
 
     document.getElementById(`hunt-${area.name}`).addEventListener('change', function(e) {
