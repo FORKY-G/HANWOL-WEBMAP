@@ -148,7 +148,7 @@ redItems.forEach((item) => {
     const popupContent = `
         <div style="text-align:center; min-width:200px; color:#000; padding: 0;">
             <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px;">
-                적환단 (${item.n}번)
+                적환단
             </div>
             <div style="background:#333; border-radius:4px; padding: 5px 0; margin-bottom: 10px; cursor:pointer;" 
                  onclick="copyCoords(${item.x}, ${item.y}, ${item.z})">
