@@ -72,10 +72,6 @@ animals.forEach((ani) => {
     marker.on('mouseover', () => polyline.setStyle({ opacity: 0.7 }));
     marker.on('mouseout', () => polyline.setStyle({ opacity: 0 }));
 });
-    marker.bindPopup(popupContent);
-    marker.on('mouseover', () => polyline.setStyle({ opacity: 0.7 }));
-    marker.on('mouseout', () => polyline.setStyle({ opacity: 0 }));
-});
 
 // 5. 스폰 지점 마커
 L.marker(mcToPx(spawnData.mcX, spawnData.mcZ), { icon: compassIcon })
