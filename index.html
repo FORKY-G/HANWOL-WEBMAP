@@ -5,66 +5,50 @@
     <title>한월환해도 (0404 업데이트)</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
-    /* 1. 고딕체 폰트 불러오기 (동일) */
+    /* 1. 고딕체 폰트 불러오기 */
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
 
     body { 
         margin: 0; padding: 0; background-color: #1a1a1a; 
         font-family: 'Pretendard', sans-serif;
-        font-weight: 700; 
     }
     
     #map { width: 100vw; height: 100vh; }
     
-    /* 2. 마인크래프트 UI 창 - 크기 및 테두리 축소 */
+    /* 2. 마인크래프트 UI 창 - 깔끔한 테두리와 배경 */
     .leaflet-popup-content-wrapper {
         background-color: #c6c6c6; 
-        border: 2px solid #000000; /* 테두리 3px -> 2px로 축소 */
-        border-radius: 0; 
-        /* 입체감(Bevel) 효과도 3px -> 2px로 축소 */
+        border: 2px solid #000000;
+        border-radius: 0;
         box-shadow: inset 2px 2px 0px #ffffff, inset -2px -2px 0px #555555 !important; 
-        padding: 0px; /* 내부 패딩 제거 */
-        min-width: 50px; /* 최소 너비 제한 해제 */
+        padding: 0px;
+        min-width: 50px;
     }
 
-    .leaflet-popup-tip-container {
-        display: none;
-    }
-
-    /* 3. 글씨 및 그림자 스타일 - 절반 수준으로 축소 */
-    .leaflet-popup-content {
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 220;
-        font-size: 13px; /* 19px -> 13px로 대폭 축소 */
-        text-align: center;
-        color: #ffffff; 
-        margin: 8px 12px !important; /* 여백 14/20 -> 8/12로 축소 (말풍선 크기 결정) */
-        line-height: 1.3;
-        letter-spacing: -0.5px; 
-        
-        /* 텍스트 그림자 두께 축소 */
-        text-shadow: 1.5px 1.5px 0px #000000; 
-    }
-
-    .leaflet-popup-close-button {
+    .leaflet-popup-tip-container, .leaflet-popup-close-button {
         display: none !important;
     }
 
+    /* 3. 글씨 스타일 기준 - 그림자를 없애고 검은색을 기본으로 */
+    .leaflet-popup-content {
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        text-align: center;
+        color: #000000; /* 기본 글자색을 검정으로 변경 */
+        margin: 10px 14px !important;
+        line-height: 1.4;
+        letter-spacing: -0.5px;
+        text-shadow: none !important; /* 번져 보이는 그림자 제거 */
+    }
+
     /* 복사 완료 알림 스타일 */
-#copy-toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px 16px;
-    border: 1px solid #ffffff;
-    font-size: 14px;
-    z-index: 10000;
-    display: none; /* 평소엔 숨김 */
-}
-    
+    #copy-toast {
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8); color: white;
+        padding: 8px 16px; border: 1px solid #ffffff;
+        font-size: 14px; z-index: 10000; display: none;
+    }
 </style>
 </head>
 <body>
