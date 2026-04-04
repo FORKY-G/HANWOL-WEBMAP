@@ -128,3 +128,42 @@ mines.forEach((mine) => {
     marker.on('mouseover', () => minePolylines[mine.c].setStyle({ opacity: 0.8 }));
     marker.on('mouseout', () => minePolylines[mine.c].setStyle({ opacity: 0 }));
 });
+
+// 7. 적환단 마커 생성
+const redIcon = L.icon({
+    iconUrl: 'images/red.png', // 적환단 전용 아이콘
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+    popupAnchor: [0, -10]
+});
+
+redItems.forEach((item) => {
+    const pos = mcToPx(item.x, item.z);
+    const marker = L.marker(pos, { icon: redIcon }).addTo(map);
+
+    const popupContent = `
+        <div style="text-align:center; min-width:200px; color:#000; padding: 0;">
+            <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px;">
+                적환단 (${item.n}번)
+            </div>
+            
+            <div style="background:#333; border-radius:4px; padding: 5px 0; margin-bottom: 10px; cursor:pointer;" 
+                 onclick="copyCoords(${item.x}, ${item.y}, ${item.z})">
+                <div style="color:#FFD700; font-size:15px; font-weight:700;">
+                    ${item.x}, ${item.y}, ${item.z}
+                </div>
+                <div style="color:#aaa; font-size:9px;">(클릭하여 좌표 복사)</div>
+            </div>
+
+            <div style="margin-top: 5px; border: 1px solid #ccc; padding: 2px; background: #fff;">
+                <img src="images/${item.file}" 
+                     style="width:100%; max-width:180px; height:auto; cursor:zoom-in; display:block; margin:0 auto;" 
+                     onclick="window.open('images/${item.file}', '_blank')"
+                     title="클릭하면 크게 봅니다">
+                <div style="font-size:10px; color:#666; margin-top:3px;">▲ 이미지 클릭 시 확대</div>
+            </div>
+        </div>
+    `;
+
+    marker.bindPopup(popupContent, { autoPanPadding: [30, 30], keepInView: true });
+});
