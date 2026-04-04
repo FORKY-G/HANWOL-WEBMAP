@@ -161,20 +161,20 @@ const npcData = [
 // 사냥터 데이터
 
 const huntingGrounds = [
-    { name: "경작지", lv: "0~5", monsters: "참새(lv.0), 허수아비(lv.5)", file: "map1.png" },
-    { name: "화수원", lv: "10~20", monsters: "다람쥐(lv.10), 흙토끼(lv.15), 백토끼(lv.20)", file: "map2.png" },
-    { name: "괴암곡", lv: "25~35", monsters: "하급쥐(lv.25), 중급쥐(lv30), 상급쥐(lv.35)", memo: "*괴암곡제단 : 장로쥐 소환", file: "map3.png" },
-    { name: "멸문", lv: "40~50", monsters: "뱀(lv.40), 청사(lv.45), 적사(lv.50)", memo: "*구렁이 출현", file: "map4.png" },
-    { name: "신선원", lv: "55~65", monsters: "새싹삼(lv.55), 진삼(lv.60), 대장삼(lv.65)", memo: "*거대삼 출현, *농장주인 소환 포탈", file: "map5.png" },
-    { name: "천웅성", lv: "70~80", monsters: "비웅(lv70), 겸웅(lv.75), 꼬마유령(lv.80)", file: "map6.png" },
-    { name: "매화곡", lv: "85~95", monsters: "천도원숭이(lv.85), 황도원숭이(lv.90), 매화호(lv.95)", memo: "*거대 매화호 출현", file: "map7.png" },
-    { name: "이매궁", lv: "100~110", monsters: "도깨비(lv.100), 청깨비(lv.105), 진깨비(lv.110)", file: "map8.png" },
-    { name: "검성지묘", lv: "115~125", monsters: "강암수호(Lv.115), 새끼암갑수(Lv.120), 암갑수(Lv.125)", file: "map9.png" },
-    { name: "빙설곡", lv: "130~140", monsters: "백랑(Lv.130), 적호(Lv.135), 백호(Lv.140)", file: "map10.png" },
-    { name: "빙궁", lv: "145~155", monsters: "빙궁조(Lv.145), 빙궁병(Lv.150), 북해신녀(Lv.155)", file: "map11.png" },
-    { name: "협사곡", lv: "160~170", monsters: "산적(Lv.160), 산적궁수(Lv.165), 멧돼지산적(Lv.170)", file: "map12.png" },
-    { name: "황야성", lv: "175~185", monsters: "토석병(Lv.175), 토석군(Lv.180), 토석궁사(Lv.185)", file: "map13.png" },
-    { name: "운해궁", lv: "999", monsters: "???", file: "map14.png" },
-    { name: "혈교도", lv: "100", monsters: "혈교도(lv.100)", file: "map15.png" },
-    { name: "화검문", lv: "???", monsters: "봉원숭이(lv.90), 곤봉원숭이(lv.90)", memo: "*화검문포탈(화검문열쇠) / [히든] 심마니", file: "map16.png" }
+    { name: "경작지", lv: "0~5", monsters: "참새(lv.0), 허수아비(lv.5)", file: "map1.png", x: -960, y: 67, z: -670 },
+    { name: "화수원", lv: "10~20", monsters: "다람쥐(lv.10), 흙토끼(lv.15), 백토끼(lv.20)", file: "map2.png", x: -609, y: 95, z: -271 },
+    { name: "괴암곡", lv: "25~35", monsters: "하급쥐(lv.25), 중급쥐(lv30), 상급쥐(lv.35)", memo: "*괴암곡제단 : 장로쥐 소환", file: "map3.png", x: 1310, y: 176, z: -1592 },
+    { name: "멸문", lv: "40~50", monsters: "뱀(lv.40), 청사(lv.45), 적사(lv.50)", memo: "*구렁이 출현", file: "map4.png", x: 3858, y: 131, z: -2635 },
+    { name: "신선원", lv: "55~65", monsters: "새싹삼(lv.55), 진삼(lv.60), 대장삼(lv.65)", memo: "*거대삼 출현, *농장주인 소환 포탈", file: "map5.png", x: -3616, y: 244, z: -3096 },
+    { name: "천웅성", lv: "70~80", monsters: "비웅(lv70), 겸웅(lv.75), 꼬마유령(lv.80)", file: "map6.png", x: 5706, y: 160, z: 5178 },
+    { name: "매화곡", lv: "85~95", monsters: "천도원숭이(lv.85), 황도원숭이(lv.90), 매화호(lv.95)", memo: "*거대 매화호 출현", file: "map7.png", x: 5696, y: 151, z: 5212 },
+    { name: "이매궁", lv: "100~110", monsters: "도깨비(lv.100), 청깨비(lv.105), 진깨비(lv.110)", file: "map8.png", x: 1634, y: 72, z: 331 },
+    { name: "검성지묘", lv: "115~125", monsters: "강암수호(Lv.115), 새끼암갑수(Lv.120), 암갑수(Lv.125)", file: "map9.png", x: -5428, y: 121, z: -808 },
+    { name: "빙설곡", lv: "130~140", monsters: "백랑(Lv.130), 적호(Lv.135), 백호(Lv.140)", file: "map10.png", x: 6796, y: 87, z: -2515 },
+    { name: "빙궁", lv: "145~155", monsters: "빙궁조(Lv.145), 빙궁병(Lv.150), 북해신녀(Lv.155)", file: "map11.png", x: 6566, y: 83, z: 952  },
+    { name: "협사곡", lv: "160~170", monsters: "산적(Lv.160), 산적궁수(Lv.165), 멧돼지산적(Lv.170)", file: "map12.png", x: -242, y: 107, z: 4305 },
+    { name: "황야성", lv: "175~185", monsters: "토석병(Lv.175), 토석군(Lv.180), 토석궁사(Lv.185)", file: "map13.png", x: -1985, y: 22, z: 2001 },
+    { name: "운해궁", lv: "999", monsters: "???", file: "map14.png", x: -1449, y: 96, z: 5606 },
+    { name: "혈교도", lv: "100", monsters: "혈교도(lv.100)", file: "map15.png", x: -3980, y: 80, z: 2496 },
+    { name: "화검문", lv: "???", monsters: "봉원숭이(lv.90), 곤봉원숭이(lv.90)", memo: "*화검문포탈(화검문열쇠) / [히든] 심마니", file: "map16.png", x: -3297, y: 116, z:-1696 }
 ];
