@@ -19,27 +19,53 @@
         
         #map { width: 100vw; height: 100vh; }
         
-        /* [추가] 우측 필터 사이드바 스타일 */
-        #controls {
-            position: fixed;
-            top: 20px; right: 20px;
-            width: 240px;
-            max-height: 85vh;
-            background: rgba(255, 255, 255, 0.95);
-            z-index: 1000;
-            padding: 15px;
-            border: 2px solid #000;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-            overflow-y: auto;
-            color: #000;
-        }
+        /* 우측 필터 사이드바 스타일 수정 */
+#controls {
+    position: fixed;
+    top: 15px; right: 15px; /* 모서리에서 살짝 띄움 */
+    width: 240px;
+    max-height: 85vh;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 1000;
+    padding: 12px;
+    border: 2px solid #000;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    color: #000;
+    transition: transform 0.3s ease; /* 접기 애니메이션 */
+}
 
-        .control-title {
-            font-size: 16px; font-weight: 900;
-            border-bottom: 2px solid #000;
-            margin-bottom: 12px; padding-bottom: 5px;
-            text-align: left;
-        }
+/* 사이드바가 접혔을 때 상태 */
+#controls.collapsed {
+    transform: translateX(calc(100% + 20px));
+}
+
+/* 접기/펴기 버튼 스타일 */
+#toggle-sidebar {
+    position: fixed;
+    top: 15px; right: 15px;
+    z-index: 1001;
+    background: #fff;
+    border: 2px solid #000;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: 900;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+.control-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #000;
+    margin-bottom: 12px;
+    padding-bottom: 5px;
+}
+
+.control-title {
+    font-size: 16px; font-weight: 900;
+    margin: 0;
+}
 
         .control-group { margin-bottom: 15px; }
         
