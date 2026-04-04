@@ -280,40 +280,51 @@ npcData.forEach((npc) => {
     marker.bindPopup(popupContent, { autoPan: false, keepInView: true, closeButton: false, offset: L.point(0, -5) });
 });
 
-// [14] 사냥터 영역 이미지 오버레이 생성
+// [14] 사냥터 영역 이미지 오버레이 생성 (개별 체크박스 연동)
 const huntingImageBounds = [[0, 0], [7300, 7300]]; 
 const huntingListContainer = document.getElementById('hunt-accordion-content');
 
 huntingGrounds.forEach((area) => {
+    // 1. 이미지 오버레이 생성 (초기에 .addTo(map)을 하지 않아 숨김 상태로 시작)
     const overlay = L.imageOverlay(`images/${area.file}`, huntingImageBounds, {
-        opacity: 0.5, interactive: true
-    }).addTo(map); // 초기에는 지형 확인을 위해 켜두거나 취향껏 설정 가능
-
-    layers.hunting[area.name] = overlay;
-
-    // 아코디언 메뉴 내부에 체크박스 동적 생성
-    const label = document.createElement('label');
-    label.className = 'control-item';
-    label.innerHTML = `<input type="checkbox" id="hunt-${area.name}" checked> ${area.name}`;
-    huntingListContainer.appendChild(label);
-
-    // 이벤트 연결
-    document.getElementById(`hunt-${area.name}`).addEventListener('change', function(e) {
-        if(e.target.checked) layers.hunting[area.name].addTo(map);
-        else map.removeLayer(layers.hunting[area.name]);
+        opacity: 0.5, 
+        interactive: true
     });
 
+    // 레이어 객체에 저장 (나중에 끄고 켜기 위함)
+    layers.hunting[area.name] = overlay;
+
+    // 2. 아코디언 메뉴 내부에 체크박스 생성 (초기 체크 해제 상태)
+    const label = document.createElement('label');
+    label.className = 'control-item';
+    label.innerHTML = `<input type="checkbox" id="hunt-${area.name}"> ${area.name}`;
+    huntingListContainer.appendChild(label);
+
+    // 3. 체크박스 이벤트 연결: 체크하면 지도에 추가, 해제하면 제거
+    document.getElementById(`hunt-${area.name}`).addEventListener('change', function(e) {
+        if(e.target.checked) {
+            layers.hunting[area.name].addTo(map);
+        } else {
+            map.removeLayer(layers.hunting[area.name]);
+        }
+    });
+
+    // 4. 기존 팝업 및 마우스 효과 로직 유지
     const memoInfo = area.memo ? `<div style="margin-top:4px; color:#d00; font-weight:700;">${area.memo}</div>` : '';
     const popupContent = `
         <div style="text-align:center; min-width:220px; color:#000; padding: 5px; line-height: 1.4;">
-            <div style="font-size:18px; font-weight:800; border-bottom:2px solid #333; padding-bottom:5px; margin-bottom:8px;">${area.name} (Lv.${area.lv})</div>
+            <div style="font-size:18px; font-weight:800; border-bottom:2px solid #333; padding-bottom:5px; margin-bottom:8px;">
+                ${area.name} <span style="font-size:13px; color:#666;">(Lv.${area.lv})</span>
+            </div>
             <div style="text-align:left; font-size:12px;">
                 <div style="margin-bottom:4px;"><span style="font-weight:800; color:#007bff;">[몬스터]</span> ${area.monsters}</div>
                 ${memoInfo}
             </div>
         </div>
     `;
+    
     overlay.bindPopup(popupContent, { autoPan: false, keepInView: true });
+    
     overlay.on('mouseover', function () { this.setOpacity(0.8); });
     overlay.on('mouseout', function () { this.setOpacity(0.5); });
 });
