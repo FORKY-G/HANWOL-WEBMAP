@@ -190,7 +190,32 @@
     <script src="js/ui-control.js"></script>   
 
     <script>
-        // 아코디언 토글 기능
+        const sidebar = document.getElementById('controls');
+        const toggleBtn = document.getElementById('toggle-sidebar');
+
+        function toggleSidebar() {
+            // 사이드바에 collapsed 클래스를 넣었다 뺐다 하며 애니메이션 실행
+            sidebar.classList.toggle('collapsed');
+            
+            // 접혔을 때와 펼쳐졌을 때 버튼 텍스트와 표시 여부 변경
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtn.style.display = 'block';
+                toggleBtn.innerText = '◀ 메뉴 열기';
+            } else {
+                toggleBtn.style.display = 'none';
+            }
+        }
+
+        // 초기 설정: 사이드바가 열려있으므로 '메뉴 열기' 버튼은 숨김
+        toggleBtn.style.display = 'none';
+
+        // '◀ 접기' 글자를 눌렀을 때 실행
+        // (HTML에 작성하신 onclick="toggleSidebar()"와 연결됩니다)
+        
+        // 우측 상단 '▶' 혹은 '◀ 메뉴 열기' 버튼을 눌렀을 때 실행
+        toggleBtn.addEventListener('click', toggleSidebar);
+
+        // --- 기존 아코디언 토글 기능 (유지) ---
         document.getElementById('hunt-accordion-btn').addEventListener('click', function() {
             const content = document.getElementById('hunt-accordion-content');
             content.classList.toggle('active');
