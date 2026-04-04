@@ -278,8 +278,7 @@ mountains.forEach((mt) => {
     marker.bindPopup(popupContent, { autoPan: false, keepInView: true });
 });
 
-// ★ 파일 맨 마지막에 '잘림 방지 보정 스크립트'가 있는지 꼭 확인하세요!
-
+// 파일 맨 아래에 넣어주세요.
 map.on('popupopen', function(e) {
     const popup = e.popup;
     const container = popup._container;
