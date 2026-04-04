@@ -77,11 +77,21 @@ L.marker(mcToPx(spawnData.mcX, spawnData.mcZ), { icon: compassIcon })
     .addTo(map)
     .bindPopup(`<div style="color:#000; font-weight:bold; font-size:14px; text-align:center;">스폰 지점</div>`);
 
-// 6. 광산 마커 생성 (초정밀 콤팩트 UI 적용)
+// 6. 광산 마커 생성 (특정 번호 강조 로직 추가)
 mines.forEach((mine) => {
     const pos = mcToPx(mine.x, mine.z);
+    
+    // 강조하고 싶은 광산 번호 리스트
+    const specialMineNumbers = [14, 15, 24, 63, 64, 20, 27, 19];
+    
+    // 기본 클래스에 'special-mine' 조건부 추가
+    let markerClass = `mine-marker mine-${mine.c}`;
+    if (specialMineNumbers.includes(mine.n)) {
+        markerClass += " special-mine";
+    }
+
     const mineIcon = L.divIcon({
-        className: `mine-marker mine-${mine.c}`,
+        className: markerClass,
         iconSize: [12, 12],
         iconAnchor: [6, 6]
     });
@@ -92,6 +102,7 @@ mines.forEach((mine) => {
     const commonOres = mineResources["공통"];
     const pathList = minePaths[mine.c].join(' > ');
 
+    // 정보창 디자인 (기존 콤팩트 UI 유지)
     const popupContent = `
         <div style="text-align:center; min-width:230px; color:#000; padding: 0; line-height: 1.2;">
             <div style="font-size:20px; font-weight:800; border-bottom:2px solid #000; padding: 4px 0; margin-bottom: 8px; word-break:keep-all;">
@@ -112,6 +123,7 @@ mines.forEach((mine) => {
             </div>
         </div>
     `;
+    
     marker.bindPopup(popupContent, { autoPanPadding: [50, 50], keepInView: true });
     marker.on('mouseover', () => minePolylines[mine.c].setStyle({ opacity: 0.8 }));
     marker.on('mouseout', () => minePolylines[mine.c].setStyle({ opacity: 0 }));
