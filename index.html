@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     
     <style>
-        /* 1. 고딕체 폰트 불러오기 */
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
 
         body { 
@@ -19,53 +18,50 @@
         
         #map { width: 100vw; height: 100vh; }
         
-        /* 우측 필터 사이드바 스타일 수정 */
-#controls {
-    position: fixed;
-    top: 15px; right: 15px; /* 모서리에서 살짝 띄움 */
-    width: 240px;
-    max-height: 85vh;
-    background: rgba(255, 255, 255, 0.95);
-    z-index: 1000;
-    padding: 12px;
-    border: 2px solid #000;
-    box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-    overflow-y: auto;
-    color: #000;
-    transition: transform 0.3s ease; /* 접기 애니메이션 */
-}
+        #controls {
+            position: fixed;
+            top: 15px; right: 15px;
+            width: 240px;
+            max-height: 85vh;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            padding: 12px;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            color: #000;
+            transition: transform 0.3s ease;
+        }
 
-/* 사이드바가 접혔을 때 상태 */
-#controls.collapsed {
-    transform: translateX(calc(100% + 20px));
-}
+        #controls.collapsed {
+            transform: translateX(calc(100% + 20px));
+        }
 
-/* 접기/펴기 버튼 스타일 */
-#toggle-sidebar {
-    position: fixed;
-    top: 15px; right: 15px;
-    z-index: 1001;
-    background: #fff;
-    border: 2px solid #000;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-weight: 900;
-    box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
-}
+        #toggle-sidebar {
+            position: fixed;
+            top: 15px; right: 15px;
+            z-index: 1001;
+            background: #fff;
+            border: 2px solid #000;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: 900;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
 
-.control-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #000;
-    margin-bottom: 12px;
-    padding-bottom: 5px;
-}
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            margin-bottom: 12px;
+            padding-bottom: 5px;
+        }
 
-.control-title {
-    font-size: 16px; font-weight: 900;
-    margin: 0;
-}
+        .control-title {
+            font-size: 16px; font-weight: 900;
+            margin: 0;
+        }
 
         .control-group { margin-bottom: 15px; }
         
@@ -78,12 +74,10 @@
         .control-item img { width: 20px; height: 20px; margin-right: 10px; object-fit: contain; }
         .control-item input { margin-right: 8px; cursor: pointer; }
 
-        /* 광산용 색상 박스 */
         .color-dot { width: 14px; height: 14px; border: 1px solid #000; margin-right: 10px; border-radius: 2px; }
 
         .divider { border-top: 1px solid #ccc; margin: 10px 0; }
 
-        /* 사냥터 아코디언 스타일 */
         .accordion-header {
             background: #e0e0e0; padding: 8px; font-weight: 800;
             cursor: pointer; display: flex; justify-content: space-between;
@@ -92,7 +86,7 @@
         .accordion-content { display: none; padding: 10px 5px; border: 1px solid #ccc; border-top: none; }
         .accordion-content.active { display: block; }
 
-        /* --- 기존 리플렛/마인크래프트 UI 스타일 시작 --- */
+        /* 기존 리플렛/마인크래프트 UI 스타일 */
         .leaflet-popup-content-wrapper {
             background-color: #c6c6c6; 
             border: 2px solid #000000;
@@ -147,44 +141,75 @@
     <div id="map"></div>
     <div id="copy-toast">복사 완료!</div>
 
-   <div id="toggle-sidebar">▶</div>
+    <div id="toggle-sidebar">▶</div>
 
-<div id="controls">
-    <div class="control-header">
-        <h3 class="control-title">한월서버</h3>
-        <span style="cursor:pointer; font-size:12px;" onclick="toggleSidebar()">◀ 접기</span>
-    </div>
-    
-    <div class="control-group">
-    <label class="control-item">
-        <input type="checkbox" id="check-spawn" checked> <img src="images/compass.png"> 스폰 지점
-    </label>
-    <label class="control-item">
-        <input type="checkbox" id="check-animals" checked> <img src="images/forky.png"> 십이지신
-    </label>
-</div>
-
-    <div class="divider"></div>
-
-    <div class="control-group">
-        <label class="control-item">
-            <input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상
-        </label>
-        <label class="control-item">
-            <input type="checkbox" id="check-npc"> <img src="images/forky.png"> NPC
-        </label>
-    </div>
-    
-    <div class="control-group">
-        <div class="accordion-header" id="hunt-accordion-btn">
-            사냥터 목록 <span>▼</span>
+    <div id="controls">
+        <div class="control-header">
+            <h3 class="control-title">한월서버</h3>
+            <span style="cursor:pointer; font-size:12px;" onclick="toggleSidebar()">◀ 접기</span>
         </div>
-        <div class="accordion-content" id="hunt-accordion-content"></div>
+        
+        <div class="control-group">
+            <label class="control-item">
+                <input type="checkbox" id="check-spawn" checked> <img src="images/compass.png"> 스폰 지점
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="check-animals" checked> <img src="images/forky.png"> 십이지신/동선
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="control-group">
+            <label class="control-item">
+                <input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="check-npc"> <img src="images/npc_default.png"> NPC
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="control-group">
+            <label class="control-item">
+                <input type="checkbox" id="check-red"> <img src="images/red.png"> 적환단
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="check-pot"> <img src="images/pot.png"> 탐색(항아리)
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="check-box"> <img src="images/box.png"> 의문의 상자
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="control-group">
+            <div style="font-weight: 900; margin-bottom: 8px; font-size: 13px;">광산 구역</div>
+            <label class="control-item">
+                <input type="checkbox" id="mine-녹"> <div class="color-dot" style="background:#2ecc71;"></div> 녹색광산
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="mine-청"> <div class="color-dot" style="background:#3498db;"></div> 청색광산
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="mine-황"> <div class="color-dot" style="background:#f1c40f;"></div> 황색광산
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="mine-적"> <div class="color-dot" style="background:#e74c3c;"></div> 적색광산
+            </label>
+        </div>
+
+        <div class="control-group">
+            <div class="accordion-header" id="hunt-accordion-btn">
+                사냥터 목록 <span>▼</span>
+            </div>
+            <div class="accordion-content" id="hunt-accordion-content"></div>
+        </div>
     </div>
-</div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    
     <script src="js/data.js"></script>         
     <script src="js/map-logic.js"></script>    
     <script src="js/ui-control.js"></script>   
@@ -194,10 +219,7 @@
         const toggleBtn = document.getElementById('toggle-sidebar');
 
         function toggleSidebar() {
-            // 사이드바에 collapsed 클래스를 넣었다 뺐다 하며 애니메이션 실행
             sidebar.classList.toggle('collapsed');
-            
-            // 접혔을 때와 펼쳐졌을 때 버튼 텍스트와 표시 여부 변경
             if (sidebar.classList.contains('collapsed')) {
                 toggleBtn.style.display = 'block';
                 toggleBtn.innerText = '◀ 메뉴 열기';
@@ -206,16 +228,9 @@
             }
         }
 
-        // 초기 설정: 사이드바가 열려있으므로 '메뉴 열기' 버튼은 숨김
         toggleBtn.style.display = 'none';
-
-        // '◀ 접기' 글자를 눌렀을 때 실행
-        // (HTML에 작성하신 onclick="toggleSidebar()"와 연결됩니다)
-        
-        // 우측 상단 '▶' 혹은 '◀ 메뉴 열기' 버튼을 눌렀을 때 실행
         toggleBtn.addEventListener('click', toggleSidebar);
 
-        // --- 기존 아코디언 토글 기능 (유지) ---
         document.getElementById('hunt-accordion-btn').addEventListener('click', function() {
             const content = document.getElementById('hunt-accordion-content');
             content.classList.toggle('active');
