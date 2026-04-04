@@ -44,6 +44,13 @@ const boxIcon = L.icon({
     popupAnchor: [0, -15]
 });
 
+const npcIcon = L.icon({
+    iconUrl: 'forky.png', // 
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
+});
+
 // [2] 십이지신 동선 설정
 const animalPathPoints = animals.map(ani => mcToPx(ani.mcX, ani.mcZ));
 const polyline = L.polyline(animalPathPoints, {
@@ -309,6 +316,64 @@ mysteryBoxes.forEach((box) => {
                 ${itemInfo}
                 ${entranceInfo}
             </div>` : ''}
+        </div>
+    `;
+
+    marker.bindPopup(popupContent, {
+        autoPan: false,
+        keepInView: true,
+        closeButton: false,
+        offset: L.point(0, -5)
+    });
+});
+
+// [13] 퀘스트 NPC 마커 생성
+npcData.forEach((npc) => {
+    const pos = mcToPx(npc.x, npc.z);
+    
+    // 해적선처럼 파일 없이 투명 처리가 필요한 경우 체크
+    let currentIcon;
+    if (npc.file === "transparent") {
+        currentIcon = transparentIcon; // 기존에 정의된 투명 아이콘 사용
+    } else {
+        // NPC별 고유 아이콘 생성
+        currentIcon = L.icon({
+            iconUrl: `images/${npc.file}`,
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+    }
+
+    const marker = L.marker(pos, { icon: currentIcon }).addTo(map);
+
+    // 상세 정보 HTML 조립 (데이터가 있는 것만 노출)
+    const lvInfo = npc.lv ? `<span style="font-size:12px; color:#666; font-weight:normal;"> (lv.${npc.lv})</span>` : '';
+    const questInfo = npc.quest ? `<div style="margin-bottom:4px;"><span style="color:#d00; font-weight:800;">[퀘스트]</span> ${npc.quest}</div>` : '';
+    const itemInfo = npc.item ? `<div style="margin-bottom:4px;"><span style="color:#007bff; font-weight:800;">[필요아이템]</span> ${npc.item}</div>` : '';
+    const routeInfo = npc.route ? `<div style="margin-bottom:4px;"><span style="color:#28a745; font-weight:800;">[동선]</span> ${npc.route}</div>` : '';
+    const rewardInfo = npc.reward ? `<div style="margin-bottom:4px;"><span style="color:#f39c12; font-weight:800;">[보상]</span> ${npc.reward}</div>` : '';
+    const memoInfo = npc.memo ? `<div style="margin-top:4px; border-top:1px dashed #ccc; padding-top:4px; color:#666;">※ ${npc.memo}</div>` : '';
+
+    const popupContent = `
+        <div style="text-align:center; min-width:240px; color:#000; padding: 0; line-height: 1.4;">
+            <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px;">
+                ${npc.name}${lvInfo}
+            </div>
+            
+            <div style="background:#333; border-radius:4px; padding: 6px 0; margin-bottom: 10px; cursor:pointer;" 
+                 onclick="copyCoords(${npc.x}, ${npc.y}, ${npc.z})">
+                <div style="color:#FFD700; font-size:15px; font-weight:700;">${npc.x}, ${npc.y}, ${npc.z}</div>
+                <div style="color:#aaa; font-size:9px;">(클릭하여 좌표 복사)</div>
+            </div>
+
+            <div style="text-align:left; font-size:12px; color:#333; letter-spacing:-0.4px; border-top:1px solid #aaa; padding-top: 8px;">
+                ${questInfo}
+                ${itemInfo}
+                ${routeInfo}
+                ${rewardInfo}
+                ${memoInfo}
+            </div>
         </div>
     `;
 
