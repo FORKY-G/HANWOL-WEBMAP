@@ -122,53 +122,68 @@
     <div id="copy-toast">복사 완료!</div>
 
     <div id="controls">
-        <div class="control-title">지도 필터</div>
-        
-       <div class="control-group">
-    <label class="control-item">
-        <input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상
-    </label>
-    <label class="control-item">
-        <input type="checkbox" id="check-npc"> <img src="forky.png"> NPC
-    </label>
-</div>
-
-<div class="control-group">
-    <label class="control-item">
-        <input type="checkbox" id="check-red"> <img src="images/red.png"> 적환단
-    </label>
-    <label class="control-item">
-        <input type="checkbox" id="check-pot"> <img src="images/pot.png"> 탐색(항아리)
-    </label>
-    <label class="control-item">
-        <input type="checkbox" id="check-box"> <img src="images/box.png"> 의문의 상자
-    </label>
-</div>
-
-<div class="control-group">
-    <div style="font-weight: 900; margin-bottom: 8px; font-size: 13px;">광산 구역</div>
-    <label class="control-item">
-        <input type="checkbox" id="mine-녹"> <div class="color-dot" style="background:#2ecc71;"></div> 녹색광산
-    </label>
-    <label class="control-item">
-        <input type="checkbox" id="mine-청"> <div class="color-dot" style="background:#3498db;"></div> 청색광산
-    </label>
-    <label class="control-item">
-        <input type="checkbox" id="mine-황"> <div class="color-dot" style="background:#f1c40f;"></div> 황색광산
-    </label>
-    <label class="control-item">
-        <input type="checkbox" id="mine-적"> <div class="color-dot" style="background:#e74c3c;"></div> 적색광산
-    </label>
-</div>
-
-        <div class="control-group">
-            <div class="accordion-header" id="hunt-accordion-btn">
-                사냥터 목록 <span>▼</span>
-            </div>
-            <div class="accordion-content" id="hunt-accordion-content">
-                </div>
-        </div>
+    <div class="control-title">지도 필터</div>
+    
+    <div class="control-group">
+        <label class="control-item">
+            <input type="checkbox" id="check-spawn" checked> <img src="images/compass.png"> 스폰 지점
+        </label>
+        <label class="control-item">
+            <input type="checkbox" id="check-animals" checked> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==" style="border:1px solid #aaa;"> 십이지신/동선
+        </label>
     </div>
+
+    <div class="divider"></div>
+
+    <div class="control-group">
+        <label class="control-item">
+            <input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상
+        </label>
+        <label class="control-item">
+            <input type="checkbox" id="check-npc"> <img src="images/npc_default.png"> NPC
+        </label>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="control-group">
+        <label class="control-item">
+            <input type="checkbox" id="check-red"> <img src="images/red.png"> 적환단
+        </label>
+        <label class="control-item">
+            <input type="checkbox" id="check-pot"> <img src="images/pot.png"> 탐색(항아리)
+        </label>
+        <label class="control-item">
+            <input type="checkbox" id="check-box"> <img src="images/box.png"> 의문의 상자
+        </label>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="control-group">
+        <div style="font-weight: 900; margin-bottom: 8px; font-size: 13px;">광산 구역</div>
+        <label class="control-item">
+            <input type="checkbox" id="mine-녹"> <div class="color-dot" style="background:#2ecc71;"></div> 녹색광산
+        </label>
+        <label class="control-item">
+            <input type="checkbox" id="mine-청"> <div class="color-dot" style="background:#3498db;"></div> 청색광산
+        </label>
+        <label class="control-item">
+            <input type="checkbox" id="mine-황"> <div class="color-dot" style="background:#f1c40f;"></div> 황색광산
+        </label>
+        <label class="control-item">
+            <input type="checkbox" id="mine-적"> <div class="color-dot" style="background:#e74c3c;"></div> 적색광산
+        </label>
+    </div>
+
+    <div class="control-group">
+        <div class="accordion-header" id="hunt-accordion-btn">
+            사냥터 목록 <span>▼</span>
+        </div>
+        <div class="accordion-content" id="hunt-accordion-content">
+            </div>
+    </div>
+</div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     
