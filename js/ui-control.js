@@ -175,8 +175,9 @@ redItems.forEach((item) => {
 });
 });
 
-// 8. 공용 아이콘 정의 (동상과 비석에서 함께 사용)
-// 정의를 먼저 해야 아래에서 에러가 나지 않습니다.
+// [수정] 8. 아이콘 정의 (동상과 비석 아이콘 분리)
+
+// 비석(산) 전용 아이콘 (기존 유지)
 const stoneIcon = L.icon({
     iconUrl: 'images/stone.png',
     iconSize: [24, 24],
@@ -184,13 +185,23 @@ const stoneIcon = L.icon({
     popupAnchor: [0, -10]
 });
 
+// [추가] 동상 전용 아이콘 (stone2.png 사용)
+const stone2Icon = L.icon({
+    iconUrl: 'images/stone2.png',
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+    popupAnchor: [0, -10]
+});
+
+
 // 9. 동상 마커 생성 (한월동상 수동 고정 + 나머지 자동 생성)
 
-// [A] 한월동상 전용: 이미지 좌표(1278, 1246)에 강제 고정
+// [A] 한월동상 전용
 const hanwolManual = statues.find(st => st.name === "한월동상");
 if (hanwolManual) {
-    const hanwolPos = [(7300 - 1246), 1278]; // [Y픽셀, X픽셀] 수동 계산
-    const hMarker = L.marker(hanwolPos, { icon: stoneIcon }).addTo(map);
+    const hanwolPos = [(7300 - 1246), 1278]; 
+    // [수정] stoneIcon -> stone2Icon 사용
+    const hMarker = L.marker(hanwolPos, { icon: stone2Icon }).addTo(map);
 
     const hPopupContent = `
         <div style="text-align:center; min-width:200px; color:#000; padding: 0;">
@@ -213,10 +224,11 @@ if (hanwolManual) {
     hMarker.bindPopup(hPopupContent, { autoPan: false, keepInView: true });
 }
 
-// [B] 나머지 동상들: 기존 마크 좌표 계산 방식 유지 (filter 사용)
+// [B] 나머지 동상들
 statues.filter(st => st.name !== "한월동상").forEach((st) => {
     const pos = mcToPx(st.x, st.z);
-    const marker = L.marker(pos, { icon: stoneIcon }).addTo(map);
+    // [수정] stoneIcon -> stone2Icon 사용
+    const marker = L.marker(pos, { icon: stone2Icon }).addTo(map);
 
     const popupContent = `
         <div style="text-align:center; min-width:200px; color:#000; padding: 0;">
@@ -239,6 +251,13 @@ statues.filter(st => st.name !== "한월동상").forEach((st) => {
     marker.bindPopup(popupContent, { autoPan: false, keepInView: true });
 });
 
+// 10. 비석(산) 마커 생성 (기존 유지)
+mountains.forEach((mt) => {
+    const pos = mcToPx(mt.x, mt.z);
+    // 비석은 기존대로 stoneIcon 사용
+    const marker = L.marker(pos, { icon: stoneIcon }).addTo(map);
+    
+    // ... (이하 팝업 디자인 코드는 동일하므로 생략) ...
 // 10. 비석(산) 마커 생성
 mountains.forEach((mt) => {
     const pos = mcToPx(mt.x, mt.z);
