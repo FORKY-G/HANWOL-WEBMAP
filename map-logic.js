@@ -29,25 +29,21 @@ window.addEventListener('resize', () => fitMapToScreen());
 
 // --- [좌표 동기화 (영점 조절) 로직] ---
 
-// 1. 측정하신 대각선 두 지점 (2번 북서쪽과 4번 남동쪽 데이터 사용)
-const refA = { mcX: -5321, mcZ: -5519, pxX: 1277, pxY: 1246 }; 
+// 1. 기준점 A를 '스폰 위치'로 고정하고, 기준점 B를 남동쪽 끝(4번)으로 설정
+const refA = { mcX: -969, mcZ: -965, pxX: 3218, pxY: 3277 }; // 스폰 위치 데이터로 변경!
 const refB = { mcX: 7265, mcZ: 5293, pxX: 6874, pxY: 6046 };   
 
-// 2. 1블록당 픽셀 비율 및 오프셋 계산
+// 2. 1블록당 픽셀 비율 및 오프셋 계산 (공식은 동일합니다)
 const scaleX = (refB.pxX - refA.pxX) / (refB.mcX - refA.mcX);
 const scaleZ = (refB.pxY - refA.pxY) / (refB.mcZ - refA.mcZ);
 const offsetX = refA.pxX - (refA.mcX * scaleX);
 const offsetZ = refA.pxY - (refA.mcZ * scaleZ);
 
-// 3. 변환 함수 (마크 좌표 -> 웹 지도 좌표)
+// 3. 변환 함수 (이하 동일)
 function mcToPx(mcX, mcZ) {
     const origPxX = (mcX * scaleX) + offsetX;
     const origPxY = (mcZ * scaleZ) + offsetZ;
-
-    // 현재 화면에 띄운 웹 이미지 해상도에 맞게 스케일 조정
     const webPxX = origPxX * (webImgSize / originalImgWidth);
     const webPxY = origPxY * (webImgSize / originalImgHeight);
-
-    // Leaflet 좌표계(위에서 아래로 내려오는 Y축 보정)로 변환
     return [(webImgSize - webPxY), webPxX];
 }
