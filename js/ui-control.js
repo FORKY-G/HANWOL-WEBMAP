@@ -65,3 +65,35 @@ animals.forEach((ani) => {
 L.marker(mcToPx(spawnData.mcX, spawnData.mcZ), { icon: compassIcon })
     .addTo(map)
     .bindPopup(`<div style="color:#000; font-weight:bold; font-size:14px; text-align:center;">스폰 지점</div>`);
+
+mines.forEach((mine) => {
+    const pos = mcToPx(mine.x, mine.z);
+    
+    // 색상별로 클래스를 다르게 적용한 정사각형 마커 생성
+    const mineIcon = L.divIcon({
+        className: `mine-marker mine-${mine.c}`,
+        iconSize: [10, 10], // 아주 작고 깔끔한 정사각형
+        iconAnchor: [5, 5]
+    });
+
+    const marker = L.marker(pos, { icon: mineIcon }).addTo(map);
+
+    // 다겸님이 만족하신 가독성 스타일 정보창 적용
+    const popupContent = `
+        <div style="text-align:center; min-width:180px; color:#000; padding: 5px 0;">
+            <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding-bottom:5px; margin-bottom:10px;">
+                ${mine.n}번 광산 (${mine.c}색)
+            </div>
+            
+            <div style="background:#333; border-radius:4px; padding:8px 0; cursor:pointer;" 
+                 onclick="copyCoords(${mine.x}, ${mine.y}, ${mine.z})">
+                <div style="color:#FFD700; font-size:14px; font-weight:700;">
+                    ${mine.x}, ${mine.y}, ${mine.z}
+                </div>
+                <div style="color:#aaa; font-size:10px; margin-top:3px;">(클릭하여 좌표 복사)</div>
+            </div>
+        </div>
+    `;
+
+    marker.bindPopup(popupContent);
+});
