@@ -96,7 +96,6 @@ mines.forEach((mine) => {
             <div style="font-size:20px; font-weight:800; border-bottom:2px solid #000; padding: 4px 0; margin-bottom: 8px; word-break:keep-all;">
                 ${mine.n}번 광산 <span style="font-size:13px; font-weight:800; color:#d00;">(${specificOres})</span>
             </div>
-            
             <div style="background:#333; border-radius:4px; padding: 5px 0; margin-bottom: 8px; cursor:pointer;" 
                  onclick="copyCoords(${mine.x}, ${mine.y}, ${mine.z})">
                 <div style="color:#FFD700; font-size:16px; font-weight:700; letter-spacing:0.5px;">
@@ -104,7 +103,6 @@ mines.forEach((mine) => {
                 </div>
                 <div style="color:#aaa; font-size:10px; margin-top: 1px;">(클릭하여 좌표 복사)</div>
             </div>
-
             <div style="font-size:12px; color:#333; letter-spacing:-0.4px; border-top:1px solid #aaa; padding-top: 6px;">
                 <div style="margin-bottom: 4px; font-weight:600; color:#666;">[공통] ${commonOres}</div>
                 <div style="font-weight:700; word-break:break-all; line-height: 1.3;">
@@ -113,7 +111,7 @@ mines.forEach((mine) => {
             </div>
         </div>
     `;
-    marker.bindPopup(popupContent, {
-    autoPanPadding: [50, 50], // 창이 크므로 여유 공간을 50px로 넉넉하게 설정
-    keepInView: true
+    marker.bindPopup(popupContent, { autoPanPadding: [50, 50], keepInView: true });
+    marker.on('mouseover', () => minePolylines[mine.c].setStyle({ opacity: 0.8 }));
+    marker.on('mouseout', () => minePolylines[mine.c].setStyle({ opacity: 0 }));
 });
