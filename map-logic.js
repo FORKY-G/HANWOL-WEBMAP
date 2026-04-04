@@ -13,7 +13,7 @@ const imgHeight = 4560; // 세로
 const imageBounds = [[0, 0], [imgHeight, imgWidth]];
 
 // 4. 지도 이미지 띄우기
-L.imageOverlay('hanwol-map.jpg', imageBounds).addTo(map);
+L.imageOverlay('map.jpg', imageBounds).addTo(map);
 
 // 5. 화면 크기에 맞춰 맵 전체가 보이도록 자동 조절하는 함수
 function fitMapToScreen() {
