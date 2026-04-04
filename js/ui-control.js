@@ -1,3 +1,5 @@
+// js/ui-control.js
+
 const compassIcon = L.icon({
     iconUrl: 'images/compass.png',
     iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -10]
@@ -68,10 +70,13 @@ animals.forEach((ani) => {
         </div>
     `;
     marker.bindPopup(popupContent, {
-    autoPan: true,           // 팝업이 화면 밖이면 지도를 자동으로 움직임
-    autoPanPaddingTopLeft: [50, 50], // 왼쪽/위쪽 여백 확보 (천장 잘림 방지)
-    autoPanPaddingBottomRight: [50, 50], // 오른쪽/아래쪽 여백 확보
-    keepInView: true
+        autoPan: true,
+        autoPanPaddingTopLeft: [50, 50],
+        autoPanPaddingBottomRight: [50, 50],
+        keepInView: true
+    });
+    marker.on('mouseover', () => polyline.setStyle({ opacity: 0.7 }));
+    marker.on('mouseout', () => polyline.setStyle({ opacity: 0 }));
 });
 
 // 5. 스폰 지점 마커
@@ -79,18 +84,12 @@ L.marker(mcToPx(spawnData.mcX, spawnData.mcZ), { icon: compassIcon })
     .addTo(map)
     .bindPopup(`<div style="color:#000; font-weight:bold; font-size:14px; text-align:center;">스폰 지점</div>`);
 
-// 6. 광산 마커 생성 (특정 번호 강조 로직 추가)
+// 6. 광산 마커 생성
 mines.forEach((mine) => {
     const pos = mcToPx(mine.x, mine.z);
-    
-    // 강조하고 싶은 광산 번호 리스트
     const specialMineNumbers = [14, 15, 24, 63, 64, 20, 27, 19];
-    
-    // 기본 클래스에 'special-mine' 조건부 추가
     let markerClass = `mine-marker mine-${mine.c}`;
-    if (specialMineNumbers.includes(mine.n)) {
-        markerClass += " special-mine";
-    }
+    if (specialMineNumbers.includes(mine.n)) markerClass += " special-mine";
 
     const mineIcon = L.divIcon({
         className: markerClass,
@@ -104,7 +103,6 @@ mines.forEach((mine) => {
     const commonOres = mineResources["공통"];
     const pathList = minePaths[mine.c].join(' > ');
 
-    // 정보창 디자인 (기존 콤팩트 UI 유지)
     const popupContent = `
         <div style="text-align:center; min-width:230px; color:#000; padding: 0; line-height: 1.2;">
             <div style="font-size:20px; font-weight:800; border-bottom:2px solid #000; padding: 4px 0; margin-bottom: 8px; word-break:keep-all;">
@@ -127,16 +125,17 @@ mines.forEach((mine) => {
     `;
     
     marker.bindPopup(popupContent, {
-    // 팝업 위치를 마커 중심에서 살짝 아래로 내리고 싶다면 offset을 조정합니다.
-    // [가로, 세로] - 세로 값을 양수로 주면 아래로 내려옵니다.
-    offset: L.point(0, 10), 
-    autoPanPadding: [60, 60], // 창이 크므로 여유 공간을 더 넉넉히
-    keepInView: true
+        offset: L.point(0, 10), 
+        autoPanPadding: [60, 60],
+        keepInView: true
+    });
+    marker.on('mouseover', () => minePolylines[mine.c].setStyle({ opacity: 0.8 }));
+    marker.on('mouseout', () => minePolylines[mine.c].setStyle({ opacity: 0 }));
 });
 
 // 7. 적환단 마커 생성
 const redIcon = L.icon({
-    iconUrl: 'images/red.png', // 적환단 전용 아이콘
+    iconUrl: 'images/red.png',
     iconSize: [24, 24],
     iconAnchor: [12, 12],
     popupAnchor: [0, -10]
@@ -151,7 +150,6 @@ redItems.forEach((item) => {
             <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px;">
                 적환단 (${item.n}번)
             </div>
-            
             <div style="background:#333; border-radius:4px; padding: 5px 0; margin-bottom: 10px; cursor:pointer;" 
                  onclick="copyCoords(${item.x}, ${item.y}, ${item.z})">
                 <div style="color:#FFD700; font-size:15px; font-weight:700;">
@@ -159,20 +157,40 @@ redItems.forEach((item) => {
                 </div>
                 <div style="color:#aaa; font-size:9px;">(클릭하여 좌표 복사)</div>
             </div>
-
             <div style="margin-top: 5px; border: 1px solid #ccc; padding: 2px; background: #fff;">
                 <img src="images/${item.file}" 
                      style="width:100%; max-width:180px; height:auto; cursor:zoom-in; display:block; margin:0 auto;" 
-                     onclick="window.open('images/${item.file}', '_blank')"
-                     title="클릭하면 크게 봅니다">
+                     onclick="window.open('images/${item.file}', '_blank')">
                 <div style="font-size:10px; color:#666; margin-top:3px;">▲ 이미지 클릭 시 확대</div>
             </div>
         </div>
     `;
 
-   marker.bindPopup(popupContent, {
-    autoPan: true,           // 팝업이 화면 밖이면 지도를 자동으로 움직임
-    autoPanPaddingTopLeft: [50, 50], // 왼쪽/위쪽 여백 확보 (천장 잘림 방지)
-    autoPanPaddingBottomRight: [50, 50], // 오른쪽/아래쪽 여백 확보
-    keepInView: true
+    marker.bindPopup(popupContent, {
+        autoPan: true,
+        autoPanPaddingTopLeft: [50, 50],
+        autoPanPaddingBottomRight: [50, 50],
+        keepInView: true
+    });
+});
+
+// ★ [핵심] 천장/벽 잘림 방지 보정 스크립트 (파일 맨 아래에 위치)
+map.on('popupopen', function(e) {
+    const popup = e.popup;
+    const container = popup._container;
+    
+    // 팝업이 뜨자마자 화면상의 위치를 체크합니다.
+    const rect = container.getBoundingClientRect();
+    
+    // 만약 팝업의 윗부분이 화면 상단(천장)에서 20px 이내로 가깝거나 넘어갔다면
+    if (rect.top < 20) {
+        // 팝업을 마커 아래쪽으로 강제로 밀어내기 위해 마진을 줍니다.
+        // 팝업 높이만큼 아래로 내리면 마커 아래쪽에 위치하게 됩니다.
+        const shiftDistance = rect.height + 40; 
+        container.style.marginTop = shiftDistance + "px";
+        
+        // 말풍선 꼬리표(세모)가 거꾸로 보이면 어색하므로 숨깁니다.
+        const tip = container.querySelector('.leaflet-popup-tip-container');
+        if (tip) tip.style.display = 'none';
+    }
 });
