@@ -77,7 +77,9 @@ const redItems = [
     { n: 4, x: 2661, y: 72, z: -4790, file: "red4.png" },
     { n: 5, x: 1961, y: 150, z: -6200, file: "red5.png" },
     { n: 6, x: -2579, y: 87, z: -5970, file: "red6.png" },
-    { n: 7, x: -3375, y: 100, z: 3449, file: "red7.png" }
+    { n: 7, x: -3375, y: 100, z: 3449, file: "red7.png" },
+    { n: "탐령구", x: -2076, y: 221, z: 401, materials: "철1개, 적동괴2개", file: "gu.png"},
+    { n: "정적주", x: 2034, y: -19, z: 3265, materials: "철1개, 적동괴2개, 송진덩어리", file: "gu2.png"}
 ];
 
 // 동상 데이터 (이미지 포함)
