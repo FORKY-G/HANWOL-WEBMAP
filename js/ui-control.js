@@ -296,6 +296,20 @@ npcData.forEach((npc) => {
         `;
     }
 
+    let videoHtml = '';
+    if (npc.name === "해무사승려") {
+        videoHtml = `
+            <div style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;">
+                <div style="font-weight:800; font-size:13px; color:#007bff; margin-bottom:5px;">[퀘스트 가이드 영상]</div>
+                <video width="100%" height="auto" controls style="border-radius:4px; border:1px solid #ddd;">
+                    <source src="images/haemusa.mov" type="video/quicktime">
+                    <source src="images/haemusa.mp4" type="video/mp4">
+                    브라우저가 동영상을 지원하지 않습니다.
+                </video>
+            </div>
+        `;
+    }
+
     const lvInfo = npc.lv ? `<span style="font-size:12px; color:#666; font-weight:normal;"> (lv.${npc.lv})</span>` : '';
     const questInfo = npc.quest ? `<div style="margin-bottom:4px;"><span style="color:#d00; font-weight:800;">[퀘스트]</span> ${npc.quest}</div>` : '';
     const itemInfo = npc.item ? `<div style="margin-bottom:4px;"><span style="color:#007bff; font-weight:800;">[필요아이템]</span> ${npc.item}</div>` : '';
@@ -320,8 +334,7 @@ npcData.forEach((npc) => {
             </div>
         </div>
     `;
-    marker.bindPopup(popupContent, { autoPan: false, keepInView: true, closeButton: false, offset: L.point(0, -5) });
-});
+    marker.bindPopup(popupContent, { autoPan: true, keepInView: true, closeButton: false, offset: L.point(0, -5) });
 
 // [14] 사냥터 영역 및 투명 마커 생성
 const huntingImageBounds = [[0, 0], [7300, 7300]]; 
