@@ -121,6 +121,7 @@
         .special-mine { border: 2.5px solid #ffffff !important; box-shadow: 0 0 8px #fff, 0 0 12px #ff0000 !important; z-index: 1000 !important; }
     </style>
 </head>
+    
 <body>
 
     <div id="map"></div>
@@ -197,77 +198,58 @@
                 </div>
                 <div class="accordion-content" id="hunt-accordion-content"></div>
             </div>
-        </div>
-    </div>
 
-    <div class="control-group">
-    <div class="accordion-header" id="herb-accordion-btn">
-        약초 목록 <span>▼</span>
-    </div>
-    <div class="accordion-content" id="herb-accordion-content"></div>
-</div>
-
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+            <div class="control-group">
+                <div class="accordion-header" id="herb-accordion-btn">
+                    약초 목록 <span>▼</span>
+                </div>
+                <div class="accordion-content" id="herb-accordion-content"></div>
+            </div>
+        </div> </div> <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="js/data.js"></script>         
     <script src="js/map-logic.js"></script>    
     <script src="js/ui-control.js"></script>   
 
     <script>
-        // 1. 요소 가져오기
         const sidebar = document.getElementById('controls');
         const toggleBtn = document.getElementById('toggle-sidebar');
         const searchResultsDiv = document.getElementById('search-results');
 
-        // 2. 메뉴 열기/닫기 함수
         function toggleSidebar() {
             if (!sidebar) return;
             sidebar.classList.toggle('active');
-            if (sidebar.classList.contains('active')) {
-                toggleBtn.innerText = '▲ 한월메뉴 닫기';
-            } else {
-                toggleBtn.innerText = '▼ 한월메뉴 열기';
-            }
+            toggleBtn.innerText = sidebar.classList.contains('active') ? '▲ 한월메뉴 닫기' : '▼ 한월메뉴 열기';
         }
 
-        // 3. 버튼 클릭 시 메뉴 토글
         if (toggleBtn) {
-            toggleBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleSidebar();
-            });
+            toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
         }
 
-        // 4. 지도 클릭 시 메뉴 및 검색창 자동 닫기
         if (typeof map !== 'undefined') {
-            map.on('click', function() {
+            map.on('click', () => {
                 if (sidebar && sidebar.classList.contains('active')) {
                     sidebar.classList.remove('active');
                     toggleBtn.innerText = '▼ 한월메뉴 열기';
                 }
-                if (searchResultsDiv) {
-                    searchResultsDiv.style.display = 'none';
-                }
+                if (searchResultsDiv) searchResultsDiv.style.display = 'none';
             });
         }
 
-        // 5. 메뉴 내부 클릭 시 닫힘 방지
-        if (sidebar) {
-            sidebar.addEventListener('click', function(e) { 
-                e.stopPropagation(); 
-            });
-        }
+        if (sidebar) sidebar.addEventListener('click', (e) => e.stopPropagation());
 
-        // 6. 사냥터 아코디언 토글
-        const accordionBtn = document.getElementById('hunt-accordion-btn');
-        if (accordionBtn) {
-            accordionBtn.addEventListener('click', function() {
-                const content = document.getElementById('hunt-accordion-content');
-                if (content) {
+        function bindAccordion(btnId, contentId) {
+            const btn = document.getElementById(btnId);
+            const content = document.getElementById(contentId);
+            if (btn && content) {
+                btn.addEventListener('click', function() {
                     content.classList.toggle('active');
                     this.querySelector('span').innerText = content.classList.contains('active') ? '▲' : '▼';
-                }
-            });
+                });
+            }
         }
+
+        bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
+        bindAccordion('herb-accordion-btn', 'herb-accordion-content');
     </script>
 </body>
 </html>
