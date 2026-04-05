@@ -587,6 +587,40 @@ function moveToLocation(target) {
     }, 1100);
 }
 
+// [18] 목록 초기화 시스템
+// 1. 사냥터 초기화
+document.getElementById('reset-hunt').addEventListener('click', function(e) {
+    e.stopPropagation(); // 아코디언이 같이 닫히는 것 방지
+    huntingGrounds.forEach(area => {
+        const chk = document.getElementById(`hunt-${area.name}`);
+        if (chk && chk.checked) {
+            chk.checked = false; // 체크박스 해제
+            map.removeLayer(layers.hunting[area.name]); // 영역 이미지 삭제
+            // hMarker는 layerGroup에 있으므로 직접 찾아서 지우거나 그룹에서 관리해야 함
+            // 만약 개별로 관리 중이라면 아래처럼 처리
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker && layer.getPopup() && layer.getPopup().getContent().includes(area.name)) {
+                    map.removeLayer(layer);
+                }
+            });
+        }
+    });
+});
+
+// 2. 약초 초기화
+document.getElementById('reset-herb').addEventListener('click', function(e) {
+    e.stopPropagation();
+    herbData.forEach(herb => {
+        const chk = document.getElementById(`herb-${herb.name}`);
+        if (chk && chk.checked) {
+            chk.checked = false;
+            map.removeLayer(layers.herbs[herb.name]); // 약초 분포 이미지 삭제
+            map.removeLayer(layers.herbMarkers[herb.name]); // 약초 마커 그룹 삭제
+        }
+    });
+    map.closePopup(); // 열려있는 팝업 닫기
+});
+
 map.on('popupopen', function(e) {
     const popup = e.popup;
     const container = popup._container;
