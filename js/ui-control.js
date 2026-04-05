@@ -142,24 +142,36 @@ mines.forEach((mine) => {
     marker.on('mouseout', () => minePolylines[mine.c].setStyle({ opacity: 0 }));
 });
 
-// [8] 적환단 및 특수 제작 아이템 마커 생성
+// [8] 적환단 및 특수 제작 아이템 마커 생성 (최종 완성본)
 redItems.forEach((item) => {
     const pos = mcToPx(item.x, item.z);
     
-    // 1. 모든 아이콘은 통일감 있게 기존 redIcon(red.png) 사용
-    const marker = L.marker(pos, { icon: redIcon }).addTo(layers.red);
+    // 1. 아이콘 결정: 
+    // 데이터에 name이 있는 특수 아이템(탐령구 등)은 데이터의 file(gu.png 등)을 아이콘으로 사용
+    // 일반 적환단은 기존 redIcon(red.png) 사용
+    let currentIcon;
+    if (item.name) {
+        currentIcon = L.icon({
+            iconUrl: `images/${item.file}`,
+            iconSize: [32, 32], 
+            iconAnchor: [16, 16],
+            popupAnchor: [0, -15]
+        });
+    } else {
+        currentIcon = redIcon; // 기존 정의된 redIcon 사용
+    }
 
-    // 2. 이름 설정: 데이터에 name이 있으면 쓰고, 없으면 "적환단"
-    const itemName = item.name || "적환단"; 
+    const marker = L.marker(pos, { icon: currentIcon }).addTo(layers.red);
 
-    // 3. 재료 정보: 데이터에 materials가 있을 때만 생성
+    // 2. 팝업 내용 설정
+    const itemName = item.name ? item.name : "적환단"; 
     const materialInfo = item.materials ? `
-        <div style="text-align:left; font-size:12px; margin-bottom:8px; padding:8px; background:#f9f9f9; border:1px solid #eee; border-radius:4px;">
-            <span style="color:#d00; font-weight:800;">[필요재료]</span><br>${item.materials}
+        <div style="text-align:left; font-size:12px; margin-bottom:8px; padding:10px; background:#fff; border-radius:4px; border:1px solid #eee;">
+            <span style="color:#d00; font-weight:800;">[필요재료]</span><br>
+            <span style="font-weight:700; color:#333;">${item.materials}</span>
         </div>` : '';
 
-    // 4. 사진 섹션: "적환단"인 경우(이름이 없는 경우)에만 사진을 보여줌
-    // 탐령구, 정적주처럼 이름이 따로 있는 애들은 사진 칸이 아예 안 생깁니다.
+    // 이름이 없는 일반 적환단만 하단에 상세 사진 표시
     const imageSection = !item.name ? `
         <div style="margin-top: 5px; border: 1px solid #ccc; padding: 2px; background: #fff;">
             <img src="images/${item.file}" style="width:100%; max-width:180px; height:auto; cursor:zoom-in; display:block; margin:0 auto;" onclick="window.open('images/${item.file}', '_blank')">
@@ -170,10 +182,12 @@ redItems.forEach((item) => {
             <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px;">
                 ${itemName}
             </div>
+            
             <div style="background:#333; border-radius:4px; padding: 5px 0; margin-bottom: 10px; cursor:pointer;" onclick="copyCoords(${item.x}, ${item.y}, ${item.z})">
                 <div style="color:#FFD700; font-size:15px; font-weight:700;">${item.x}, ${item.y}, ${item.z}</div>
                 <div style="color:#aaa; font-size:9px;">(클릭하여 좌표 복사)</div>
             </div>
+
             ${materialInfo}
             ${imageSection}
         </div>
