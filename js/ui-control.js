@@ -343,6 +343,18 @@ layers.herbMarkers = {};
 // 희귀 약초 리스트
 const rareHerbs = ["홍련업화", "철목영지", "금향과", "월계엽", "빙백설화"];
 
+herbData.sort((a, b) => {
+    const aRare = rareHerbs.includes(a.name);
+    const bRare = rareHerbs.includes(b.name);
+
+    // 1. 희귀 여부 우선 정렬 (희귀가 위로)
+    if (aRare && !bRare) return -1;
+    if (!aRare && bRare) return 1;
+
+    // 2. 같은 등급 내에서는 가나다(이름) 순 정렬
+    return a.name.localeCompare(b.name, 'ko');
+});
+
 herbData.forEach((herb) => {
     const isRare = rareHerbs.includes(herb.name);
     const rareTag = isRare ? '<span style="color: #ff0000; font-weight: bold; margin-left: 5px;">(희귀)</span>' : '';
