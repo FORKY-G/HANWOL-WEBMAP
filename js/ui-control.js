@@ -394,7 +394,7 @@ herbData.forEach((herb) => {
             
             // 첫 번째 좌표로 부드럽게 이동 및 확대
             const firstPos = mcToPx(herb.locations[0].x, herb.locations[0].z);
-            map.flyTo(firstPos, 4, { animate: true, duration: 1.0 });
+            map.flyTo(firstPos, 0.5, { animate: true, duration: 1.0 });
             
             // 이동 후 첫 번째 마커의 팝업을 자동으로 열어줌
             setTimeout(() => {
