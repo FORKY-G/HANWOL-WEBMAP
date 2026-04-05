@@ -193,19 +193,27 @@
             </div>
 
             <div class="control-group">
-                <div class="accordion-header" id="hunt-accordion-btn">
-                    사냥터 목록 <span>▼</span>
-                </div>
-                <div class="accordion-content" id="hunt-accordion-content"></div>
-            </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div class="accordion-header" id="hunt-accordion-btn" style="flex: 1; margin-right: 5px;">
+            사냥터 목록 <span>▼</span>
+        </div>
+        <button id="reset-hunt" style="padding: 5px 8px; font-size: 11px; font-weight: 800; cursor: pointer; border: 2px solid #000; background: #fff;">초기화</button>
+    </div>
+    <div class="accordion-content" id="hunt-accordion-content"></div>
+</div>
 
-            <div class="control-group">
-                <div class="accordion-header" id="herb-accordion-btn">
-                    약초 목록 <span>▼</span>
-                </div>
-                <div class="accordion-content" id="herb-accordion-content"></div>
-            </div>
-        </div> </div> <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<div class="control-group">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div class="accordion-header" id="herb-accordion-btn" style="flex: 1; margin-right: 5px;">
+            약초 목록 <span>▼</span>
+        </div>
+        <button id="reset-herb" style="padding: 5px 8px; font-size: 11px; font-weight: 800; cursor: pointer; border: 2px solid #000; background: #fff;">초기화</button>
+    </div>
+    <div class="accordion-content" id="herb-accordion-content"></div>
+</div>
+        </div> </div> 
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="js/data.js"></script>         
     <script src="js/map-logic.js"></script>    
     <script src="js/ui-control.js"></script>   
