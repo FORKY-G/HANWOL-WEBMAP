@@ -481,6 +481,61 @@ function moveToLocation(target) {
     }, 1100);
 }
 
+// [17] 약초 시스템 (멀티 마커 지원)
+const herbListContainer = document.getElementById('herb-accordion-content'); // HTML에 이 ID의 div를 만드세요!
+layers.herbs = {};
+layers.herbMarkers = {};
+
+herbData.forEach((herb) => {
+    // 1. 분포도 이미지 (투명 PNG)
+    const overlay = L.imageOverlay(`images/${herb.file}`, huntingImageBounds, {
+        opacity: 0.6, interactive: false 
+    });
+    layers.herbs[herb.name] = overlay;
+
+    // 2. 이 약초의 모든 좌표에 투명 마커 생성
+    const markerGroup = L.layerGroup();
+    herb.locations.forEach(loc => {
+        const pos = mcToPx(loc.x, loc.z);
+        const hMarker = L.marker(pos, { icon: transparentIcon });
+        
+        const popupContent = `
+            <div style="text-align:center; min-width:180px;">
+                <div style="font-size:16px; font-weight:800; border-bottom:2px solid #000; padding-bottom:5px; margin-bottom:8px;">${herb.name}</div>
+                <div style="background:#333; color:#FFD700; border-radius:4px; padding:5px; cursor:pointer;" onclick="copyCoords(${loc.x}, 0, ${loc.z})">
+                    ${loc.x}, ${loc.z} (클릭 복사)
+                </div>
+            </div>
+        `;
+        hMarker.bindPopup(popupContent);
+        markerGroup.addLayer(hMarker);
+    });
+    layers.herbMarkers[herb.name] = markerGroup;
+
+    // 3. 목록 생성
+    const label = document.createElement('label');
+    label.className = 'control-item';
+    label.innerHTML = `
+        <input type="checkbox" id="herb-${herb.name}"> 
+        <span style="flex:1;">${herb.name}</span>
+    `;
+    if(herbListContainer) herbListContainer.appendChild(label);
+
+    // 4. 체크박스 이벤트 (이미지 + 모든 마커 켜기/끄기)
+    document.getElementById(`herb-${herb.name}`).addEventListener('change', function(e) {
+        if(e.target.checked) {
+            layers.herbs[herb.name].addTo(map);
+            layers.herbMarkers[herb.name].addTo(map);
+            // 첫 번째 좌표로 이동 (서비스!)
+            const firstPos = mcToPx(herb.locations[0].x, herb.locations[0].z);
+            map.flyTo(firstPos, 4);
+        } else {
+            map.removeLayer(layers.herbs[herb.name]);
+            map.removeLayer(layers.herbMarkers[herb.name]);
+        }
+    });
+});
+
 // [최종] 잘림 방지 보정 스크립트
 map.on('popupopen', function(e) {
     const popup = e.popup;
