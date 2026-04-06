@@ -143,7 +143,7 @@ const mysteryBoxes = [
 const npcData = [
     { name: "도사", lv: 50, x: -1293, y: 290, z: -598, quest: "[히든]십이지신, [히든]호리병을 찾아서,<br>[히든]심마니", item: "[히든]심마니 : 백향초1개,무공정수20개", route: "[히든]호리병을 찾아서 : 도사 > 도공 > 멸문대(수상한포탈) > 도사", reward: "금환단, 파력검법", memo: "", file: "dosa.png" },
     { name: "도공", lv: 50, x: -4778, y: 67, z: 1454, quest: "[히든]호리병을 찾아서", item: "무괴철 1개, 자금 3개", route: "도공 > 멸문대(수상한포탈)", file: "dogong.png" },
-    { name: "상단주", lv: 50, x: -3260, y: 123, z: -4287, quest: "[히든]상단주", route: "상단주 > 부숴진마차", reward: "금환단", file: "owner.png" },
+    { name: "상단주", lv: 50, x: -3260, y: 123, z: -4287, quest: "[히든]상단주", route: "상단주 > 부숴진마차 > 상단주 > 자운스님 > 상단주", reward: "금환단", file: "owner.png" },
     { name: "부숴진마차", lv: 50, x: -2706, y: 71, z: -2372, quest: "[히든]상단주", route: "부숴진마차 > 자운스님", file: "macha.png" },
     { name: "자운스님", lv: 50, x: -4366, y: 194, z: 1399, quest: "[히든]상단주", item: "향목가루 5개", route: "자운스님 > 상단주", file: "jaun.png" },
     { name: "해진", lv: 50, x: -4310, y: 129, z: 5838, quest: "[히든]해적선", route: "해진 > 해적선(수상한포탈) > 해진 > 백향초재배지 > 해진", reward: "금환단", file: "haejin.png" },
