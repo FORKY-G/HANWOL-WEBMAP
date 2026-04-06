@@ -168,7 +168,7 @@ const npcData = [
     { name: "명인대장장이", x: -7047, y: 74, z: -727, quest: "???", file: "mungin.png" },
     { name: "망한대장장이", x: 5365, y: 73, z: -3467, quest: "[히든]심마니", item: "은괴 3개, 무괴철 3개", reward: "화검문열쇠", route: "망한대장장이 > 화검문(꼭대기포탈) > 도사", file: "mang.png" },
     { name: "탐령구", x: -2076, y: 221, z: 401, materials: "철1개, 적동괴2개", file: "gu.png"},
-    { name: "정적주", x: 2035, y: -13, z: 3264, quest: "사도연 : 정적주제작", materials: "1만전, 철1개, 적동괴2개, 송진덩어리", file: "gu2.png"},
+    { name: "고대의제작대(정적주)", x: 2035, y: -13, z: 3264, quest: "사도연 : 정적주제작", materials: "1만전, 철1개, 적동괴2개, 송진덩어리", file: "gu2.png"},
     { name: "기록서(사도연)", x: 1539, y: 196, z: 4654, quest: "사도연 : 퀘스트 시작", route: "기록서 > 풍잔객 ", file: "memo.png"},
     { name: "풍잔객", lv: 50, x: 3031, y: 104, z:4286, quest: "사도연 : 바람의목격자", route: "풍잔객 > 정적주제작 > 청풍초 > 풍잔객 > 사도연-검 > 풍잔객", records: [{n : "청풍초", x: 3050, y: 207, z: 4388}, { n: "사도연-검", x: 3081, y: 109, z: 4174}], reward: "초살선풍", file: "pung.png"},
     { name: "감시관", lv: 67, x: 5176, y: 76, z: 4582, quest: "[메인]퀘스트", item: "사보도 1개, 철 3개, 무공정수 10개", file: "gamsi.png" }
