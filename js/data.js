@@ -159,6 +159,8 @@ const npcData = [
     { name: "해적선", x: -3622, y: 65, z: 4043, quest: "[히든]해적선", route: "훔친백향초찾기 - 수상한포탈 > 해적잡기 > 해진", file: "transparent" }, // 투명 처리용 키워드
     { name: "백향초재배지", x: -5488, y: 66, z: 4162, quest: "[히든]해적선", route: "수상한포탈 > 해진", file: "portal.png" },
     { name: "점소이", x: -2537, y: 79, z: -5994, quest: "???", file: "jumsoi.png" },
+    { name: "수습의원", x: -2040, y: 107, z: 171, quest: "???", file: "doctor.png" },
+    { name: "다친광부", x: -787, y: 100, z: -1994, quest: "???", item: "녹태", file: "miner.png" },
     { name: "주루대주", x: -2545, y: 79, z: -6022, quest: "???", file: "juru.png" },
     { name: "심마니", lv: 90, x: -3485, y: 80, z: -1950, quest: "[히든]심마니", route: "심마니 > 화검문 > 심마니 > 망한 대장장이 > 화검문 > 도사 > 제천대성 > 매화곡 > 도사 > 심마니", reward: "금환단,매화쾌검", file: "simmani.png" },
     { name: "척후병", lv: 102, x: -3963, y: 148, z: 2613, quest: "혈교 상자 찾기(절정 승급 이후)", item: "정적주, 빙백설화", records: [ {n:'상자1', x: -3939, y: 13, z: 2045}, {n:'상자2', x: -4097, y: 13, z: 2168}, {n:'상자3', x: -3880, y: -30, z: 2303}], reward: "혈마베기", file: "scout.png" },
