@@ -76,14 +76,21 @@ color: mineColors[colorKey], weight: 3, opacity: 0, dashArray: '7, 10'
 }).addTo(layers.mines[colorKey]); 
 });
 
-// [4] 좌표 복사 함수
+// [4] 좌표 복사 함수 (ui-control.js)
 window.copyCoords = (x, y, z) => {
-const text = `${x} ${y} ${z}`; 
-navigator.clipboard.writeText(text).then(() => {
-const toast = document.getElementById('copy-toast');
-toast.style.display = 'block';
-setTimeout(() => { toast.style.display = 'none'; }, 1500);
-});
+    const text = `${x} ${y} ${z}`; 
+    navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('copy-toast');
+        toast.innerText = `복사 완료`; // 어떤 좌표인지 표시해주면 더 친절함!
+        toast.style.display = 'block';
+        
+        // 1.5초 뒤에 사라짐
+        setTimeout(() => { 
+            toast.style.display = 'none'; 
+        }, 1500);
+    }).catch(err => {
+        console.error('복사 실패:', err);
+    });
 };
 
 // [5] 십이지신 마커 생성
