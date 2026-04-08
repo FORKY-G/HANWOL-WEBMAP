@@ -76,7 +76,6 @@ color: mineColors[colorKey], weight: 3, opacity: 0, dashArray: '7, 10'
 }).addTo(layers.mines[colorKey]); 
 });
 
-// [4] 좌표 복사 함수
 // [4] 좌표 복사 함수 (ui-control.js)
 window.copyCoords = (x, y, z) => {
     const text = `${x} ${y} ${z}`; 
