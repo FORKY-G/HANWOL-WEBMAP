@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>한월환해도 (0408 업데이트)</title>
+    <title>한월환해도 (0408 업데이트)</title>
 <link rel="icon" type="image/png" href="images/hanwol-icon.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
@@ -115,23 +115,10 @@ padding: 12px;
 .leaflet-popup-tip-container, .leaflet-popup-close-button { display: none !important; }
 .leaflet-popup-content { font-family: 'Pretendard', sans-serif; font-weight: 700; font-size: 13px; text-align: center; color: #000000; margin: 10px 14px !important; line-height: 1.4; letter-spacing: -0.5px; }
 
-/* [수정] 좌표 복사 알림창 디자인 개선 */
-#copy-toast { 
-position: fixed; 
-top: 100px; /* 화면 상단에서 100px 내려온 위치 */
-left: 50%; 
-transform: translateX(-50%); 
-background-color: #ffd700; /* 한월서버 포인트 컬러 (황금색) */
-color: #000; /* 글자는 검정색으로 대비 상향 */
-padding: 10px 24px; 
-border: 2px solid #000; 
-box-shadow: 4px 4px 0px rgba(0,0,0,0.3); /* 네오 브루탈리즘 스타일 통일 */
-font-size: 15px; 
-font-weight: 900; 
-z-index: 11000; /* 공지사항 팝업보다 더 위에 뜨도록 설정 */
-display: none; 
-border-radius: 4px;
-}
+#copy-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.8); color: white; padding: 8px 16px; border: 1px solid #ffffff; font-size: 14px; z-index: 10000; display: none; }
+.mine-marker { border: 1px solid #000; border-radius: 2px; }
+.mine-녹 { background-color: #2ecc71; } .mine-황 { background-color: #f1c40f; } .mine-청 { background-color: #3498db; } .mine-적 { background-color: #e74c3c; }
+.special-mine { border: 2.5px solid #ffffff !important; box-shadow: 0 0 8px #fff, 0 0 12px #ff0000 !important; z-index: 1000 !important; }
 </style>
 </head>
 
@@ -139,10 +126,6 @@ border-radius: 4px;
 
 <div id="map"></div>
 <div id="copy-toast">복사 완료!</div>
-<div id="copy-toast" style="display: none; align-items: center; gap: 8px;">
-    <img src="images/forky.png" style="width: 20px; height: 20px; object-fit: contain;">
-    <span id="toast-text">복사 완료!</span>
-</div>
 
 <div id="controls-wrapper">
 <div id="toggle-sidebar">▼ 한월메뉴 열기</div>
