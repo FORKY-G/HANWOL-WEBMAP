@@ -577,44 +577,40 @@ const extras = [
 
 extras.forEach(group => {
         group.data.forEach(item => {
+            // 이름 설정
             const name = item.name || (item.n && typeof item.n === "string" ? item.n : "") || (item.file ? "적환단" : group.cat);
-            const quest = (item.quest || "").toLowerCase();
-            const materials = (item.materials || "").toLowerCase();
-    group.data.forEach(item => {
-        // 이름 설정 (없을 경우 카테고리명으로 대체)
-        const name = item.name || (item.n && typeof item.n === "string" ? item.n : "") || (item.file ? "적환단" : group.cat);
-        
-        // 검색 비교용 데이터 문자열 생성 (모두 소문자로 변환하여 검색 정확도 높임)
-        const sName = name.toLowerCase();
-        const sQuest = (item.quest || "").toLowerCase();
-        const sMaterials = (item.materials || "").toLowerCase();
-        const sDropItem = (item.item || "").toLowerCase(); // 항아리 속 아이템 (예: 고목조각)
-        const sTool = (item.tool || "").toLowerCase();     // 필요 도구 (예: 탐색부적)
+            
+            // 검색 비교용 데이터 (소문자 변환)
+            const sName = name.toLowerCase();
+            const sQuest = (item.quest || "").toLowerCase();
+            const sMaterials = (item.materials || "").toLowerCase();
+            const sDropItem = (item.item || "").toLowerCase();
+            const sTool = (item.tool || "").toLowerCase();
 
-        // 검색어가 이름, 퀘스트, 재료, 아이템, 도구 중 하나라도 포함되면 결과에 추가
-        if (sName.includes(query) || sQuest.includes(query) || sMaterials.includes(query) || sDropItem.includes(query) || sTool.includes(query)) {
+            // 검색어가 어디든 포함되어 있는지 확인
+            if (sName.includes(query) || sQuest.includes(query) || sMaterials.includes(query) || sDropItem.includes(query) || sTool.includes(query)) {
+                
+                let finalDisplayName = name;
 
-            if (name.toLowerCase().includes(query) || quest.includes(query) || materials.includes(query)) {
-                currentFilteredData.push({ name: name, category: group.cat, x: item.x, z: item.z, type: 'extra' });
-            // [편의기능] 아이템 이름으로 검색했을 때 결과 리스트에 아이템명을 같이 보여줌
-            let finalDisplayName = name;
-            if (sDropItem.includes(query) && group.cat === '탐색') {
-                finalDisplayName = `${name} (${item.item})`; // 예: 항아리 (고목조각)
-            } else if (sTool.includes(query) && group.cat === '탐색') {
-                finalDisplayName = `${name} [${item.tool}]`; // 예: 항아리 [탐색부적]
-}
-        });
+                // 항아리 아이템/도구 검색 시 이름 뒤에 정보 추가 표시
+                if (group.cat === '탐색') {
+                    if (sDropItem.includes(query)) {
+                        finalDisplayName = `${name} (${item.item})`;
+                    } else if (sTool.includes(query)) {
+                        finalDisplayName = `${name} [${item.tool}]`;
+                    }
+                }
 
-            currentFilteredData.push({ 
-                name: finalDisplayName, 
-                category: group.cat, 
-                x: item.x, 
-                z: item.z, 
-                type: 'extra' 
-            });
-        }
-});
-});
+                currentFilteredData.push({ 
+                    name: finalDisplayName, 
+                    category: group.cat, 
+                    x: item.x, 
+                    z: item.z, 
+                    type: 'extra' 
+                });
+            }
+        }); // group.data.forEach 끝
+    }); // extras.forEach 끝
 
 // 검색 결과 리스트 생성
 if (currentFilteredData.length > 0) {
