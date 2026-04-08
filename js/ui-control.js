@@ -76,18 +76,25 @@ color: mineColors[colorKey], weight: 3, opacity: 0, dashArray: '7, 10'
 }).addTo(layers.mines[colorKey]); 
 });
 
-// [4] 좌표 복사 함수 (아이콘 대응 버전)
+// [4] 좌표 복사 함수 (안전 모드)
 window.copyCoords = (x, y, z) => {
     const text = `${x} ${y} ${z}`; 
     navigator.clipboard.writeText(text).then(() => {
         const toast = document.getElementById('copy-toast');
+        // toast-text가 없어도 에러가 나지 않도록 체크합니다.
         const toastText = document.getElementById('toast-text');
         
-        if (toast && toastText) {
-            toastText.innerText = `복사 완료!`;
-            toast.style.display = 'flex'; // block 대신 flex를 써야 아이콘이랑 정렬이 예뻐요!
+        if (toast) {
+            // 만약 toastText(span)가 있다면 거기 글자를 바꾸고, 
+            // 없다면 그냥 toast 자체의 글자를 바꿉니다.
+            if (toastText) {
+                toastText.innerText = `복사 완료!`;
+            } else {
+                toast.innerText = `복사 완료!`;
+            }
             
-            // 1.5초 뒤에 사라짐
+            toast.style.display = 'flex'; 
+            
             setTimeout(() => { 
                 toast.style.display = 'none'; 
             }, 1500);
