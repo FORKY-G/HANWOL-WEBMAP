@@ -695,46 +695,40 @@ L.popup().setLatLng(targetPos)
 }
 
 // [18] 목록 초기화 시스템
+// 1. 사냥터 초기화
 document.getElementById('reset-hunt').addEventListener('click', function(e) {
-e.stopPropagation();
-huntingGrounds.forEach(area => {
-const chk = document.getElementById(`hunt-${area.name}`);
-if (chk && chk.checked) {
-chk.checked = false;
-map.removeLayer(layers.hunting[area.name]);
-}
-});
+    e.stopPropagation();
+    huntingGrounds.forEach(area => {
+        const chk = document.getElementById(`hunt-${area.name}`);
+        if (chk && chk.checked) {
+            chk.checked = false;
+            // 맵에서 사냥터 레이어(영역 색상) 제거
+            if (layers.hunting[area.name]) {
+                map.removeLayer(layers.hunting[area.name]);
+            }
+            // 맵에 생성된 해당 사냥터의 마커들만 찾아서 제거
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker && layer.getPopup() && layer.getPopup().getContent().includes(area.name)) {
+                    map.removeLayer(layer);
+                }
+            });
+        }
+    });
 });
 
-// [18] 목록 초기화 시스템
-document.getElementById('reset-hunt').addEventListener('click', function(e) {
-e.stopPropagation();
-huntingGrounds.forEach(area => {
-const chk = document.getElementById(`hunt-${area.name}`);
-if (chk && chk.checked) {
-chk.checked = false;
-map.removeLayer(layers.hunting[area.name]);
-// 해당 영역의 마커도 지도에서 제거
-map.eachLayer(layer => {
-if (layer instanceof L.Marker && layer.getPopup() && layer.getPopup().getContent().includes(area.name)) {
-map.removeLayer(layer);
-}
-});
-}
-});
-});
-
+// 2. 약초 초기화
 document.getElementById('reset-herb').addEventListener('click', function(e) {
-e.stopPropagation();
-sortedHerbData.forEach(herb => {
-const chk = document.getElementById(`herb-${herb.name}`);
-if (chk && chk.checked) {
-chk.checked = false;
-map.removeLayer(layers.herbs[herb.name]);
-map.removeLayer(layers.herbMarkers[herb.name]);
-}
-});
-map.closePopup();
+    e.stopPropagation();
+    sortedHerbData.forEach(herb => {
+        const chk = document.getElementById(`herb-${herb.name}`);
+        if (chk && chk.checked) {
+            chk.checked = false;
+            // 맵에서 약초 레이어 및 마커 그룹 제거
+            if (layers.herbs[herb.name]) map.removeLayer(layers.herbs[herb.name]);
+            if (layers.herbMarkers[herb.name]) map.removeLayer(layers.herbMarkers[herb.name]);
+        }
+    });
+    map.closePopup(); // 열려있는 약초 팝업 닫기
 });
 
 // [19] 공지사항 팝업 닫기 함수
