@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>한월환해도 (0408 업데이트, 팝업창 추가)</title>
+<title>한월환해도 (0408 업데이트)</title>
 <link rel="icon" type="image/png" href="images/hanwol-icon.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
@@ -115,22 +115,10 @@ padding: 12px;
 .leaflet-popup-tip-container, .leaflet-popup-close-button { display: none !important; }
 .leaflet-popup-content { font-family: 'Pretendard', sans-serif; font-weight: 700; font-size: 13px; text-align: center; color: #000000; margin: 10px 14px !important; line-height: 1.4; letter-spacing: -0.5px; }
 
-/* [수정] 좌표 복사 알림창 디자인 개선 */
-#copy-toast { 
-    position: fixed; 
-    top: 100px; /* 화면 상단에서 100px 내려온 위치 */
-    left: 50%; 
-    transform: translateX(-50%); 
-    background-color: #ffd700; /* 한월서버 포인트 컬러 (황금색) */
-    color: #000; /* 글자는 검정색으로 대비 상향 */
-    padding: 10px 24px; 
-    border: 2px solid #000; 
-    box-shadow: 4px 4px 0px rgba(0,0,0,0.3); /* 네오 브루탈리즘 스타일 통일 */
-    font-size: 15px; 
-    font-weight: 900; 
-    z-index: 11000; /* 공지사항 팝업보다 더 위에 뜨도록 설정 */
-    display: none; 
-    border-radius: 4px;}
+#copy-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(0, 0, 0, 0.8); color: white; padding: 8px 16px; border: 1px solid #ffffff; font-size: 14px; z-index: 10000; display: none; }
+.mine-marker { border: 1px solid #000; border-radius: 2px; }
+.mine-녹 { background-color: #2ecc71; } .mine-황 { background-color: #f1c40f; } .mine-청 { background-color: #3498db; } .mine-적 { background-color: #e74c3c; }
+.special-mine { border: 2.5px solid #ffffff !important; box-shadow: 0 0 8px #fff, 0 0 12px #ff0000 !important; z-index: 1000 !important; }
 </style>
 </head>
 
@@ -238,17 +226,13 @@ padding: 12px;
                 <li>서고관리인에 벽력공, 천뢰공 비급 제작 추가</li>
                 <li>주문서상자 > 삼류,이류,일류주문서 상자로 명칭 변경</li>
                 <li>강화소(대장장이조수)에 이류주문서상자, 일류주문서상자 제작 추가</li>
-            </ul>
             <p style="font-size: 12px; color: #666; font-weight: 500; border-top: 1px dashed #ccc; padding-top: 10px;">
                 ※ 자세한 업데이트 내역은 서버 디스코드를 이용해주세요.
             </p>
         </div>
-        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-    <label style="font-size: 12px; color: #666; cursor: pointer; display: flex; align-items: center; font-weight: 700;">
-        <input type="checkbox" id="stop-showing" style="margin-right: 5px; cursor: pointer;"> 오늘 다시 보지 않기
-    </label>
-    <button onclick="closeNotice()" style="padding: 8px 24px; background: #000; color: #fff; border: none; font-weight: 900; cursor: pointer; font-family: 'Pretendard';">확인</button>
-</div>
+        <div style="margin-top: 20px; text-align: right;">
+            <button onclick="closeNotice()" style="padding: 8px 24px; background: #000; color: #fff; border: none; font-weight: 900; cursor: pointer; font-family: 'Pretendard';">확인</button>
+        </div>
     </div>
 </div>
 
@@ -261,86 +245,38 @@ padding: 12px;
 const sidebar = document.getElementById('controls');
 const toggleBtn = document.getElementById('toggle-sidebar');
 const searchResultsDiv = document.getElementById('search-results');
-const modal = document.getElementById('notice-modal');
 
-// [1] 공지사항 관련 함수 (확인 버튼 클릭 시)
-function closeNotice() {
-    const checkbox = document.getElementById('stop-showing');
-    if (modal) {
-        if (checkbox && checkbox.checked) {
-            localStorage.setItem('hideNotice', 'true');
-        }
-        modal.style.display = 'none';
-    }
-}
-
-// [2] 페이지 로드 시 '다시 보지 않기' 확인
-window.addEventListener('load', function() {
-    const isHidden = localStorage.getItem('hideNotice');
-    if (modal) {
-        if (isHidden === 'true') {
-            modal.style.display = 'none';
-        } else {
-            modal.style.display = 'flex';
-        }
-    }
-});
-
-// [3] 지도 클릭 이벤트 (중복 제거 및 방어막)
-if (typeof map !== 'undefined') {
-    map.on('click', () => {
-        // [핵심 방어] 팝업이 켜져 있다면 지도의 다른 클릭 이벤트를 완전히 차단합니다.
-        if (modal && modal.style.display !== 'none') return;
-
-        // 사이드바 닫기
-        if (sidebar && sidebar.classList.contains('active')) {
-            sidebar.classList.remove('active');
-            toggleBtn.innerText = '▼ 한월메뉴 열기';
-        }
-        // 검색 결과창 닫기
-        if (searchResultsDiv) searchResultsDiv.style.display = 'none';
-    });
-}
-
-// [4] 팝업 내부 클릭 전파 차단
-if (modal) {
-    const modalContent = modal.querySelector('div');
-    if (modalContent) {
-        modalContent.addEventListener('click', (e) => {
-            e.stopPropagation(); // 팝업 내부 클릭이 지도로 전달되지 않게 함
-        });
-    }
-}
-
-// [5] 메뉴 토글 및 사이드바 클릭 전파 차단
 function toggleSidebar() {
-    if (!sidebar) return;
-    sidebar.classList.toggle('active');
-    toggleBtn.innerText = sidebar.classList.contains('active') ? '▲ 한월메뉴 닫기' : '▼ 한월메뉴 열기';
+if (!sidebar) return;
+sidebar.classList.toggle('active');
+toggleBtn.innerText = sidebar.classList.contains('active') ? '▲ 한월메뉴 닫기' : '▼ 한월메뉴 열기';
 }
 
 if (toggleBtn) {
-    toggleBtn.addEventListener('click', (e) => { 
-        e.stopPropagation(); 
-        toggleSidebar(); 
-    });
+toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
 }
 
-if (sidebar) {
-    sidebar.addEventListener('click', (e) => e.stopPropagation());
+if (typeof map !== 'undefined') {
+map.on('click', () => {
+if (sidebar && sidebar.classList.contains('active')) {
+sidebar.classList.remove('active');
+toggleBtn.innerText = '▼ 한월메뉴 열기';
+}
+if (searchResultsDiv) searchResultsDiv.style.display = 'none';
+});
 }
 
-// [6] 아코디언 바인딩
+if (sidebar) sidebar.addEventListener('click', (e) => e.stopPropagation());
+
 function bindAccordion(btnId, contentId) {
-    const btn = document.getElementById(btnId);
-    const content = document.getElementById(contentId);
-    if (btn && content) {
-        btn.addEventListener('click', function() {
-            content.classList.toggle('active');
-            const icon = this.querySelector('span');
-            if (icon) icon.innerText = content.classList.contains('active') ? '▲' : '▼';
-        });
-    }
+const btn = document.getElementById(btnId);
+const content = document.getElementById(contentId);
+if (btn && content) {
+btn.addEventListener('click', function() {
+content.classList.toggle('active');
+this.querySelector('span').innerText = content.classList.contains('active') ? '▲' : '▼';
+});
+}
 }
 
 bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
