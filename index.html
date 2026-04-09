@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>한월환해도 (0408 업데이트)</title>
+    <title>한월환해도 (0409 업데이트)</title>
     <link rel="icon" type="image/png" href="images/hanwol-icon.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
@@ -22,6 +22,21 @@
             align-items: flex-start;
             gap: 10px;
         }
+
+        /* [비급 정보창 스타일] */
+        #skill-btn {
+            position: fixed; top: 80px; left: 12px; z-index: 1000; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        #skill-btn:hover { transform: scale(1.1); }
+        #skill-window {
+            display: none; position: fixed; top: 80px; left: 70px; z-index: 1000; 
+            width: 320px; max-height: 70vh; background: white; border: 2px solid #000; 
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.2); overflow-y: auto; font-family: 'Pretendard', sans-serif;
+        }
+        #skill-window::-webkit-scrollbar { width: 8px; }
+        #skill-window::-webkit-scrollbar-thumb { background: #000; border-radius: 4px; }
+        #skill-window::-webkit-scrollbar-track { background: #eee; }
 
         /* [검색 시스템] */
         #search-container { display: flex; position: relative; }
@@ -136,6 +151,18 @@
         </div>
     </div>
 </div>
+
+    <div id="skill-btn">
+        <img src="images/skill.png" style="width: 44px; height: 44px; border: 2px solid #000; background: #fff; box-shadow: 4px 4px 0px rgba(0,0,0,0.2);" alt="Skill Icon">
+    </div>
+    <div id="skill-window">
+        <div style="background: #000; color: #fff; padding: 12px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10;">
+            <span>📜 비급 획득 정보</span>
+            <span onclick="toggleSkillWindow()" style="cursor: pointer; font-size: 18px;">✖</span>
+        </div>
+        <div id="skill-list-content" style="padding: 12px;">
+            </div>
+    </div>
 
     <div id="map"></div>
     <div id="copy-toast" style="display: none; align-items: center; justify-content: center; gap: 10px;">
