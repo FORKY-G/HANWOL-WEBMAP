@@ -84,16 +84,12 @@ window.copyCoords = (x, y, z) => {
         const toastText = document.getElementById('toast-text');
         
         if (toast) {
-            // 글자 태그가 있으면 글자를 바꾸고, 없으면 상자 자체에 글자를 씁니다 (에러 방지)
             if (toastText) {
                 toastText.innerText = "복사 완료!";
             } else {
                 toast.innerText = "복사 완료!";
             }
-            
-            // 아이콘과 글자가 나란히 보이게 flex로 켭니다
             toast.style.display = 'flex';
-            
             setTimeout(() => { 
                 toast.style.display = 'none'; 
             }, 1500);
@@ -503,23 +499,23 @@ searchInput.addEventListener('input', function() {
 
     // 약초
     sortedHerbData.forEach(h => {
-        if (h.name.toLowerCase().includes(query)) currentFilteredData.push({ name: h.name, category: '약초', x: h.locations[0].x, z: h.locations[0].z, type: 'herb', herbName: h.name });
+        if (h.name.toLowerCase().includes(query)) currentFilteredData.push({ name: h.name, category: '약초', x: h.locations[0].x, y: (h.locations[0].y || 0), z: h.locations[0].z, type: 'herb', herbName: h.name });
     });
     // 십이지신
     animals.forEach(ani => {
-        if (ani.name.toLowerCase().includes(query)) currentFilteredData.push({ name: ani.name, category: '십이지신', x: ani.mcX, z: ani.mcZ, type: 'animal' });
+        if (ani.name.toLowerCase().includes(query)) currentFilteredData.push({ name: ani.name, category: '십이지신', x: ani.mcX, y: ani.mcY, z: ani.mcZ, type: 'animal' });
     });
     // 광산
     mines.forEach(mine => {
         const spec = mineResources[mine.c] || "";
         const common = mineResources["공통"] || "";
-        if ((mine.n.toString() + spec + common).toLowerCase().includes(query)) currentFilteredData.push({ name: `${mine.n}번 광산 (${spec})`, category: '광산', x: mine.x, z: mine.z, type: 'mine' });
+        if ((mine.n.toString() + spec + common).toLowerCase().includes(query)) currentFilteredData.push({ name: `${mine.n}번 광산 (${spec})`, category: '광산', x: mine.x, y: mine.y, z: mine.z, type: 'mine' });
     });
     // 사냥터
     huntingGrounds.forEach(area => {
-        if (area.name.toLowerCase().includes(query) || area.monsters.toLowerCase().includes(query)) currentFilteredData.push({ name: area.name, category: '사냥터', x: area.x, z: area.z, type: 'hunting', areaName: area.name });
+        if (area.name.toLowerCase().includes(query) || area.monsters.toLowerCase().includes(query)) currentFilteredData.push({ name: area.name, category: '사냥터', x: area.x, y: area.y, z: area.z, type: 'hunting', areaName: area.name });
     });
-    // 기타
+    // 기타 (NPC, 적환단, 동상, 탐색, 상자 등)
     const extras = [
         { data: npcData, cat: 'NPC' }, { data: redItems, cat: '적환단' }, { data: statues, cat: '동상/산' }, { data: mountains, cat: '동상/산' }, { data: potItems, cat: '탐색' }, { data: mysteryBoxes, cat: '의문의 상자' }
     ];
@@ -537,7 +533,7 @@ searchInput.addEventListener('input', function() {
                     if (sItem.includes(query)) dName = `${name} (${item.item})`;
                     else if (sTool.includes(query)) dName = `${name} [${item.tool}]`;
                 }
-                currentFilteredData.push({ name: dName, category: group.cat, x: item.x, z: item.z, type: 'extra' });
+                currentFilteredData.push({ name: dName, category: group.cat, x: item.x, y: (item.y || 0), z: item.z, type: 'extra' });
             }
         });
     });
@@ -568,11 +564,13 @@ function moveToLocation(target) {
         // 1. 이미 지도에 있는 마커 찾기 (NPC, 탐색, 상자 등)
         const allGroups = [layers.spawn, layers.animals, layers.stones, layers.npc, layers.red, layers.pot, layers.box, layers.huntingMarkers];
         allGroups.forEach(group => {
-            group.eachLayer(layer => {
-                if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
-                    foundMarker = layer;
-                }
-            });
+            if (group.eachLayer) {
+                group.eachLayer(layer => {
+                    if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
+                        foundMarker = layer;
+                    }
+                });
+            }
         });
 
         // 2. 마커가 있으면 그 마커를 열고, 없으면 전용 좌표 복사 팝업을 띄움
@@ -598,7 +596,49 @@ function moveToLocation(target) {
     }, 600);
 }
 
-// [18] 초기화
+// [18] 비급 정보 제어 기능
+window.toggleSkillWindow = function() {
+    const win = document.getElementById('skill-window');
+    if (!win) return;
+    if (win.style.display === 'none') {
+        win.style.display = 'block';
+        renderSkillList();
+    } else {
+        win.style.display = 'none';
+    }
+};
+
+window.renderSkillList = function() {
+    const container = document.getElementById('skill-list-content');
+    if (!container) return;
+
+    container.innerHTML = skillData.map(skill => {
+        const imageTag = skill.image 
+            ? `<img src="${skill.image}" style="width:100%; border-radius:4px; margin-top:8px; border:1px solid #ddd; display:block;">` 
+            : '';
+
+        return `
+            <div style="margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                <div style="font-weight: 800; color: #d00; font-size: 15px; margin-bottom: 5px; display: flex; align-items: center;">
+                    <span style="background: #d00; color: #fff; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 6px;">SKILL</span>
+                    ${skill.name}
+                </div>
+                <div style="font-size: 12px; color: #333; font-weight: 700; line-height: 1.5; word-break: keep-all; padding-left: 2px;">
+                    ${skill.info}
+                </div>
+                ${imageTag}
+            </div>
+        `;
+    }).join('');
+};
+
+// 버튼 클릭 이벤트 연결
+const skillBtn = document.getElementById('skill-btn');
+if (skillBtn) {
+    skillBtn.addEventListener('click', toggleSkillWindow);
+}
+
+// [19] 초기화 기능
 document.getElementById('reset-hunt').addEventListener('click', e => {
     e.stopPropagation();
     huntingGrounds.forEach(area => {
@@ -623,7 +663,7 @@ document.getElementById('reset-herb').addEventListener('click', e => {
     map.closePopup();
 });
 
-// [19] 팝업 관리
+// [20] 팝업 관리 및 제작 아이템 표시
 map.on('popupopen', e => {
     const container = e.popup._container;
     const rect = container.getBoundingClientRect();
