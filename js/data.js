@@ -79,7 +79,7 @@ const redItems = [
     { n: 6, x: -2579, y: 87, z: -5970, file: "red6.png" },
     { n: 7, x: -3375, y: 100, z: 3449, file: "red7.png" },
     { n: 8, x: 7227, y: 30, z: 764, file: "" },
-    { n: 9, x: 15, y: 48, z: 2488, file: "" },
+    { n: 9, x: 15, y: 48, z: 2488, file: "red9.png" },
 ];
 
 // 동상 데이터 (이미지 포함)
