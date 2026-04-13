@@ -129,7 +129,7 @@ L.marker(mcToPx(spawnData.mcX, spawnData.mcZ), { icon: compassIcon })
 // [7] 광산 마커 생성
 mines.forEach((mine) => {
     const pos = mcToPx(mine.x, mine.z);
-    const specialNumbers = [14, 15, 24, 63, 64, 20, 27, 19];
+    const specialNumbers = [14, 15, 24, 20, 27, 19];
     let markerClass = `mine-marker mine-${mine.c}`;
     if (specialNumbers.includes(mine.n)) markerClass += " special-mine";
     const mineIcon = L.divIcon({ className: markerClass, iconSize: [18, 18], iconAnchor: [9, 9] });
