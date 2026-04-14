@@ -205,6 +205,9 @@ const npcData = [
 // 사냥터 데이터
 
 const huntingGrounds = [
+    { name: "혈교도", lv: "100", monsters: "혈교도(lv.100)", file: "map15.png", x: -3980, y: 80, z: 2496 },
+    { name: "화검문", lv: "90", monsters: "봉원숭이(lv.90), 곤봉원숭이(lv.90)", memo: "*화검문포탈(화검문열쇠) / [히든] 심마니", file: "map16.png", x: -3297, y: 116, z:-1696 },
+    { name: "흑운회", lv: "90", monsters: "흑운회무인(lv.90)", memo: "", file: "map17.png", x: 2461, y: 88, z:-1879 },
     { name: "경작지", lv: "0~5", monsters: "참새(lv.0), 허수아비(lv.5)", file: "map1.png", x: -960, y: 67, z: -670 },
     { name: "화수원", lv: "10~20", monsters: "다람쥐(lv.10), 흙토끼(lv.15), 백토끼(lv.20)", file: "map2.png", x: -586, y: 90, z: 443 },
     { name: "괴암곡", lv: "25~35", monsters: "하급쥐(lv.25), 중급쥐(lv30), 상급쥐(lv.35)", memo: "*괴암곡제단 : 장로쥐 소환", file: "map3.png", x: 1310, y: 176, z: -1592 },
@@ -218,10 +221,8 @@ const huntingGrounds = [
     { name: "빙궁", lv: "145~155", monsters: "빙궁조(Lv.145), 빙궁병(Lv.150), 북해신녀(Lv.155)", file: "map11.png", x: 6566, y: 83, z: 952  },
     { name: "협사곡", lv: "160~170", monsters: "산적(Lv.160), 산적궁수(Lv.165), 멧돼지산적(Lv.170)", file: "map12.png", x: -242, y: 107, z: 4305 },
     { name: "황야성", lv: "175~185", monsters: "토석병(Lv.175), 토석군(Lv.180), 토석궁사(Lv.185)", file: "map13.png", x: -1985, y: 22, z: 2001 },
-    { name: "운해궁", lv: "999", monsters: "???", file: "map14.png", x: -1449, y: 96, z: 5606 },
-    { name: "혈교도", lv: "100", monsters: "혈교도(lv.100)", file: "map15.png", x: -3980, y: 80, z: 2496 },
-    { name: "화검문", lv: "???", monsters: "봉원숭이(lv.90), 곤봉원숭이(lv.90)", memo: "*화검문포탈(화검문열쇠) / [히든] 심마니", file: "map16.png", x: -3297, y: 116, z:-1696 }
-];
+    { name: "운해궁", lv: "999", monsters: "???", file: "map14.png", x: -1449, y: 96, z: 5606 }
+    ];
 
 // [약초 데이터] 
 const herbData = [
