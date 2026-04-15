@@ -279,7 +279,7 @@ mysteryBoxes.forEach((box) => {
     const marker = L.marker(pos, { icon: boxIcon }).addTo(layers.box);
     
     const itemInfo = box.item ? `<div style="margin-bottom:4px;"><span style="color:#666; font-weight:700;">획득아이템:</span> ${box.item}</div>` : '';
-    const entranceInfo = box.entrance ? `<div style="margin-top:4px; padding: 4px; background: #fff1f1; border-radius: 4px; border: 1px dashed #d00;"><span style="color:#d00; font-weight:800;">[진입입구]</span><br><span style="font-size:11px; font-weight:700;">${box.entrance}</span></div>` : '';
+    const entranceInfo = box.entrance ? `<div style="margin-top:4px; padding: 4px; background: #fff1f1; border-radius: 4px; border: 1px dashed #d00;"><span style="color:#d00; font-weight:800;">[상자위치]</span><br><span style="font-size:11px; font-weight:700;">${box.entrance}</span></div>` : '';
     
     const popupContent = `
         <div style="text-align:center; min-width:200px; color:#000; padding: 0; line-height: 1.3;">
