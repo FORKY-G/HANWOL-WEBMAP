@@ -691,11 +691,6 @@ function showPartDetail(itemName, itemData, parts, parentGrid, isAutoOpen) {
     partArea.innerHTML = '';
     partArea.style.cssText = 'margin-top:15px; padding:10px; background:#fafafa; border:1px solid #eee; position: relative;';
 
-    const partTitle = document.createElement('div');
-    partTitle.style.cssText = 'font-size:12px; font-weight:900; margin-bottom:10px; color:#555;';
-    partTitle.innerText = `▷ ${itemName} 상세보기`;
-    partArea.appendChild(partTitle);
-
     const fixedSpecBox = document.createElement('div');
     fixedSpecBox.style.cssText = `
         display: none; font-size: 11px; background: #fff; padding: 10px; 
@@ -717,11 +712,10 @@ function showPartDetail(itemName, itemData, parts, parentGrid, isAutoOpen) {
         partIcon.innerText = part;
 
         const openSpec = () => {
-            // 무기나 장신구(스텟)는 데이터 자체를, 방어구는 해당 부위 데이터를 가져옴
             const target = (parts[0] === "무기" || parts[0] === "스텟") ? itemData : itemData[part];
             if (target) {
+                // [수정] 헤더 부분 삭제하고 [스텟], [일반]만 노출
                 fixedSpecBox.innerHTML = `
-                    <div style="font-weight:900; color:#000; margin-bottom:5px; border-bottom:1px solid #eee;">[${isAutoOpen ? itemName : part}] 정보</div>
                     <div style="color:#d35400; font-weight:800;">[스텟] ${target.스텟}</div>
                     ${target.일반 ? `<div style="color:#7f8c8d;">[일반] ${target.일반}</div>` : ''}
                 `;
@@ -865,10 +859,6 @@ function renderAccessoryLevels(typeName, levelsData, targetArea) {
 
 function renderAccessoryItems(lvTitle, items, targetArea) {
     targetArea.innerHTML = '';
-    const title = document.createElement('div');
-    title.style.cssText = 'font-weight:900; background:#eee; padding:5px; margin-top:15px; border-left:4px solid #000; font-size:12px;';
-    title.innerText = `▷ ${lvTitle} 목록`;
-    targetArea.appendChild(title);
 
     const itemGrid = document.createElement('div');
     itemGrid.style.cssText = 'display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 10px;';
@@ -885,9 +875,8 @@ function renderAccessoryItems(lvTitle, items, targetArea) {
         };
         itemGrid.appendChild(itemBox);
     }
+    
     targetArea.appendChild(itemGrid);
-    const infoArea = document.createElement('div');
-    infoArea.className = 'part-detail-area-container';
     targetArea.appendChild(infoArea);
 }
 
