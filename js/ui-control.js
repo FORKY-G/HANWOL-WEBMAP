@@ -851,16 +851,10 @@ function showPartDetail(itemName, itemData, parts, parentGrid, isAutoOpen) {
     partArea.appendChild(fixedSpecBox);
 }
 
-// [20-3] 장신구 전용 렌더러 (장비와 동일한 3단계 그리드 방식)
+// [20-3] 장신구 전용 렌더러 (2단계: 반지/귀걸이 선택)
 function renderAccessory(level, catData, detailArea) {
-    // 1. 반지 / 귀걸이 선택 버튼 (그리드)
     const typeGrid = document.createElement('div');
-    typeGrid.style.cssText = `
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        margin-top: 15px;
-    `;
+    typeGrid.style.cssText = 'display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px;';
 
     for (const type in catData) { // type: "반지", "귀걸이"
         const typeBtn = document.createElement('div');
@@ -874,71 +868,90 @@ function renderAccessory(level, catData, detailArea) {
         typeBtn.onclick = function() {
             Array.from(typeGrid.children).forEach(btn => btn.style.background = '#fff');
             this.style.background = '#ffd700';
-            
-            // 반지/귀걸이 클릭 시 해당 카테고리의 아이템들을 아래에 보여줌
-            renderAccessoryItems(type, catData[type], accessoryItemArea);
+            renderAccessoryLevels(type, catData[type], accessoryMainArea);
         };
         typeGrid.appendChild(typeBtn);
     }
     detailArea.appendChild(typeGrid);
 
-    // 장신구 아이템들이 그려질 영역
-    const accessoryItemArea = document.createElement('div');
-    accessoryItemArea.id = 'accessory-item-area';
-    detailArea.appendChild(accessoryItemArea);
+    const accessoryMainArea = document.createElement('div');
+    accessoryMainArea.id = 'accessory-main-area';
+    detailArea.appendChild(accessoryMainArea);
 }
 
-// [20-4] 장신구 아이템 리스트 렌더링 (1x5 그리드 형태)
-function renderAccessoryItems(typeName, subLevels, targetArea) {
-    targetArea.innerHTML = ''; // 초기화
+// [20-4] 장신구 레벨 선택 (30제, 70제 버튼 생성)
+function renderAccessoryLevels(typeName, levelsData, targetArea) {
+    targetArea.innerHTML = ''; 
 
-    // 각 레벨별(30제, 70제 등)로 그룹화하여 표시
-    for (const levelKey in subLevels) {
-        const lvTitle = document.createElement('div');
-        lvTitle.style.cssText = 'font-weight:900; background:#eee; padding:5px; margin-top:15px; border-left:4px solid #000; font-size:12px;';
-        lvTitle.innerText = `[${levelKey}]`;
-        targetArea.appendChild(lvTitle);
+    const lvGrid = document.createElement('div');
+    lvGrid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px;';
 
-        const itemGrid = document.createElement('div');
-        itemGrid.style.cssText = 'display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 10px;';
+    for (const lvKey in levelsData) {
+        const lvBtn = document.createElement('div');
+        lvBtn.style.cssText = `
+            background: #fff; border: 1px solid #000; padding: 8px 5px;
+            text-align: center; font-weight: 800; cursor: pointer; font-size: 12px;
+        `;
+        lvBtn.innerText = lvKey;
 
-        const items = subLevels[levelKey];
-        for (const itemName in items) {
-            const itemBox = document.createElement('div');
-            itemBox.style.cssText = `
-                border: 1px solid #000; background: #fff; padding: 5px 2px;
-                text-align: center; cursor: pointer; font-size: 11px; font-weight: 800;
-                display: flex; flex-direction: column; align-items: center; gap: 5px;
-            `;
-
-            const iconPlaceholder = document.createElement('div');
-            iconPlaceholder.style.cssText = 'width:35px; height:35px; background:#f9f9f9; border:1px solid #ccc;';
-            iconPlaceholder.innerText = 'IMG';
-
-            const nameLabel = document.createElement('div');
-            nameLabel.style.cssText = 'font-size: 10px; line-height:1.1; word-break: keep-all; width: 100%;';
-            nameLabel.innerText = itemName;
-
-            itemBox.appendChild(iconPlaceholder);
-            itemBox.appendChild(nameLabel);
-
-            itemBox.onclick = function() {
-                Array.from(itemGrid.children).forEach(child => child.style.background = '#fff');
-                this.style.background = '#f1f1f1';
-                
-                // 장신구는 부위가 하나이므로 바로 상세 정보 오픈 (isAutoOpen = true)
-                showPartDetail(itemName, items[itemName], ["정보"], itemGrid, true);
-            };
-
-            itemGrid.appendChild(itemBox);
-        }
-        targetArea.appendChild(itemGrid);
-        
-        // 상세 정보가 뜰 영역 (각 아이템 그리드 바로 아래)
-        const partArea = document.createElement('div');
-        partArea.className = 'part-detail-area'; 
-        targetArea.appendChild(partArea);
+        lvBtn.onclick = function() {
+            Array.from(lvGrid.children).forEach(btn => btn.style.background = '#fff');
+            this.style.background = '#ffd700';
+            renderAccessoryItems(lvKey, levelsData[lvKey], itemShowArea);
+        };
+        lvGrid.appendChild(lvBtn);
     }
+    targetArea.appendChild(lvGrid);
+
+    const itemShowArea = document.createElement('div');
+    itemShowArea.id = 'accessory-item-show-area';
+    targetArea.appendChild(itemShowArea);
+}
+
+// [20-5] 최종 장신구 아이템 그리드 (IMG + 이름)
+function renderAccessoryItems(lvTitle, items, targetArea) {
+    targetArea.innerHTML = '';
+    
+    const title = document.createElement('div');
+    title.style.cssText = 'font-weight:900; background:#eee; padding:5px; margin-top:15px; border-left:4px solid #000; font-size:12px;';
+    title.innerText = `[${lvTitle} 목록]`;
+    targetArea.appendChild(title);
+
+    const itemGrid = document.createElement('div');
+    itemGrid.style.cssText = 'display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 10px;';
+
+    for (const itemName in items) {
+        const itemBox = document.createElement('div');
+        itemBox.style.cssText = `
+            border: 1px solid #000; background: #fff; padding: 5px 2px;
+            text-align: center; cursor: pointer; font-size: 10px; font-weight: 800;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        `;
+
+        const iconPlaceholder = document.createElement('div');
+        iconPlaceholder.style.cssText = 'width:35px; height:35px; background:#f9f9f9; border:1px solid #ccc;';
+        iconPlaceholder.innerText = 'IMG';
+
+        const nameLabel = document.createElement('div');
+        nameLabel.innerText = itemName;
+
+        itemBox.appendChild(iconPlaceholder);
+        itemBox.appendChild(nameLabel);
+
+        itemBox.onclick = function() {
+            Array.from(itemGrid.children).forEach(child => child.style.background = '#fff');
+            this.style.background = '#f1f1f1';
+            
+            // 장신구는 스텟 하나뿐이므로 ["정보"] 대신 ["스텟"] 하나만 전달
+            showPartDetail(itemName, items[itemName], ["스텟"], itemGrid, true);
+        };
+        itemGrid.appendChild(itemBox);
+    }
+    targetArea.appendChild(itemGrid);
+
+    const infoArea = document.createElement('div');
+    infoArea.className = 'part-detail-area';
+    targetArea.appendChild(infoArea);
 }
 
 // [21] 팝업 관리 및 제작 아이템 표시
