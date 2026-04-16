@@ -769,9 +769,10 @@ function renderBlacksmithData() {
     container.appendChild(detailContainer);
 }
 
-// [22] 2단계: 아이템 선택 (방어구/무기 디자인 통일)
+// [22] 2단계: 아이템 선택 (재료 정보 완벽 복구!)
 function showLevelDetail(level) {
     const detailArea = document.getElementById('blacksmith-detail-area');
+    if (!detailArea) return;
     detailArea.innerHTML = '';
     const data = blacksmithData[level];
     
@@ -782,11 +783,35 @@ function showLevelDetail(level) {
 
     for (const category in data) {
         const catData = data[category];
+        
+        // 1. 카테고리 제목 ([방어구], [무기])
         const catTitle = document.createElement('div');
-        catTitle.style.cssText = 'font-weight:900; background:#2a211a; color:#ffcc00; padding:8px; margin-top:15px; border-left:4px solid #ffd700; font-size:13px;';
+        catTitle.style.cssText = 'font-weight:900; background:#2a211a; color:#d4af37; padding:8px; margin-top:15px; border-left:4px solid #b8860b; font-size:13px;';
         catTitle.innerText = `[${category}]`;
         detailArea.appendChild(catTitle);
 
+        // ★ 2. 사라졌던 재료 정보 복구 (가장 중요!) ★
+        if (catData.materials) {
+            const matInfo = document.createElement('div');
+            matInfo.style.cssText = `
+                font-size: 11px; 
+                color: #eee7c5; 
+                margin: 8px 0; 
+                font-weight: 700; 
+                background: #251e19; 
+                padding: 10px; 
+                border: 1px solid #4a3d33;
+                border-radius: 4px;
+                line-height: 1.4;
+            `;
+            matInfo.innerHTML = `
+                <div style="color:#d4af37; margin-bottom:2px;">필요 재료: ${catData.materials}</div>
+                <div style="color:#8c837a;">주문서 횟수: ${catData.scrollCount}회</div>
+            `;
+            detailArea.appendChild(matInfo);
+        }
+
+        // 3. 아이템 그리드 생성
         const itemGrid = document.createElement('div');
         itemGrid.style.cssText = 'display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 15px;';
 
@@ -800,19 +825,15 @@ function showLevelDetail(level) {
             itemBox.innerHTML = '<div style="color:#888; font-size:10px; font-weight:900;">IMG</div>';
 
             const nameLabel = document.createElement('div');
-            nameLabel.style.cssText = 'margin-top:8px; font-size:11px; font-weight:900; color:#ffffff; text-shadow:-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; text-align:center; word-break:keep-all;';
+            nameLabel.className = 'game-item-name';
             nameLabel.innerText = itemName;
 
             itemContainer.appendChild(itemBox);
             itemContainer.appendChild(nameLabel);
 
             itemContainer.onclick = function() {
-                document.querySelectorAll('.game-item-box').forEach(el => {
-                    el.style.borderColor = '#000';
-                    el.style.boxShadow = 'inset 0 0 5px rgba(0,0,0,0.5)';
-                });
-                itemBox.style.borderColor = '#ffd700';
-                itemBox.style.boxShadow = '0 0 10px rgba(255, 215, 0, 0.5)';
+                document.querySelectorAll('.game-item-box').forEach(el => el.classList.remove('selected'));
+                itemBox.classList.add('selected');
                 
                 const parts = (category === "방어구") ? ["투구", "갑옷", "허리띠", "신발"] : ["무기"];
                 showPartDetail(itemName, catData.items[itemName], parts, itemGrid, (parts.length === 1));
@@ -820,8 +841,11 @@ function showLevelDetail(level) {
             itemGrid.appendChild(itemContainer);
         }
         detailArea.appendChild(itemGrid);
+
+        // 4. 상세 정보창 영역
         const infoArea = document.createElement('div');
         infoArea.className = 'part-detail-area-container';
+        infoArea.style.cssText = 'min-height: 5px;';
         detailArea.appendChild(infoArea);
     }
 }
