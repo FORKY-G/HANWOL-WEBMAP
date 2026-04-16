@@ -21,7 +21,7 @@
        /* [비급/대장장이 정보창 스타일] */
         #skill-btn { position: fixed; top: 80px; left: 12px; z-index: 1000; cursor: pointer; transition: transform 0.2s; }
         #skill-btn:hover { transform: scale(1.1); }
-        #skill-window, #blacksmith-window {
+       #skill-window, #blacksmith-window {
             display: none; 
             position: fixed; 
             top: 80px; 
@@ -29,12 +29,12 @@
             z-index: 1000; 
             width: 320px; 
             max-height: 70vh; 
-            background: #1e1a17; /* 눈이 편안한 다크 브라운 */
-            border: 2px solid #6d5a4a; /* 차분한 테두리 색상 */
+            background: #1e1a17 !important; /* 눈이 편안한 다크 브라운 */
+            border: 2px solid #6d5a4a !important; 
             box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(0,0,0,0.5);
             overflow-y: auto; 
             font-family: 'Pretendard', sans-serif;
-            color: #eee7c5; /* 베이지색 글자 */
+            color: #eee7c5;
         }
 
         /* 스크롤바 디자인 */
@@ -44,11 +44,11 @@
         }
         #skill-window::-webkit-scrollbar-track, #blacksmith-window::-webkit-scrollbar-track { background: #1a1512; }
 
-        /* 제목 표시줄 - 노란색 톤다운 */
+        /* 제목 표시줄 - 고문서 금색으로 변경 */
         #skill-window > div:first-child, #blacksmith-window > div:first-child {
             background: #2a241f !important; 
             border-bottom: 2px solid #4a3d33;
-            color: #d4af37 !important; /* 쨍하지 않은 고문서 금색 */
+            color: #d4af37 !important; /* 쨍하지 않은 차분한 골드 */
             position: sticky; top: 0; z-index: 10;
         }
 
@@ -60,8 +60,10 @@
             position: relative; box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
             cursor: pointer; transition: all 0.1s;
         }
+        
+        /* [핵심 추가] 버튼이 선택되었을 때의 테두리 색상 */
         .game-item-box:hover, .game-item-box.selected {
-            border-color: #b8860b; /* 차분한 골드 */
+            border-color: #b8860b !important; /* 차분한 호박색 */
             box-shadow: 0 0 12px rgba(184, 134, 11, 0.4);
         }
 
@@ -70,6 +72,20 @@
             margin-top: 8px; font-size: 11px; font-weight: 900; color: #ffffff;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
             text-align: center; word-break: keep-all; width: 60px;
+        }
+
+        /* [핵심 추가] 대장장이 상단 레벨 버튼 가독성 보정 */
+        .level-btn-style {
+            background: #2a241f !important; 
+            border: 2px solid #4a3d33 !important;
+            color: #b0a59a !important; /* 글자색을 밝게 보정 */
+            padding: 15px 5px; text-align: center; font-weight: 900; 
+            cursor: pointer; box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
+        }
+        .level-btn-style.active {
+            background: #8d735c !important; 
+            border-color: #d4af37 !important;
+            color: #fff !important;
         }
 
         /* [사이드바 메뉴 스타일] */
