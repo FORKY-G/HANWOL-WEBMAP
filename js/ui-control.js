@@ -625,8 +625,11 @@ function moveToLocation(target) {
 // [18] 비급 정보 제어 기능
 window.toggleSkillWindow = function() {
     const win = document.getElementById('skill-window');
+    const blacksmithWin = document.getElementById('blacksmith-window');
     if (!win) return;
-    if (win.style.display === 'none') {
+
+    if (win.style.display === 'none' || win.style.display === '') {
+        if (blacksmithWin) blacksmithWin.style.display = 'none'; // 대장장이창도 같이 닫아주면 좋겠죠?
         win.style.display = 'block';
         renderSkillList();
     } else {
