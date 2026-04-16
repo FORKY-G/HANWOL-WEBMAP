@@ -739,7 +739,7 @@ function showLevelDetail(level) {
         if (catData.materials) {
             const matInfo = document.createElement('div');
             matInfo.style.cssText = 'font-size:11px; color:#333; margin:5px 0; font-weight:700; background:#f9f9f9; padding:8px; border:1px solid #ddd;';
-            matInfo.innerHTML = `필요: ${catData.materials} (주문서 ${catData.scrollCount}회)`;
+            matInfo.innerHTML = `필요: ${catData.materials} (주문서 횟수 ${catData.scrollCount}회)`;
             detailArea.appendChild(matInfo);
         }
 
