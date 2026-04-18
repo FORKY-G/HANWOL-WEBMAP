@@ -714,12 +714,22 @@ function showPartDetail(itemName, itemData, parts, parentGrid, isAutoOpen) {
         partIcon.className = 'game-item-box'; 
         
         // 데이터에 file이 있으면 해당 파일을, 없으면 기본 이름.png를 시도합니다.
-        let imgName = (partSpecificData && partSpecificData.file) ? partSpecificData.file : `${part}.png`;
+        let imgName = "";
+if (partSpecificData && partSpecificData.file) {
+    imgName = partSpecificData.file; // 데이터에 정의된 파일명 사용
+} else if (category === "방어구") {
+    // 만약 데이터에 file이 없으면 규칙에 따라 강제 매칭 시도 (디버깅용)
+    // 예: 110제 + 부위명 매칭 등
+    imgName = `${part}.png`; 
+}
 
-        partIcon.innerHTML = `
-            <img src="images/${imgName}" onerror="this.style.display='none'" style="width:85%; height:85%; object-fit:contain; position:relative; z-index:2;">
-            <div style="position:absolute; color:#444; font-size:9px; z-index:1;">${part}</div>
-        `;
+// 이미지 태그 생성 시 에러 핸들링 추가
+partIcon.innerHTML = `
+    <img src="images/${imgName}" 
+         onerror="console.warn('${itemName} ${part} 이미지 로드 실패: ${imgName}'); this.src='images/default_item.png';" 
+         style="width:85%; height:85%; object-fit:contain; position:relative; z-index:2;">
+    <div style="position:absolute; color:#444; font-size:9px; z-index:1;">${part}</div>
+`;
 
         const partName = document.createElement('div');
         partName.className = 'game-item-name';
