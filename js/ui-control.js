@@ -88,9 +88,13 @@ function generateVerifyCode(foundList) {
     return `PK-${resultNum}-${userName}(${durationSeconds}s)`;
 }
 
-// [결과 창 UI] - 소요 시간 경고 문구 살짝 추가
+// [결과 창 UI] - 하나로 통합 및 강화된 버전
 function showVictoryModal(code) {
+    // 이미 모달이 떠 있다면 중복 생성 방지
+    if (document.getElementById('poki-victory-modal')) return;
+
     const modal = document.createElement('div');
+    modal.id = 'poki-victory-modal';
     modal.style.cssText = `
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
         background: #1a1512; border: 3px solid #c5a368; color: #eee7c5;
@@ -98,9 +102,9 @@ function showVictoryModal(code) {
         box-shadow: 0 0 30px rgba(0,0,0,0.9); font-family: sans-serif;
     `;
     
-    // 소요 시간 정보를 추출해서 표시 (운영 참고용)
+    // 검증 코드에서 시간 정보 추출 (예: 125s)
     const timeMatch = code.match(/\((.*)\)/);
-    const displayTime = timeMatch ? timeMatch[1] : "알 수 없음";
+    const displayTime = timeMatch ? timeMatch[1] : "기록 없음";
 
     modal.innerHTML = `
         <h2 style="color:#d4af37; margin-top:0;">🎉 포키 10마리 검거 완료! 🎉</h2>
@@ -110,7 +114,7 @@ function showVictoryModal(code) {
         </div>
         <p style="font-size:11px; color:#c5a368;">검거 소요 시간: ${displayTime}</p>
         <p style="font-size:10px; color:#555;">SEED: ${EVENT_SEED} | 부정행위 적발 시 무효 처리됩니다.</p>
-        <button onclick="this.parentElement.remove()" style="background:#c5a368; color:#1a1512; border:none; padding:10px 25px; cursor:pointer; font-weight:900; border-radius:4px;">확인</button>
+        <button onclick="this.parentElement.remove()" style="background:#c5a368; color:#1a1512; border:none; padding:10px 25px; cursor:pointer; font-weight:900; border-radius:4px; margin-top:10px;">확인</button>
     `;
     document.body.appendChild(modal);
 }
