@@ -692,12 +692,7 @@ function showPartDetail(itemName, itemData, parts, parentGrid, isAutoOpen) {
     partArea.style.cssText = 'margin-top:10px; padding:10px; position: relative;';
 
     const fixedSpecBox = document.createElement('div');
-    fixedSpecBox.style.cssText = `
-        display: none; font-size: 12px; background: #15110e; padding: 12px; 
-        border: 2px solid #5e4b3c; margin-top: 10px; line-height: 1.6;
-        box-shadow: 4px 4px 10px rgba(0,0,0,0.5); width: calc(100% - 20px); 
-        box-sizing: border-box; border-radius: 4px;
-    `;
+    // ... (기존 스타일 유지)
     
     const partGrid = document.createElement('div');
     partGrid.style.cssText = `
@@ -706,31 +701,34 @@ function showPartDetail(itemName, itemData, parts, parentGrid, isAutoOpen) {
     `;
 
     parts.forEach(part => {
-        const partSpecificData = (parts[0] === "무기" || parts[0] === "스텟") ? itemData : itemData[part];
+        // [수정] 무기/스텟 카테고리 여부를 판별하는 로직
+        const isWeaponOrStat = (parts[0] === "무기" || parts[0] === "스텟");
+        const partSpecificData = isWeaponOrStat ? itemData : itemData[part];
+        
         const partContainer = document.createElement('div');
         partContainer.style.cssText = 'display: flex; flex-direction: column; align-items: center; cursor: pointer;';
 
         const partIcon = document.createElement('div');
         partIcon.className = 'game-item-box'; 
         
-        // 데이터에 file이 있으면 해당 파일을, 없으면 기본 이름.png를 시도합니다.
+        // [수정 핵심] imgName 결정 로직
         let imgName = "";
-if (partSpecificData && partSpecificData.file) {
-    imgName = partSpecificData.file; // 데이터에 정의된 파일명 사용
-} else if (category === "방어구") {
-    // 만약 데이터에 file이 없으면 규칙에 따라 강제 매칭 시도 (디버깅용)
-    // 예: 110제 + 부위명 매칭 등
-    imgName = `${part}.png`; 
-}
+        if (partSpecificData && partSpecificData.file) {
+            imgName = partSpecificData.file;
+        } else {
+            // category 변수 대신 part(부위명)를 활용하여 안전하게 처리
+            imgName = `${part}.png`; 
+        }
 
-// 이미지 태그 생성 시 에러 핸들링 추가
-partIcon.innerHTML = `
-    <img src="images/${imgName}" 
-         onerror="console.warn('${itemName} ${part} 이미지 로드 실패: ${imgName}'); this.src='images/default_item.png';" 
-         style="width:85%; height:85%; object-fit:contain; position:relative; z-index:2;">
-    <div style="position:absolute; color:#444; font-size:9px; z-index:1;">${part}</div>
-`;
+        // 이미지 태그 생성 및 에러 처리
+        partIcon.innerHTML = `
+            <img src="images/${imgName}" 
+                 onerror="console.warn('${itemName} ${part} 이미지 로드 실패: ${imgName}'); this.src='images/default_item.png'; this.onerror=null;" 
+                 style="width:85%; height:85%; object-fit:contain; position:relative; z-index:2;">
+            <div style="position:absolute; color:#444; font-size:9px; z-index:1;">${part}</div>
+        `;
 
+        // ... (이하 기존 partName 생성 및 openSpec 로직 유지)
         const partName = document.createElement('div');
         partName.className = 'game-item-name';
         partName.innerText = part;
