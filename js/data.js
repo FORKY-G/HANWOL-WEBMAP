@@ -291,7 +291,7 @@ const skillData = [
 const blacksmithData = {
     "50제": {
         "방어구": {
-            "materials": "적동괴 1개, 오금 1개, 오금철 1개",
+            "materials": "적동괴 1개, 자금 1개, 오금철 1개",
             "scrollCount": 3,
             "items": {
                 "광설": {
