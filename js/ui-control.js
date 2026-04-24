@@ -627,63 +627,106 @@ L.popup()
 
 // [18] 비급 정보 제어 기능
 window.toggleSkillWindow = function() {
-const win = document.getElementById('skill-window');
-const blacksmithWin = document.getElementById('blacksmith-window');
-if (!win) return;
+    const win = document.getElementById('skill-window');
+    const danWin = document.getElementById('dan-window'); // 영단창 추가
+    const blacksmithWin = document.getElementById('blacksmith-window');
+    if (!win) return;
 
-if (win.style.display === 'none' || win.style.display === '') {
-if (blacksmithWin) blacksmithWin.style.display = 'none'; // 대장장이창도 같이 닫아주면 좋겠죠?
-win.style.display = 'block';
-renderSkillList();
-} else {
-win.style.display = 'none';
-}
+    if (win.style.display === 'none' || win.style.display === '') {
+        // 다른 창들 닫기
+        if (danWin) danWin.style.display = 'none'; 
+        if (blacksmithWin) blacksmithWin.style.display = 'none';
+        win.style.display = 'block';
+        renderSkillList();
+    } else {
+        win.style.display = 'none';
+    }
 };
 
 window.renderSkillList = function() {
-const container = document.getElementById('skill-list-content');
-if (!container) return;
+    const container = document.getElementById('skill-list-content');
+    if (!container) return;
 
-container.innerHTML = skillData.map(skill => {
-const imageTag = skill.image 
-? `<img src="${skill.image}" style="width:100%; border-radius:4px; margin-top:8px; border:1px solid #5e4b3c; display:block;">` 
-: '';
+    container.innerHTML = skillData.map(skill => {
+        const imageTag = skill.image ? `<img src="${skill.image}" style="width:100%; border-radius:4px; margin-top:8px; border:1px solid #5e4b3c; display:block;">` : '';
+        return `
+            <div style="margin-bottom: 20px; border-bottom: 1px solid #3d3129; padding-bottom: 15px;">
+                <div style="font-weight: 900; color: #c5a368; font-size: 15px; margin-bottom: 8px; display: flex; align-items: center;">
+                    <span style="background: #a68b5b; color: #1a1512; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 8px; font-weight:900;">SKILL</span>
+                    ${skill.name}
+                </div>
+                <div style="font-size: 12px; color: #b0a59a; font-weight: 700; line-height: 1.6; word-break: keep-all; padding-left: 2px;">
+                    ${skill.info}
+                </div>
+                ${imageTag}
+            </div>
+        `;
+    }).join('');
+};
 
-return `
-           <div style="margin-bottom: 20px; border-bottom: 1px solid #3d3129; padding-bottom: 15px;">
-               <div style="font-weight: 900; color: #c5a368; font-size: 15px; margin-bottom: 8px; display: flex; align-items: center;">
-                   <span style="background: #a68b5b; color: #1a1512; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-right: 8px; font-weight:900;">SKILL</span>
-                   ${skill.name}
-               </div>
-               <div style="font-size: 12px; color: #b0a59a; font-weight: 700; line-height: 1.6; word-break: keep-all; padding-left: 2px;">
-                   ${skill.info}
-               </div>
-               ${imageTag}
-           </div>
-       `;
-}).join('');
+// [18-2] 영단 정보 제어 기능 (비급이랑 똑같이 신규 추가)
+window.toggleDanWindow = function() {
+    const win = document.getElementById('dan-window');
+    const skillWin = document.getElementById('skill-window');
+    const blacksmithWin = document.getElementById('blacksmith-window');
+    if (!win) return;
+
+    if (win.style.display === 'none' || win.style.display === '') {
+        // 다른 창들 닫기
+        if (skillWin) skillWin.style.display = 'none';
+        if (blacksmithWin) blacksmithWin.style.display = 'none';
+        win.style.display = 'block';
+        renderDanList();
+    } else {
+        win.style.display = 'none';
+    }
+};
+
+window.renderDanList = function() {
+    const container = document.getElementById('dan-list-content');
+    if (!container || !danData) return; // data.js에 danData가 있어야 함
+
+    container.innerHTML = danData.map(dan => {
+        return `
+            <div style="margin-bottom: 20px; border-bottom: 1px solid #3d3129; padding-bottom: 15px; display: flex; align-items: center;">
+                <div style="width: 50px; height: 50px; background: #1a1512; border: 2px solid #c5a368; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0;">
+                    <img src="images/${dan.file}" style="width: 80%; height: 80%; object-fit: contain;" onerror="this.src='images/dan9.png'">
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 900; color: #c5a368; font-size: 15px; margin-bottom: 6px;">${dan.name}</div>
+                    <div style="font-size: 12px; color: #b0a59a; font-weight: 700; line-height: 1.5; word-break: keep-all;">
+                        <span style="color: #8c837a;">[효과]</span> ${dan.info}<br>
+                        <span style="color: #8c837a;">[획득]</span> ${dan.source}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
 };
 
 // 버튼 클릭 이벤트 연결
 const skillBtn = document.getElementById('skill-btn');
-if (skillBtn) {
-skillBtn.addEventListener('click', toggleSkillWindow);
-}
+if (skillBtn) skillBtn.addEventListener('click', toggleSkillWindow);
+
+const danBtn = document.getElementById('dan-btn');
+if (danBtn) danBtn.addEventListener('click', toggleDanWindow);
 
 
-// [19] 대장장이 정보창 토글
+// [19] 대장장이 정보창 토글 (수정: 영단창 닫기 추가)
 window.toggleBlacksmithWindow = function() {
-const win = document.getElementById('blacksmith-window');
-const skillWin = document.getElementById('skill-window');
-if (!win) return;
+    const win = document.getElementById('blacksmith-window');
+    const skillWin = document.getElementById('skill-window');
+    const danWin = document.getElementById('dan-window');
+    if (!win) return;
 
-if (win.style.display === 'none' || win.style.display === '') {
-if (skillWin) skillWin.style.display = 'none';
-win.style.display = 'block';
-renderBlacksmithData();
-} else {
-win.style.display = 'none';
-}
+    if (win.style.display === 'none' || win.style.display === '') {
+        if (skillWin) skillWin.style.display = 'none';
+        if (danWin) danWin.style.display = 'none';
+        win.style.display = 'block';
+        renderBlacksmithData();
+    } else {
+        win.style.display = 'none';
+    }
 };
 
 // [20] 3단계: 부위별 상세 정보 렌더링 (방어구 상세 PNG 연동)
