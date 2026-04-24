@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>한월환해도 (0425 영단 업데이트)</title>
+<title>한월환해도 (0422 업데이트)</title>
+<title>한월환해도 (0425 업데이트)</title>
 <link rel="icon" type="image/png" href="images/hanwol-icon.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
@@ -12,166 +13,220 @@
 body { margin: 0; padding: 0; background-color: #1a1a1a; font-family: 'Pretendard', sans-serif; overflow: hidden; }
 #map { width: 100vw; height: 100vh; z-index: 1; }
 
-/* [상단 바 스타일] */
-#top-bar-container {
-    position: fixed; top: 0; left: 0; width: 100%; height: 65px; 
-    background: rgba(0, 0, 0, 0.85); /* 진한 검정 반투명 */
-    border-bottom: 2px solid #4a3d33;
-    display: flex; align-items: center; justify-content: flex-end; /* 오른쪽 정렬 */
-    padding: 0 20px; box-sizing: border-box; z-index: 2000;
-}
-    
 /* [컨트롤 패널 레이아웃] */
 #controls-wrapper {
 position: fixed; top: 15px; right: 20px; z-index: 1000;
 display: flex; flex-direction: row; align-items: center; gap: 12px;
 }
 
-/* [정보창 공통 스타일] */
-#skill-window, #blacksmith-window, #dan-window {
+/* [비급/대장장이 정보창 스타일] */
+#skill-btn { position: fixed; top: 80px; left: 12px; z-index: 1000; cursor: pointer; transition: transform 0.2s; }
+#skill-btn:hover { transform: scale(1.1); }
+#skill-window, #blacksmith-window {
 display: none; 
 position: fixed; 
 top: 80px; 
-right: 20px; 
-z-index: 10000; 
+left: 70px; 
+z-index: 1000; 
 width: 320px; 
 max-height: 70vh; 
-background: #1e1a17 !important; 
+background: #1e1a17 !important; /* 눈이 편안한 다크 브라운 */
 border: 2px solid #6d5a4a !important; 
-box-shadow: 0 0 20px rgba(0,0,0,0.8);
+box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(0,0,0,0.5);
 overflow-y: auto; 
 font-family: 'Pretendard', sans-serif;
 color: #eee7c5;
 }
 
-/* 상단 바 버튼 스타일 */
-.top-bar-btn { cursor: pointer; transition: transform 0.1s; display: flex; align-items: center; }
-.top-bar-btn:hover { transform: scale(1.05); }
-.top-bar-btn img { width: 38px; height: 38px; border: 2px solid #000; background: #fff; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); }
+/* 스크롤바 디자인 */
+#skill-window::-webkit-scrollbar, #blacksmith-window::-webkit-scrollbar { width: 6px; }
+#skill-window::-webkit-scrollbar-thumb, #blacksmith-window::-webkit-scrollbar-thumb { 
+background: #5e4b3c; border-radius: 10px; 
+}
+#skill-window::-webkit-scrollbar-track, #blacksmith-window::-webkit-scrollbar-track { background: #1a1512; }
 
-/* 제목줄 스타일 */
-.window-header { background: #000 !important; color: #d4af37 !important; padding: 12px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+/* 제목 표시줄 - 고문서 금색으로 변경 */
+#skill-window > div:first-child, #blacksmith-window > div:first-child {
+background: #2a241f !important; 
+border-bottom: 2px solid #4a3d33;
+color: #d4af37 !important; /* 쨍하지 않은 차분한 골드 */
+position: sticky; top: 0; z-index: 10;
+}
 
-/* 대장장이 아이템 박스 */
-.game-item-box { width: 48px; height: 48px; background: radial-gradient(circle, #5e4b3c 0%, #1a1512 100%); border: 2px solid #000; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 0 8px rgba(0,0,0,0.8); cursor: pointer; transition: all 0.1s; }
-.game-item-box.selected { border-color: #b8860b !important; box-shadow: 0 0 12px rgba(184, 134, 11, 0.4); }
-.game-item-name { margin-top: 6px; font-size: 10px; font-weight: 900; color: #ffffff; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; text-align: center; word-break: keep-all; width: 52px; }
-.level-btn-style { background: #2a241f !important; border: 2px solid #4a3d33 !important; color: #b0a59a !important; text-align: center; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0px rgba(0,0,0,0.3); }
-.level-btn-style.active { background: #8d735c !important; border-color: #d4af37 !important; color: #fff !important; }
+/* [명인 스타일 아이템 박스] */
+.game-item-box {
+width: 54px; height: 54px; 
+background: radial-gradient(circle, #5e4b3c 0%, #1a1512 100%);
+border: 2px solid #000; display: flex; align-items: center; justify-content: center;
+position: relative; box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+cursor: pointer; transition: all 0.1s;
+}
 
-/* 사이드바 스타일 */
-#toggle-sidebar { background: #fff; border: 2px solid #000; padding: 7px 12px; cursor: pointer; font-weight: 900; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); font-size: 14px; white-space: nowrap; height: 38px; display: flex; align-items: center; box-sizing: border-box; }
-#controls { position: absolute; top: 45px; right: 0; width: 240px; max-height: 0; background: rgba(255, 255, 255, 0.98); border: 0px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); overflow-y: auto; overflow-x: hidden; transition: max-height 0.4s ease; color: #000; padding: 0; z-index: 1001; }
+/* [핵심 추가] 버튼이 선택되었을 때의 테두리 색상 */
+.game-item-box:hover, .game-item-box.selected {
+border-color: #b8860b !important; /* 차분한 호박색 */
+box-shadow: 0 0 12px rgba(184, 134, 11, 0.4);
+}
+
+/* 아이템 이름 스타일 */
+.game-item-name {
+margin-top: 8px; font-size: 11px; font-weight: 900; color: #ffffff;
+text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+text-align: center; word-break: keep-all; width: 60px;
+}
+
+/* [핵심 추가] 대장장이 상단 레벨 버튼 가독성 보정 */
+.level-btn-style {
+background: #2a241f !important; 
+border: 2px solid #4a3d33 !important;
+color: #b0a59a !important; /* 글자색을 밝게 보정 */
+padding: 15px 5px; text-align: center; font-weight: 900; 
+cursor: pointer; box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
+}
+.level-btn-style.active {
+background: #8d735c !important; 
+border-color: #d4af37 !important;
+color: #fff !important;
+}
+
+/* [사이드바 메뉴 스타일] */
+#toggle-sidebar {
+background: #fff; border: 2px solid #000; padding: 7px 12px; cursor: pointer;
+font-weight: 900; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); font-size: 14px;
+white-space: nowrap; height: 38px; display: flex; align-items: center; box-sizing: border-box;
+}
+#controls {
+position: absolute; top: 45px; right: 0; width: 240px; max-height: 0; 
+background: rgba(255, 255, 255, 0.98); border: 0px solid #000; 
+box-shadow: 4px 4px 0px rgba(0,0,0,0.2); overflow-y: auto; overflow-x: hidden;
+transition: max-height 0.4s ease; color: #000; padding: 0; z-index: 1001;
+}
 #controls.active { max-height: 80vh; border: 2px solid #000; padding: 12px; }
-#search-results { position: absolute; top: 40px; left: 0; width: 240px; background: white; border: 2px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); display: none; z-index: 1002; max-height: 300px; overflow-y: auto; }
-.search-result-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; font-size: 13px; font-weight: 700; color: #000; }
+
+/* [기타 UI 스타일] */
+#search-results {
+position: absolute; top: 40px; left: 0; width: 240px; background: white;
+border: 2px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+display: none; z-index: 1002; max-height: 300px; overflow-y: auto;
+}
+.search-result-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; font-size: 13px; font-weight: 700; }
+.control-header { border-bottom: 2px solid #000; margin-bottom: 12px; padding-bottom: 5px; }
+.control-title { font-size: 16px; font-weight: 900; margin: 0; }
+.control-group { margin-bottom: 15px; }
+.control-item { display: flex; align-items: center; margin-bottom: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.control-item img { width: 20px; height: 20px; margin-right: 10px; object-fit: contain; }
+.color-dot { width: 14px; height: 14px; border: 1px solid #000; margin-right: 10px; border-radius: 2px; }
+.divider { border-top: 1px solid #ccc; margin: 10px 0; }
+.accordion-header { background: #e0e0e0; padding: 8px; font-weight: 800; cursor: pointer; display: flex; justify-content: space-between; border: 1px solid #000; border-radius: 4px; font-size: 13px; }
+.accordion-content { display: none; padding: 10px 5px; border: 1px solid #ccc; border-top: none; }
+.accordion-content.active { display: block; }
+#copy-toast { position: fixed; top: 100px; left: 50%; transform: translateX(-50%); background-color: #ffd700; color: #000; padding: 10px 24px; border: 2px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.3); font-weight: 900; z-index: 11000; display: none; border-radius: 4px; }
 .mine-marker { border: 1px solid #000; border-radius: 2px; }
+.mine-녹 { background-color: #2ecc71; } .mine-황 { background-color: #f1c40f; } .mine-청 { background-color: #3498db; } .mine-적 { background-color: #e74c3c; }
 .special-mine { border: 2.5px solid #fff !important; box-shadow: 0 0 8px #fff, 0 0 12px #f00 !important; z-index: 1000 !important; }
-#copy-toast { position: fixed; top: 100px; left: 50%; transform: translateX(-50%); background-color: #ffd700; color: #000; padding: 10px 24px; border: 2px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.3); font-weight: 900; z-index: 11000; display: none; border-radius: 4px; align-items: center; gap: 8px; }
 </style>
 </head>
 
 <body>
 <div id="notice-modal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 20000; justify-content: center; align-items: center;">
-    <div style="background: white; padding: 25px; border-radius: 2px; width: 90%; max-width: 400px; box-shadow: 8px 8px 0px rgba(0,0,0,0.2); border: 2px solid #000; font-family: 'Pretendard', sans-serif;">
-        <div style="font-size: 18px; font-weight: 900; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px;">📢 한월서버 공지사항</div>
-        <div style="font-size: 14px; line-height: 1.6; color: #333; font-weight: 700;">
-            <p style="margin-top: 0; color: #d00;">[0424 한월서버 공지 내역]</p>
-            <ul style="padding-left: 20px; margin-bottom: 20px;">
-                <li>목걸이 제작 추가(명인대장장이)</li>
-                <li>대장장이 VIP기능에 명인대장장이 바로가기 추가</li>
-                <li>파티레이드 오공,검성 보상 상품 변경</li>
-                <li>파티 모집방식 게시판 추가</li>
-                <li>항구관리인 > 목걸이보상상자 추가</li>
-                <li>자세한 내용 업데이트 확인하세요.</li>
-            </ul>
-        </div>
-        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <label style="font-size: 12px; color: #666; cursor: pointer; font-weight: 700;">
-                <input type="checkbox" id="stop-showing"> 오늘 다시 보지 않기
-            </label>
-            <button onclick="closeNotice()" style="padding: 8px 24px; background: #000; color: #fff; border: none; font-weight: 900; cursor: pointer;">확인</button>
-        </div>
-    </div>
+<div style="background: white; padding: 25px; border-radius: 2px; width: 90%; max-width: 400px; box-shadow: 8px 8px 0px rgba(0,0,0,0.2); border: 2px solid #000; font-family: 'Pretendard', sans-serif;">
+<div style="font-size: 18px; font-weight: 900; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px;">📢 한월서버 공지사항</div>
+<div style="font-size: 14px; line-height: 1.6; color: #333; font-weight: 700;">
+<p style="margin-top: 0; color: #d00;">[0424 한월서버 공지 내역]</p>
+<ul style="padding-left: 20px; margin-bottom: 20px;">
+<li>목걸이 제작 추가(명인대장장이)</li>
+<li>대장장이 VIP기능에 명인대장장이 바로가기 추가</li>
+<li>파티레이드 오공,검성 보상 상품 변경</li>
+<li>파티 모집방식 게시판 추가</li>
+<li>항구관리인 > 목걸이보상상자 추가</li>
+<li>자세한 내용 디코 공지&업데이트 확인하세요.</li>
+</ul>
+</div>
+<div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+<label style="font-size: 12px; color: #666; cursor: pointer; font-weight: 700;">
+<input type="checkbox" id="stop-showing"> 오늘 다시 보지 않기
+</label>
+<button onclick="closeNotice()" style="padding: 8px 24px; background: #000; color: #fff; border: none; font-weight: 900; cursor: pointer;">확인</button>
+</div>
+</div>
 </div>
 
+<div id="skill-btn"><img src="images/skill.png" style="width: 44px; height: 44px; border: 2px solid #000; background: #fff; box-shadow: 4px 4px 0px rgba(0,0,0,0.2);"></div>
 <div id="skill-window">
-    <div class="window-header"><span>📜 비급 정보</span><span onclick="toggleSkillWindow()" style="cursor: pointer;">✖</span></div>
-    <div id="skill-list-content" style="padding: 12px;"></div>
+<div style="background: #000; color: #fff; padding: 12px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10;">
+<span>📜 비급 획득 정보</span>
+<span onclick="toggleSkillWindow()" style="cursor: pointer; font-size: 18px;">✖</span>
 </div>
-<div id="dan-window">
-    <div class="window-header"><span>⚫ 영단 정보</span><span onclick="toggleDanWindow()" style="cursor: pointer;">✖</span></div>
-    <div id="dan-list-content" style="padding: 12px;"></div>
-</div>
-<div id="blacksmith-window">
-    <div class="window-header"><span>🔨 대장장이 장비 리스트</span><span onclick="toggleBlacksmithWindow()" style="cursor: pointer;">✖</span></div>
-    <div id="blacksmith-list-content" style="padding: 12px;"></div>
+<div id="skill-list-content" style="padding: 12px;"></div>
 </div>
 
-<div id="map"></div>
+<div id="blacksmith-window">
+<div style="background: #000; color: #fff; padding: 12px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10;">
+<span>🔨 대장장이 장비 리스트</span>
+<span onclick="toggleBlacksmithWindow()" style="cursor: pointer; font-size: 18px;">✖</span>
+</div>
+<div id="blacksmith-list-content" style="padding: 12px;"></div>
+</div> <div id="map"></div>
 <div id="copy-toast"><img src="images/forky.png" style="width: 25px; height: 25px;"><span id="toast-text">복사 완료!</span></div>
 
 <div id="controls-wrapper">
-    <div id="skill-btn" class="top-bar-btn" onclick="toggleSkillWindow()">
-        <img src="images/skill.png">
-    </div>
-    <div id="dan-btn" class="top-bar-btn" style="margin-left: 12px;" onclick="toggleDanWindow()">
-        <img src="images/youngdan.png">
-    </div>
-    <div id="blacksmith-btn" class="top-bar-btn" style="margin-left: 12px;" onclick="toggleBlacksmithWindow()">
-        <img src="images/blacksmith.png">
-    </div>
-    <a href="https://jeongsh214.github.io/herb_calculator/index.html" target="_blank" style="display: flex; align-items: center; gap: 6px; text-decoration: none; color: #000;">
-        <img src="images/herb.png" style="width: 38px; height: 38px; border: 2px solid #000; background: #fff; box-shadow: 3px 3px 0px rgba(0,0,0,0.2);">
-        <span style="font-size: 13px; font-weight: 900; background: #fff; border: 2px solid #000; padding: 7px 12px; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); height: 38px; display: flex; align-items: center; box-sizing: border-box;">약초조합계산기 ◀</span>
-    </a>
-    <div style="position: relative;">
-        <input type="text" id="search-input" placeholder="정보 및 위치 검색..." style="width: 180px; height: 38px; padding: 0 10px; border: 2px solid #000; font-family: 'Pretendard', sans-serif; font-weight: 700; outline: none; background: #fff; box-sizing: border-box;">
-        <div id="search-results"></div>
-    </div>
-    <div style="position: relative;">
-        <div id="toggle-sidebar">▼ 한월메뉴 열기</div>
-        <div id="controls">
-            <div class="control-header"><h3 class="control-title">한월서버</h3></div>
-            <div class="control-group">
-                <label class="control-item"><input type="checkbox" id="check-spawn" checked> <img src="images/compass.png"> 스폰 지점</label>
-                <label class="control-item"><input type="checkbox" id="check-animals" checked> <img src="images/forky.png"> 십이지신</label>
-            </div>
-            <div class="divider"></div>
-            <div class="control-group">
-                <label class="control-item"><input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상</label>
-                <label class="control-item"><input type="checkbox" id="check-npc"> <img src="images/forky.png"> NPC</label>
-            </div>
-            <div class="divider"></div>
-            <div class="control-group">
-                <label class="control-item"><input type="checkbox" id="check-red"> <img src="images/red.png"> 적환단</label>
-                <label class="control-item"><input type="checkbox" id="check-pot"> <img src="images/pot.png"> 탐색(항아리)</label>
-                <label class="control-item"><input type="checkbox" id="check-box"> <img src="images/box.png"> 의문의 상자</label>
-            </div>
-            <div class="divider"></div>
-            <div class="control-group">
-                <div style="font-weight: 900; margin-bottom: 8px; font-size: 13px;">광산 구역</div>
-                <label class="control-item"><input type="checkbox" id="mine-녹"> <div style="width:14px; height:14px; background:#2ecc71; margin-right:10px;"></div> 녹색광산</label>
-                <label class="control-item"><input type="checkbox" id="mine-청"> <div style="width:14px; height:14px; background:#3498db; margin-right:10px;"></div> 청색광산</label>
-                <label class="control-item"><input type="checkbox" id="mine-황"> <div style="width:14px; height:14px; background:#f1c40f; margin-right:10px;"></div> 황색광산</label>
-                <label class="control-item"><input type="checkbox" id="mine-적"> <div style="width:14px; height:14px; background:#e74c3c; margin-right:10px;"></div> 적색광산</label>
-            </div>
-            <div class="control-group">
-                <div style="display: flex; gap: 5px; margin-bottom: 8px;">
-                    <div class="accordion-header" id="hunt-accordion-btn" style="flex: 1; background: #e0e0e0; padding: 8px; font-weight: 800; cursor: pointer; display: flex; justify-content: space-between; border: 1px solid #000; border-radius: 4px; font-size: 13px;">사냥터 목록 <span>▼</span></div>
-                    <button id="reset-hunt" style="border: 2px solid #000; background: #fff; font-weight: 800; cursor: pointer; padding: 2px 6px;">초기화</button>
-                </div>
-                <div class="accordion-content" id="hunt-accordion-content" style="display:none; padding: 10px 5px; border: 1px solid #ccc; border-top: none;"></div>
-            </div>
-            <div class="control-group">
-                <div style="display: flex; gap: 5px; margin-bottom: 8px;">
-                    <div class="accordion-header" id="herb-accordion-btn" style="flex: 1; background: #e0e0e0; padding: 8px; font-weight: 800; cursor: pointer; display: flex; justify-content: space-between; border: 1px solid #000; border-radius: 4px; font-size: 13px;">약초 목록 <span>▼</span></div>
-                    <button id="reset-herb" style="border: 2px solid #000; background: #fff; font-weight: 800; cursor: pointer; padding: 2px 6px;">초기화</button>
-                </div>
-                <div class="accordion-content" id="herb-accordion-content" style="display:none; padding: 10px 5px; border: 1px solid #ccc; border-top: none;"></div>
-            </div>
-        </div>
-    </div>
+<div id="blacksmith-btn" onclick="toggleBlacksmithWindow()" style="display: flex; align-items: center; cursor: pointer; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+<img src="images/blacksmith.png" style="width: 38px; height: 38px; border: 2px solid #000; background: #fff; box-shadow: 3px 3px 0px rgba(0,0,0,0.2);">
+</div>
+
+<a href="https://jeongsh214.github.io/herb_calculator/index.html" target="_blank" style="display: flex; align-items: center; gap: 6px; text-decoration: none; color: #000;">
+<img src="images/herb.png" style="width: 38px; height: 38px; border: 2px solid #000; background: #fff; box-shadow: 3px 3px 0px rgba(0,0,0,0.2);">
+<span style="font-size: 13px; font-weight: 900; background: #fff; border: 2px solid #000; padding: 7px 12px; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); height: 38px; display: flex; align-items: center; box-sizing: border-box;">약초조합계산기 ◀</span>
+</a>
+
+<div style="position: relative;">
+<input type="text" id="search-input" placeholder="정보 및 위치 검색..." style="width: 180px; height: 38px; padding: 0 10px; border: 2px solid #000; font-family: 'Pretendard', sans-serif; font-weight: 700; outline: none; background: #fff; box-sizing: border-box;">
+<div id="search-results"></div>
+</div>
+
+<div style="position: relative;">
+<div id="toggle-sidebar">▼ 한월메뉴 열기</div>
+<div id="controls">
+<div class="control-header"><h3 class="control-title">한월서버</h3></div>
+<div class="control-group">
+<label class="control-item"><input type="checkbox" id="check-spawn" checked> <img src="images/compass.png"> 스폰 지점</label>
+<label class="control-item"><input type="checkbox" id="check-animals" checked> <img src="images/forky.png"> 십이지신</label>
+</div>
+<div class="divider"></div>
+<div class="control-group">
+<label class="control-item"><input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상</label>
+<label class="control-item"><input type="checkbox" id="check-npc"> <img src="images/forky.png"> NPC</label>
+</div>
+<div class="divider"></div>
+<div class="control-group">
+<label class="control-item"><input type="checkbox" id="check-red"> <img src="images/red.png"> 적환단</label>
+<label class="control-item"><input type="checkbox" id="check-pot"> <img src="images/pot.png"> 탐색(항아리)</label>
+<label class="control-item"><input type="checkbox" id="check-box"> <img src="images/box.png"> 의문의 상자</label>
+</div>
+<div class="divider"></div>
+<div class="control-group">
+<div style="font-weight: 900; margin-bottom: 8px; font-size: 13px;">광산 구역</div>
+<label class="control-item"><input type="checkbox" id="mine-녹"> <div class="color-dot" style="background:#2ecc71;"></div> 녹색광산</label>
+<label class="control-item"><input type="checkbox" id="mine-청"> <div class="color-dot" style="background:#3498db;"></div> 청색광산</label>
+<label class="control-item"><input type="checkbox" id="mine-황"> <div class="color-dot" style="background:#f1c40f;"></div> 황색광산</label>
+<label class="control-item"><input type="checkbox" id="mine-적"> <div class="color-dot" style="background:#e74c3c;"></div> 적색광산</label>
+</div>
+<div class="control-group">
+<div style="display: flex; gap: 5px; margin-bottom: 8px;">
+<div class="accordion-header" id="hunt-accordion-btn" style="flex: 1;">사냥터 목록 <span>▼</span></div>
+<button id="reset-hunt" style="border: 2px solid #000; background: #fff; font-weight: 800; cursor: pointer; padding: 2px 6px;">초기화</button>
+</div>
+<div class="accordion-content" id="hunt-accordion-content"></div>
+</div>
+<div class="control-group">
+<div style="display: flex; gap: 5px; margin-bottom: 8px;">
+<div class="accordion-header" id="herb-accordion-btn" style="flex: 1;">약초 목록 <span>▼</span></div>
+<button id="reset-herb" style="border: 2px solid #000; background: #fff; font-weight: 800; cursor: pointer; padding: 2px 6px;">초기화</button>
+</div>
+<div class="accordion-content" id="herb-accordion-content"></div>
+</div>
+</div>
+</div>
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -183,43 +238,41 @@ color: #eee7c5;
 // 공지사항 로직
 const modal = document.getElementById('notice-modal');
 window.closeNotice = function() {
-    if (document.getElementById('stop-showing').checked) localStorage.setItem('hideNotice_0415', 'true');
-    if (modal) modal.style.display = 'none';
+if (document.getElementById('stop-showing').checked) localStorage.setItem('hideNotice_0415', 'true');
+if (modal) modal.style.display = 'none';
 };
 window.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('hideNotice_0415') === 'true') if (modal) modal.style.display = 'none';
+if (localStorage.getItem('hideNotice_0415') === 'true') if (modal) modal.style.display = 'none';
 });
 
-// 사이드바 로직
+// 사이드바 로직 (고침)
 const sidebar = document.getElementById('controls');
 const toggleBtn = document.getElementById('toggle-sidebar');
 function toggleSidebar() {
-    if (!sidebar) return;
-    sidebar.classList.toggle('active');
-    toggleBtn.innerText = sidebar.classList.contains('active') ? '▲ 한월메뉴 닫기' : '▼ 한월메뉴 열기';
+if (!sidebar) return;
+sidebar.classList.toggle('active');
+toggleBtn.innerText = sidebar.classList.contains('active') ? '▲ 한월메뉴 닫기' : '▼ 한월메뉴 열기';
 }
 if (toggleBtn) toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
 
 // 지도 클릭 시 닫기
 if (typeof map !== 'undefined') {
-    map.on('click', () => {
-        if (sidebar && sidebar.classList.contains('active')) { sidebar.classList.remove('active'); toggleBtn.innerText = '▼ 한월메뉴 열기'; }
-        const searchRes = document.getElementById('search-results');
-        if(searchRes) searchRes.style.display = 'none';
-    });
+map.on('click', () => {
+if (sidebar && sidebar.classList.contains('active')) { sidebar.classList.remove('active'); toggleBtn.innerText = '▼ 한월메뉴 열기'; }
+document.getElementById('search-results').style.display = 'none';
+});
 }
 
-// 아코디언 로직 (공통)
+// 아코디언 로직
 function bindAccordion(btnId, contentId) {
-    const btn = document.getElementById(btnId);
-    const content = document.getElementById(contentId);
-    if (btn && content) {
-        btn.addEventListener('click', function() {
-            const isActive = content.style.display === 'block';
-            content.style.display = isActive ? 'none' : 'block';
-            this.querySelector('span').innerText = isActive ? '▼' : '▲';
-        });
-    }
+const btn = document.getElementById(btnId);
+const content = document.getElementById(contentId);
+if (btn && content) {
+btn.addEventListener('click', function() {
+content.classList.toggle('active');
+this.querySelector('span').innerText = content.classList.contains('active') ? '▲' : '▼';
+});
+}
 }
 bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
 bindAccordion('herb-accordion-btn', 'herb-accordion-content');
