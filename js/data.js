@@ -166,7 +166,7 @@ const npcData = [
     { name: "해적선", x: -3622, y: 65, z: 4043, quest: "[히든]해적선", route: "훔친백향초찾기 - 수상한포탈 > 해적잡기 > 해진", file: "transparent" }, // 투명 처리용 키워드
     { name: "백향초재배지", x: -5488, y: 66, z: 4162, quest: "[히든]해적선", route: "수상한포탈 > 해진", file: "portal.png" },
     { name: "점소이", x: -2537, y: 79, z: -5994, quest: "???", file: "jumsoi.png" },
-    { name: "수습의원", x: -2040, y: 107, z: 171, quest: "???", file: "doctor.png" },
+    { name: "수습의원", x: -2040, y: 107, z: 171, quest: "천삼캐기(NPC 위치에서 화살표방향으로 가기)", file: "doctor.png" },
     { name: "다친광부", x: -787, y: 100, z: -1994, quest: "???", item: "녹태", file: "miner.png" },
     { name: "주루대주", x: -2545, y: 79, z: -6022, quest: "???", file: "juru.png" },
     { name: "심마니", lv: 90, x: -3485, y: 80, z: -1950, quest: "[히든]심마니", route: "심마니 > 화검문 > 심마니 > 화검문꼭대기 > 심마니 > 망한 대장장이 > 심마니 > 화검문꼭대기 > 심마니 > 도사 > 제천대성 > 도사 > 매화곡 > 도사 > 심마니", reward: "금환단,매화쾌검(서고관리인 퀘스트 진행)", file: "simmani.png" },
