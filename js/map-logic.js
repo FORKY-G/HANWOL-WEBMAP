@@ -4,7 +4,17 @@ const map = L.map('map', {
     zoomSnap: 0,
     maxZoom: 3,
     attributionControl: false // 기본 로고 끄기
+    zoomControl: false
 });
+
+L.control.zoom({
+    position: 'topleft' // 원래 위치 그대로지만
+}).addTo(map);
+
+const zoomBox = document.querySelector('.leaflet-top.leaflet-left');
+if (zoomBox) {
+    zoomBox.style.marginTop = '75px'; 
+}
 
 L.control.attribution({
     prefix: '<img src="images/forky.png" style="width:15px; vertical-align:middle; margin-right:3px;"> FORKY_G'
