@@ -400,31 +400,51 @@ huntingGrounds.forEach((area) => {
     layers.hunting[area.name] = overlay;
 
     const targetPos = mcToPx(area.x, area.z);
-    // [유지] 기존 마커 생성 방식 (zIndexOffset 포함)
-    const hMarker = L.marker(targetPos, { icon: transparentIcon, zIndexOffset: -500 }); 
+    const hMarker = L.marker(targetPos, { icon: transparentIcon, zIndexOffset: -500 });
 
     const label = document.createElement('label');
     label.className = 'control-item';
     label.innerHTML = `<input type="checkbox" id="hunt-${area.name}"><span style="flex:1;">${area.name}</span><span style="font-size:10px; color:#888; font-weight:normal;">Lv.${area.lv}</span>`;
     huntingListContainer.appendChild(label);
 
+    // 1. 멸문 전용 사진 설정 (snake.png)
     let photoHtml = '';
     if (area.name === "멸문") {
         photoHtml = `
             <div style="margin-top: 10px; border: 1px solid #ccc; padding: 2px; background: #fff;">
-                <img src="images/snake.jpg" style="width:100%; max-width:200px; height:auto; display:block; margin:0 auto; cursor:zoom-in;" onclick="window.open('images/snake.png', '_blank')">
+                <img src="images/snake.jpg" style="width:100%; max-width:200px; height:auto; display:block; margin:0 auto; cursor:zoom-in;" onclick="window.open('images/snake.jpg', '_blank')">
             </div>
         `;
     }
 
+    // 2. [복구] records(주요 위치 복사 버튼) 로직 추가
+    let recordsHtml = '';
+    if (area.records && area.records.length > 0) {
+        recordsHtml = `
+            <div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">
+                <div style="font-weight:800; font-size:13px; color:#d00; margin-bottom:5px;">[위치 복사]</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    ${area.records.map(rec => `
+                        <button onclick="copyCoords(${rec.x}, ${rec.y}, ${rec.z})" 
+                                style="padding:4px; font-size:11px; background:#f8f9fa; border:1px solid #ccc; cursor:pointer; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                            ${rec.n}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // 3. 최종 팝업 컨텐츠 구성 (기존 내용 + 사진 + 위치 복사 버튼)
     const popupContent = `
         <div style="text-align:center; min-width:220px; color:#000; padding: 5px; line-height: 1.4;">
             <div style="font-size:18px; font-weight:800; border-bottom:2px solid #333; padding-bottom:5px; margin-bottom:8px;">${area.name} (Lv.${area.lv})</div>
             <div style="text-align:left; font-size:12px;">
                 <div style="margin-bottom:4px;"><span style="font-weight:800; color:#007bff;">[몬스터]</span> ${area.monsters}</div>
                 <div style="margin-bottom:4px;"><span style="font-weight:800; color:#444;">[좌표]</span> ${area.x}, ${area.y}, ${area.z}</div>
-                ${area.memo ? `<div style="margin-top:4px; color:#d00; font-weight:700;">${area.memo}</div>` : ''}
+                ${area.memo ? `<div style="margin-top:4px; color:#d00; font-weight:700; word-break:keep-all;">${area.memo}</div>` : ''}
                 ${photoHtml}
+                ${recordsHtml}
             </div>
         </div>
     `;
@@ -433,14 +453,10 @@ huntingGrounds.forEach((area) => {
 
     document.getElementById(`hunt-${area.name}`).addEventListener('change', function(e) {
         if(e.target.checked) {
-            // [유지] 1. 레이어와 마커를 즉시 지도에 추가 (화면 이동 없음)
             layers.hunting[area.name].addTo(map);
             hMarker.addTo(map);
-            
-            // [유지] 2. 렉 유발하는 flyTo 생략하고 팝업만 즉시 띄움
             hMarker.openPopup(); 
         } else {
-            // [유지] 체크 해제 시 제거
             map.removeLayer(layers.hunting[area.name]);
             map.removeLayer(hMarker);
         }
