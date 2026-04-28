@@ -895,13 +895,13 @@ function showPartDetail(itemName, itemData, parts, parentGrid, isAutoOpen) {
     partArea.appendChild(fixedSpecBox);
 }
 
-// [21] 1단계: 메인 레벨 선택 (곡괭이 제작 추가됨)
+// [21] 1단계: 메인 레벨 선택 (곡괭이 제작 접고 펴기 추가)
 function renderBlacksmithData() {
     const container = document.getElementById('blacksmith-list-content');
     if (!container) return;
     container.innerHTML = ''; 
 
-    // 상단 레벨 버튼 그리드
+    // 1. 상단 레벨 버튼 그리드 (기존 유지)
     const gridWrapper = document.createElement('div');
     gridWrapper.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;';
 
@@ -912,7 +912,6 @@ function renderBlacksmithData() {
 
         levelBtn.onclick = function() {
             Array.from(gridWrapper.children).forEach(btn => btn.classList.remove('active'));
-            // 곡괭이 선택 효과 초기화
             document.querySelectorAll('.pick-container').forEach(el => el.style.background = 'none');
             this.classList.add('active');
             showLevelDetail(level);
@@ -921,14 +920,28 @@ function renderBlacksmithData() {
     }
     container.appendChild(gridWrapper);
 
-    // --- [신규] 곡괭이 제작 섹션 (그리드 바로 아래 한 줄 추가) ---
-    const pickTitle = document.createElement('div');
-    pickTitle.style.cssText = 'font-weight:900; background:#2a211a; color:#d4af37; padding:8px; margin-top:10px; border-left:4px solid #b8860b; font-size:13px;';
-    pickTitle.innerText = "⛏️ 곡괭이 제작";
-    container.appendChild(pickTitle);
+    // 2. [수정] 곡괭이 제작 섹션 (아코디언 방식)
+    const pickHeader = document.createElement('div');
+    pickHeader.style.cssText = `
+        font-weight:900; background:#2a211a; color:#d4af37; padding:10px; 
+        margin-top:10px; border-left:4px solid #b8860b; font-size:13px; 
+        cursor:pointer; display:flex; justify-content:space-between; align-items:center;
+    `;
+    // 기본 화살표는 아래(▼) 방향
+    pickHeader.innerHTML = `<span>⛏️ 곡괭이 제작</span> <span id="pick-arrow">▼</span>`;
+    container.appendChild(pickHeader);
 
+    // 실제 곡괭이 목록 그리드 (기본은 숨김 처리)
     const pickGrid = document.createElement('div');
-    pickGrid.style.cssText = 'display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; padding: 0 5px;';
+    pickGrid.id = 'pick-grid-content';
+    pickGrid.style.cssText = 'display: none; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; padding: 0 5px;';
+
+    // 곡괭이 헤더 클릭 시 열고 닫기 이벤트
+    pickHeader.onclick = function() {
+        const isHidden = pickGrid.style.display === 'none';
+        pickGrid.style.display = isHidden ? 'grid' : 'none';
+        document.getElementById('pick-arrow').innerText = isHidden ? '▲' : '▼';
+    };
 
     pickaxeData.forEach(pick => {
         const pickContainer = document.createElement('div');
@@ -948,22 +961,22 @@ function renderBlacksmithData() {
         pickContainer.appendChild(pickBox);
         pickContainer.appendChild(pickName);
 
-        pickContainer.onclick = function() {
-            // 다른 레벨 버튼 및 곡괭이 선택 상태 초기화
+        pickContainer.onclick = function(e) {
+            e.stopPropagation(); // 헤더 클릭 이벤트 전파 방지
             Array.from(gridWrapper.children).forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.game-item-box').forEach(el => el.classList.remove('selected'));
             document.querySelectorAll('.pick-container').forEach(el => el.style.background = 'none');
             
-            // 현재 곡괭이 강조
             pickBox.classList.add('selected');
             pickContainer.style.background = 'rgba(184, 134, 11, 0.2)';
-            
             showPickaxeDetail(pick);
         };
         pickGrid.appendChild(pickContainer);
     });
+
     container.appendChild(pickGrid);
 
+    // 상세 정보가 나타날 공간
     const detailContainer = document.createElement('div');
     detailContainer.id = 'blacksmith-detail-area';
     container.appendChild(detailContainer);
