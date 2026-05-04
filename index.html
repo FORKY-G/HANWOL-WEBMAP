@@ -20,7 +20,7 @@ padding-right: 20px; z-index: 1500; border-bottom: 2px solid #5e4b3c; box-sizing
 }
 
 /* [모든 정보창 스타일 통일 - 영단창 포함 완벽 보정] */
-#skill-window, #blacksmith-window, #dan-window, #prob-window {
+#skill-window, #blacksmith-window, #dan-window, #prob-window, #main-quest-window {
 display: none; 
 position: fixed; 
 top: 80px; 
@@ -36,18 +36,19 @@ font-family: 'Pretendard', sans-serif;
 color: #eee7c5;
 }
 
-/* 스크롤바 디자인 */
-#skill-window::-webkit-scrollbar, #blacksmith-window::-webkit-scrollbar, #dan-window::-webkit-scrollbar, #prob-window::-webkit-scrollbar { width: 6px; }
-#skill-window::-webkit-scrollbar-thumb, #blacksmith-window::-webkit-scrollbar-thumb, #dan-window::-webkit-scrollbar-thumb, #prob-window::-webkit-scrollbar-thumb { 
+/* 스크롤바 디자인 */ 
+#skill-window::-webkit-scrollbar, #blacksmith-window::-webkit-scrollbar, #dan-window::-webkit-scrollbar, #prob-window::-webkit-scrollbar, #main-quest-window::-webkit-scrollbar { width: 6px; }
+#skill-window::-webkit-scrollbar-thumb, #blacksmith-window::-webkit-scrollbar-thumb, #dan-window::-webkit-scrollbar-thumb, #prob-window::-webkit-scrollbar-thumb, #main-quest-window::-webkit-scrollbar-thumb { 
 background: #5e4b3c; border-radius: 10px; 
 }
-#skill-window::-webkit-scrollbar-track, #blacksmith-window::-webkit-scrollbar-track, #dan-window::-webkit-scrollbar-track, #prob-window::-webkit-scrollbar-track { background: #1a1512; }
+#skill-window::-webkit-scrollbar-track, #blacksmith-window::-webkit-scrollbar-track, #dan-window::-webkit-scrollbar-track, #prob-window::-webkit-scrollbar-track, #main-quest-window::-webkit-scrollbar-track { background: #1a1512; }
 
 /* 제목 표시줄 스타일 통일 */
 #skill-window > div:first-child, 
 #blacksmith-window > div:first-child, 
 #dan-window > div:first-child, 
-#prob-window > div:first-child {
+#prob-window > div:first-child,
+#main-quest-window > div:first-child {
 background: #2a241f !important; 
 border-bottom: 2px solid #4a3d33;
 color: #d4af37 !important; 
@@ -129,6 +130,10 @@ align-items: center;
     <div><span> 비급 정보</span><span class="win-close" onclick="toggleSkillWindow()">✖</span></div>
     <div id="skill-list-content" style="padding: 12px;"></div>
 </div>
+    <div id="main-quest-window">
+    <div><span> 메인 퀘스트</span><span class="win-close" onclick="toggleMainQuestWindow()">✖</span></div>
+    <div id="main-quest-list-content" style="padding: 12px;"></div>
+</div>
 <div id="blacksmith-window">
     <div><span> 대장장이</span><span class="win-close" onclick="toggleBlacksmithWindow()">✖</span></div>
     <div id="blacksmith-list-content" style="padding: 12px;"></div>
@@ -140,8 +145,10 @@ align-items: center;
 
 <div id="map"></div>
 <div id="copy-toast"><img src="images/forky.png" style="width: 25px; height: 25px;"><span id="toast-text">복사 완료!</span></div>
-
 <div id="controls-wrapper">
+    <div id="main-quest-btn" onclick="toggleMainQuestWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
+    <img src="images/quest.png" class="top-bar-icon" title="메인 퀘스트">
+    </div>
     <div id="skill-btn" onclick="toggleSkillWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
         <img src="images/skill.png" class="top-bar-icon" title="비급 정보">
     </div>
