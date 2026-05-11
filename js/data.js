@@ -568,7 +568,6 @@ const blacksmithData = {
             "적옥목걸이": {"스텟": "생명력+2", "file": "necklace1.png" },
             "청옥목걸이": {"스텟": "힘+2", "file": "necklace2.png" },
             "녹옥목걸이": {"스텟": "행운+2", "file": "necklace3.png" },
-    }
         }
 };
     // 영단 데이터 
