@@ -284,26 +284,17 @@ potItems.forEach((pot) => {
 // [12] 의문의 상자 마커 생성
 mysteryBoxes.forEach((box) => {
     const pos = mcToPx(box.x, box.z);
-    const isSpecialBox = box.item && box.item.includes("고급주문서뽑기");
-    let boxIcon;
 
-    if (isSpecialBox) {
-        boxIcon = L.divIcon({
-            className: 'special-mine', 
-            iconSize: [36, 36],
-            iconAnchor: [18, 18],
-            html: `<img src="images/box.png" style="width:30px; height:30px; position:absolute; top:3px; left:3px; z-index:10;">`
-        });
-    } else {
-        boxIcon = L.icon({
-            iconUrl: 'images/box.png',
-            iconSize: [36, 36],
-            iconAnchor: [18, 18],
-            popupAnchor: [0, -15]
-        });
-    }
+    // [수정] 모든 상자에 동일한 기본 아이콘 적용
+    const boxIcon = L.icon({
+        iconUrl: 'images/box.png',
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
+        popupAnchor: [0, -15]
+    });
 
     const marker = L.marker(pos, { icon: boxIcon }).addTo(layers.box);
+
     const itemInfo = box.item ? `<div style="margin-bottom:4px;"><span style="color:#666; font-weight:700;">획득아이템:</span> ${box.item}</div>` : '';
     const entranceInfo = box.entrance ? `<div style="margin-top:4px; padding: 4px; background: #fff1f1; border-radius: 4px; border: 1px dashed #d00;"><span style="color:#d00; font-weight:800;">[상자위치]</span><br><span style="font-size:11px; font-weight:700;">${box.entrance}</span></div>` : '';
 
