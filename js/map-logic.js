@@ -50,8 +50,8 @@ const scaleX = 0.445733;
 const scaleZ = 0.445873; 
 
 // 정밀 영점(Offset)
-const offsetX = 3652.23;
-const offsetZ = 3708.21;
+const offsetX = 3652.73;
+const offsetZ = 3707.71;
 
 // 변환 함수 (모든 마커 생성 시 이 함수를 호출합니다)
 function mcToPx(mcX, mcZ) {
