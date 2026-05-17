@@ -240,7 +240,7 @@ const huntingGrounds = [
 // [약초 데이터] 
 const herbData = [
     { name: "홍련업화", file: "hub19.png", locations: [{ x: -6842, y: 84, z: 1888 }] },
-    { name: "민들레", file: "hub4.png", locations: [{ x: -3006, y: 92, z: -5033 }, { x: 1332, y: 86, z: -6112 }] },
+    { name: "민들레", file: "hub4.png", locations: [{ x: -3006, y: 92, z: -5033 }, { x: 1332, y: 86, z: -6112 }, { x: , y: , z: ] },
     { name: "옥향초", file: "hub9.png", locations: [{ x: 4800, y: 116, z: 3752 }, { x: 6408, z: 4024 }] },
     { name: "빙백설화", file: "hub16.png", locations: [{ x: 6424, y: 174, z: 136 }] },
     { name: "흑성과", file: "hub14.png", locations: [{ x: -1671, y: 133, z: -3534 }, { x: 1968, y: 124, z: -280 }] },
@@ -264,7 +264,7 @@ const herbData = [
     ]},
     { name: "자운초", file: "hub11.png", locations: [{ x: 2744, y: 224, z: 4672 }, { x: 4034, y: 210, z: 4340 }] },
     { name: "월계엽", file: "hub17.png", locations: [{ x: -96, y: 183, z: -6504 }] },
-    { name: "영군버섯", file: "hub7.png", locations: [{ x: 768, y: 101, z: 5056 }, { x: -1712, y: 113, z: -6379 }
+    { name: "영군버섯", file: "hub7.png", locations: [{ x: 768, y: 101, z: 5056 }, { x: -1712, y: 113, z: -6379 }, { x:-4605, y: 86, z: -3983 }
     ]},
     { name: "백향초", file: "hub5.png", locations: [{ x: -5488, y: 66, z: 4162 }] },
     { name: "금향과", file: "hub15.png", locations: [{ x: 560, y: 229, z: 1416 }] },
