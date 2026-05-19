@@ -78,11 +78,16 @@ function closeAllInfoWindows() {
     });
 }
 
-// [2] 십이지신 동선 설정
+// [2] 십이지신 동선 설정 [최적화 & Glow 적용]
 const animalPathPoints = animals.map(ani => mcToPx(ani.mcX, ani.mcZ));
 const polyline = L.polyline(animalPathPoints, {
-    color: '#FFD700', weight: 2, opacity: 0, dashArray: '5, 8'
-}).addTo(layers.animals); 
+    smoothFactor: 1.5,      // [최적화] 선 단순화
+    color: '#FFD700',       // 원래 색상 (골드)
+    weight: 3,              // 선 굵기 약간 키움
+    opacity: 0,             // 초기 숨김
+    dashArray: '5, 8',      // 점선 스타일
+    className: 'glow-path-gold' // [Glow 추가] CSS 클래스 바인딩 (gold)
+}).addTo(layers.animals);
 
 // [3] 광산 전용 동선 설정
 const minePolylines = {};
@@ -99,9 +104,8 @@ Object.keys(minePaths).forEach(colorKey => {
     }).addTo(layers.mines[colorKey]); 
 });
 
-// --- [NPC 커스텀 퀘스트 동선 생성 구간] ---
-
-// 1) 조사중인 스님 > 탐령구 동선 생성
+// --- [NPC 커스텀 퀘스트 동선 생성 구간 - 최적화 및 Glow 적용 통합] ---
+// 1) 조사중인 스님 > 탐령구 동선 생성 (보라색 Glow)
 const monkData = npcData.find(n => n.name === "조사중인스님");
 const guData = npcData.find(n => n.name === "탐령구");
 let npcPolyline = null;
@@ -110,11 +114,12 @@ if (monkData && guData) {
     const monkPos = mcToPx(monkData.x, monkData.z);
     const guPos = mcToPx(guData.x, guData.z);
     npcPolyline = L.polyline([monkPos, guPos], {
-        color: '#9b59b6', weight: 3, opacity: 0, dashArray: '6, 8'
+        color: '#9b59b6', weight: 4, opacity: 0, dashArray: '6, 8',
+        className: 'glow-path-purple' // [Glow 추가]
     }).addTo(layers.npc);
 }
 
-// 2) 기록서(사도연) > 풍잔객 > 고대의제작대(정적주) > 기록서(사도연) 동선 생성
+// 2) 기록서(사도연) > 풍잔객 > 고대의제작대(정적주) > 기록서(사도연) 동선 생성 (주황색 Glow)
 const recordSadoyen = npcData.find(n => n.name === "기록서(사도연)");
 const pungJanGek = npcData.find(n => n.name === "풍잔객");
 const jeongJeokJu = npcData.find(n => n.name === "고대의제작대(정적주)");
@@ -125,11 +130,12 @@ if (recordSadoyen && pungJanGek && jeongJeokJu) {
     const pPos = mcToPx(pungJanGek.x, pungJanGek.z);
     const jPos = mcToPx(jeongJeokJu.x, jeongJeokJu.z);
     sadoyenPolyline = L.polyline([rPos, pPos, jPos, rPos], {
-        color: '#e67e22', weight: 3, opacity: 0, dashArray: '6, 8'
+        color: '#e67e22', weight: 4, opacity: 0, dashArray: '6, 8',
+        className: 'glow-path-orange' // [Glow 추가]
     }).addTo(layers.npc);
 }
 
-// 3) 해진 > 해적선 > 백향초재배지 > 해진 동선 생성
+// 3) 해진 > 해적선 > 백향초재배지 > 해진 동선 생성 (청록색 Glow)
 const haejinData = npcData.find(n => n.name === "해진");
 const pirateShip = npcData.find(n => n.name === "해적선");
 const herbFarm = npcData.find(n => n.name === "백향초재배지");
@@ -140,11 +146,12 @@ if (haejinData && pirateShip && herbFarm) {
     const psPos = mcToPx(pirateShip.x, pirateShip.z);
     const hfPos = mcToPx(herbFarm.x, herbFarm.z);
     haejinPolyline = L.polyline([hjPos, psPos, hfPos, hjPos], {
-        color: '#1abc9c', weight: 3, opacity: 0, dashArray: '6, 8'
+        color: '#1abc9c', weight: 4, opacity: 0, dashArray: '6, 8',
+        className: 'glow-path-cyan' // [Glow 추가]
     }).addTo(layers.npc);
 }
 
-// 4) 연운객 > 시녀 동선 생성
+// 4) 연운객 > 시녀 동선 생성 (빨간색 Glow)
 const yeonunData = npcData.find(n => n.name === "연운객");
 const maidData = npcData.find(n => n.name === "시녀");
 let yeonunPolyline = null;
@@ -153,7 +160,8 @@ if (yeonunData && maidData) {
     const yPos = mcToPx(yeonunData.x, yeonunData.z);
     const mPos = mcToPx(maidData.x, maidData.z);
     yeonunPolyline = L.polyline([yPos, mPos], {
-        color: '#e74c3c', weight: 3, opacity: 0, dashArray: '6, 8'
+        color: '#e74c3c', weight: 4, opacity: 0, dashArray: '6, 8',
+        className: 'glow-path-red' // [Glow 추가]
     }).addTo(layers.npc);
 }
 
