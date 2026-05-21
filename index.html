@@ -194,17 +194,20 @@ align-items: center;
             </div>
             <div class="divider"></div>
             
-            <div class="control-group">
-                <label class="control-item"><input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상</label>
-                
-                <div class="accordion-item" style="margin-top: 5px;">
-                    <label class="control-item">
-                        <input type="checkbox" id="check-npc" checked> <img src="images/forky.png"> <span>NPC 위치</span>
-                    </label>
-                    
-                    <div style="padding-left: 15px; border-left: 2px solid #3d3129; margin-left: 10px; margin-top: 4px;">
-                        <div style="font-size: 11px; color: #8c837a; font-weight: 900; padding: 4px 10px;">[소메뉴] 히든 퀘스트 NPC</div>
-                        <div id="hidden-npc-content"></div>
+           <div class="control-group">
+    <label class="control-item"><input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상</label>
+    
+    <div class="accordion-item" style="margin-top: 5px;">
+        <label class="control-item">
+            <input type="checkbox" id="check-npc" checked> <img src="images/forky.png"> <span>NPC 위치</span>
+        </label>
+        
+        <div style="padding-left: 15px; border-left: 2px solid #3d3129; margin-left: 10px; margin-top: 4px;">
+            <div class="accordion-header" id="hidden-npc-accordion-btn" style="padding: 4px 10px; font-size: 11px; color: #8c837a; font-weight: 900; background: none; border: none; justify-content: space-between;">
+                <span>히든 퀘스트 NPC</span> <span style="font-size: 9px;">▼</span>
+            </div>
+            <div class="accordion-content active" id="hidden-npc-content" style="display: block; padding: 0; border: none;">
+                </div>
                     </div>
                 </div>
             </div>
