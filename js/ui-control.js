@@ -526,48 +526,82 @@ npcData.forEach((npc) => {
 });
 
 
-// --- [히든 퀘스트 NPC 소메뉴 생성 및 연동 (화면 이동 제거)] ---
+// --- [히든 퀘스트 NPC 소메뉴 개별 체크박스 제어 및 연동] ---
 const hiddenNpcNames = ["상단주", "도사", "해무사승려", "해진", "심마니"];
-const hiddenNpcContainer = document.getElementById('hidden-npc-content'); // HTML 소메뉴 컨테이너 ID
+const hiddenNpcContainer = document.getElementById('hidden-npc-content');
 
 if (hiddenNpcContainer) {
-    // npcData에서 지정된 5명의 NPC만 필터링
+    // 컨테이너 초기화 (중복 생성 방지)
+    hiddenNpcContainer.innerHTML = '';
+
+    // npcData에서 지정된 5명의 NPC 필터링
     const hiddenNpcs = npcData.filter(npc => hiddenNpcNames.includes(npc.name));
 
+    // 이 NPC 마커들을 개별적으로 제어하기 위해 맵 매핑 시 썼던 마커 객체들을 저장할 임시 공간
     hiddenNpcs.forEach((npc) => {
         const targetPos = mcToPx(npc.x, npc.z);
+        
+        // 지도 전체 레이어(layers.npc)에서 해당 NPC 좌표와 일치하는 마커 레이어 참조 찾기
+        let targetMarker = null;
+        layers.npc.eachLayer(layer => {
+            if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
+                targetMarker = layer;
+            }
+        });
 
-        // 소메뉴에 들어갈 NPC 리스트 아이템 생성
-        const div = document.createElement('div');
-        div.className = 'control-item npc-sub-item';
-        div.style.cssText = 'cursor: pointer; padding: 6px 10px; font-size: 12px; color: #b0a59a; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s;';
-        div.innerHTML = `
-            <span style="font-weight: 800; color: #c5a368;">${npc.name}</span>
+        // HTML 리스트 레이아웃 생성 (체크박스 클릭칸 포함)
+        const label = document.createElement('label');
+        label.className = 'control-item npc-sub-item';
+        label.style.cssText = 'padding: 4px 10px; font-size: 12px; color: #b0a59a; display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; transition: background 0.2s; cursor: pointer;';
+        
+        // 고유 ID 생성 (띄어쓰기 제거)
+        const checkboxId = `check-hidden-${npc.name.replace(/\s+/g, '')}`;
+        
+        label.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="${checkboxId}" checked style="cursor: pointer;">
+                <span style="font-weight: 800; color: #c5a368;">${npc.name}</span>
+            </div>
             <span style="font-size: 10px; color: #888;">${npc.lv ? 'Lv.' + npc.lv : '히든'}</span>
         `;
 
-        // 마우스 오버 시 하이라이트 효과
-        div.onmouseover = () => { div.style.background = '#2a211a'; };
-        div.onmouseout = () => { div.style.background = 'none'; };
+        // 마우스 오버 배경 변경 효과 유지
+        label.onmouseover = () => { label.style.background = '#2a211a'; };
+        label.onmouseout = () => { label.style.background = 'none'; };
 
-        // 클릭 시 화면 이동 없이 팝업만 노출
-        div.onclick = () => {
-            // NPC 레이어가 꺼져있다면 마커가 표시되도록 강제로 켜주는 예외처리
-            const npcCheckbox = document.getElementById('check-npc');
-            if (npcCheckbox && !npcCheckbox.checked) {
-                npcCheckbox.checked = true;
-                npcCheckbox.dispatchEvent(new Event('change'));
-            }
+        hiddenNpcContainer.appendChild(label);
 
-            // 화면 이동(flyTo) 없이, 지도상에 렌더링된 해당 NPC 마커를 찾아 즉시 팝업 오픈
-            layers.npc.eachLayer(layer => {
-                if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
-                    layer.openPopup();
+        // 생성된 내부 체크박스 엘리먼트 가져오기
+        const cb = document.getElementById(checkboxId);
+        
+        if (cb && targetMarker) {
+            // 체크박스 클릭(변경) 이벤트 바인딩
+            cb.addEventListener('change', function(e) {
+                if (e.target.checked) {
+                    // 메인 NPC 위치 레이어 그룹이 꺼져있다면 유저 편의를 위해 같이 켜줌
+                    const mainNpcCb = document.getElementById('check-npc');
+                    if (mainNpcCb && !mainNpcCb.checked) {
+                        mainNpcCb.checked = true;
+                        layers.npc.addTo(map);
+                    }
+                    // 지도에 마커 추가 및 팝업 표시
+                    targetMarker.addTo(map);
+                    targetMarker.openPopup();
+                } else {
+                    // 체크 해제 시 지도에서 해당 마커 제거
+                    map.removeLayer(targetMarker);
                 }
             });
-        };
 
-        hiddenNpcContainer.appendChild(div);
+            // 부모 레이어(NPC 위치) 체크박스 상태 변화에 대응 링크
+            // 메인 NPC 체크박스를 해제하면 서브 체크박스들도 동기화되도록 처리
+            const mainNpcCb = document.getElementById('check-npc');
+            if (mainNpcCb) {
+                mainNpcCb.addEventListener('change', function(e) {
+                    cb.checked = e.target.checked;
+                });
+            }
+        }
     });
 }
 
