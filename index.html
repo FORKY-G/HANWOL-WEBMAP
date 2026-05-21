@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <title>한월환해도</title>
 <link rel="icon" type="image/png" href="images/hanwol-icon.png">
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="[https://unpkg.com/leaflet/dist/leaflet.css](https://unpkg.com/leaflet/dist/leaflet.css)" />
 <style>
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+@import url('[https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css](https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css)');
 
 /* [기본 스타일] */
 body { margin: 0; padding: 0; background-color: #1a1a1a; font-family: 'Pretendard', sans-serif; overflow: hidden; }
@@ -73,7 +73,6 @@ align-items: center;
 /* [사이드바 메뉴 스타일] */
 #toggle-sidebar { background: #fff; border: 2px solid #000; padding: 7px 12px; cursor: pointer; font-weight: 900; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); font-size: 14px; white-space: nowrap; height: 38px; display: flex; align-items: center; box-sizing: border-box; }
 #controls { position: absolute; top: 45px; right: 0; width: 240px; max-height: 0; background: rgba(255, 255, 255, 0.98); border: 0px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.2); overflow-y: auto; overflow-x: hidden; transition: max-height 0.4s ease; color: #000; padding: 0; z-index: 1001; }
-/* [수정] 디폴트로 열려있도록 active 스타일 유지 */
 #controls.active { max-height: 80vh; border: 2px solid #000; padding: 12px; }
 
 /* [기타 UI 스타일] */
@@ -105,7 +104,7 @@ align-items: center;
 <div style="font-size: 14px; line-height: 1.6; color: #333; font-weight: 700;">
 <p style="margin-top: 0; color: #d00;">[0521 한월서버 공지 내역]</p>
 <ul style="padding-left: 20px; margin-bottom: 20px;">
-<li>광산 곡괭이 우클릭시 활성석 사용 연결</li>
+<li>광산 곡꭫이 우클릭시 활성석 사용 연결</li>
 <li>광산 광물 업데이트</li>
 <li>적환단 10번 획득처 난이도 하향</li>
 <li>문파레이드 흑룡 추가</li>
@@ -146,9 +145,10 @@ align-items: center;
 
 <div id="map"></div>
 <div id="copy-toast"><img src="images/forky.png" style="width: 25px; height: 25px;"><span id="toast-text">복사 완료!</span></div>
+
 <div id="controls-wrapper">
     <div id="main-quest-btn" onclick="toggleMainQuestWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
-    <img src="images/quest.png" class="top-bar-icon" title="메인 퀘스트">
+        <img src="images/quest.png" class="top-bar-icon" title="메인 퀘스트">
     </div>
     <div id="skill-btn" onclick="toggleSkillWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
         <img src="images/skill.png" class="top-bar-icon" title="비급 정보">
@@ -163,7 +163,7 @@ align-items: center;
         <img src="images/prob.png" class="top-bar-icon" title="확률 공개표">
     </div>
 
-    <a href="https://jeongsh214.github.io/herb_calculator/index.html" target="_blank" style="display: flex; align-items: center; gap: 6px; text-decoration: none; color: #000; margin-right: 15px;">
+    <a href="[https://jeongsh214.github.io/herb_calculator/index.html](https://jeongsh214.github.io/herb_calculator/index.html)" target="_blank" style="display: flex; align-items: center; gap: 6px; text-decoration: none; color: #000; margin-right: 15px;">
         <img src="images/herb.png" style="width: 38px; height: 38px; border: 2px solid #000; background: #fff; box-shadow: 3px 3px 0px rgba(0,0,0,0.2);">
         <span style="font-size: 13px; font-weight: 900; background: #fff; border: 2px solid #000; padding: 7px 12px; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); height: 38px; display: flex; align-items: center; box-sizing: border-box;">약초조합계산기 ◀</span>
     </a>
@@ -174,25 +174,39 @@ align-items: center;
     </div>
 
     <div style="position: relative;">
-        <div id="toggle-sidebar">▲ 한월메뉴 닫기</div> <!-- [수정] 초기 텍스트 닫기로 변경 -->
-        <div id="controls" class="active"> <!-- [수정] active 클래스 추가 (디폴트 열기) -->
+        <div id="toggle-sidebar">▲ 한월메뉴 닫기</div> 
+        <div id="controls" class="active"> 
             <div class="control-header"><h3 class="control-title">한월서버</h3></div>
+            
             <div class="control-group">
                 <label class="control-item"><input type="checkbox" id="check-spawn" checked> <img src="images/compass.png"> 스폰 지점</label>
                 <label class="control-item"><input type="checkbox" id="check-animals"> <img src="images/forky.png"> 십이지신</label>
             </div>
             <div class="divider"></div>
+            
             <div class="control-group">
                 <label class="control-item"><input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상</label>
-                <label class="control-item"><input type="checkbox" id="check-npc"> <img src="images/forky.png"> NPC</label>
+                
+                <div class="accordion-item" style="margin-top: 5px;">
+                    <label class="control-item">
+                        <input type="checkbox" id="check-npc" checked> <img src="images/forky.png"> <span>NPC 위치</span>
+                    </label>
+                    
+                    <div style="padding-left: 15px; border-left: 2px solid #3d3129; margin-left: 10px; margin-top: 4px;">
+                        <div style="font-size: 11px; color: #8c837a; font-weight: 900; padding: 4px 10px;">[소메뉴] 히든 퀘스트 NPC</div>
+                        <div id="hidden-npc-content"></div>
+                    </div>
+                </div>
             </div>
             <div class="divider"></div>
+            
             <div class="control-group">
                 <label class="control-item"><input type="checkbox" id="check-red"> <img src="images/red.png"> 적환단</label>
                 <label class="control-item"><input type="checkbox" id="check-pot"> <img src="images/pot.png"> 탐색(항아리)</label>
                 <label class="control-item"><input type="checkbox" id="check-box"> <img src="images/box.png"> 의문의 상자</label>
             </div>
             <div class="divider"></div>
+            
             <div class="control-group">
                 <div style="font-weight: 900; margin-bottom: 8px; font-size: 13px;">광산 구역</div>
                 <label class="control-item"><input type="checkbox" id="mine-녹"> <div class="color-dot" style="background:#2ecc71;"></div> 녹색광산</label>
@@ -200,6 +214,8 @@ align-items: center;
                 <label class="control-item"><input type="checkbox" id="mine-황"> <div class="color-dot" style="background:#f1c40f;"></div> 황색광산</label>
                 <label class="control-item"><input type="checkbox" id="mine-적"> <div class="color-dot" style="background:#e74c3c;"></div> 적색광산</label>
             </div>
+            <div class="divider"></div>
+
             <div class="control-group">
                 <div style="display: flex; gap: 5px; margin-bottom: 8px;">
                     <div class="accordion-header" id="hunt-accordion-btn" style="flex: 1;">사냥터 목록 <span>▼</span></div>
@@ -207,6 +223,7 @@ align-items: center;
                 </div>
                 <div class="accordion-content" id="hunt-accordion-content"></div>
             </div>
+            
             <div class="control-group">
                 <div style="display: flex; gap: 5px; margin-bottom: 8px;">
                     <div class="accordion-header" id="herb-accordion-btn" style="flex: 1;">약초 목록 <span>▼</span></div>
@@ -214,11 +231,7 @@ align-items: center;
                 </div>
                 <div class="accordion-content" id="herb-accordion-content"></div>
             </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        </div> </div> </div> <script src="[https://unpkg.com/leaflet/dist/leaflet.js](https://unpkg.com/leaflet/dist/leaflet.js)"></script>
 <script src="js/data.js"></script>
 <script src="js/map-logic.js"></script>
 <script src="js/ui-control.js"></script>  
@@ -227,11 +240,11 @@ align-items: center;
 // 공지사항 로직
 const modal = document.getElementById('notice-modal');
 window.closeNotice = function() {
-if (document.getElementById('stop-showing').checked) localStorage.setItem('hideNotice_0415', 'true');
-if (modal) modal.style.display = 'none';
+    if (document.getElementById('stop-showing').checked) localStorage.setItem('hideNotice_0415', 'true');
+    if (modal) modal.style.display = 'none';
 };
 window.addEventListener('DOMContentLoaded', () => {
-if (localStorage.getItem('hideNotice_0415') === 'true') if (modal) modal.style.display = 'none';
+    if (localStorage.getItem('hideNotice_0415') === 'true') if (modal) modal.style.display = 'none';
 });
 
 // 사이드바 로직 [수정] 초기 상태 체크 로직 추가
@@ -239,36 +252,42 @@ const sidebar = document.getElementById('controls');
 const toggleBtn = document.getElementById('toggle-sidebar');
 
 function toggleSidebar() {
-if (!sidebar) return;
-sidebar.classList.toggle('active');
-toggleBtn.innerText = sidebar.classList.contains('active') ? '▲ 한월메뉴 닫기' : '▼ 한월메뉴 열기';
+    if (!sidebar) return;
+    sidebar.classList.toggle('active');
+    toggleBtn.innerText = sidebar.classList.contains('active') ? '▲ 한월메뉴 닫기' : '▼ 한월메뉴 열기';
 }
 
 if (toggleBtn) toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
 
-// 지도 클릭 시 닫기
-if (typeof map !== 'undefined') {
-map.on('click', () => {
-if (sidebar && sidebar.classList.contains('active')) { sidebar.classList.remove('active'); toggleBtn.innerText = '▼ 한월메뉴 열기'; }
-document.getElementById('search-results').style.display = 'none';
+// DOM 로드 완료 후 지도 이벤트 안전하게 바인딩 처리
+window.addEventListener('DOMContentLoaded', () => {
+    if (typeof map !== 'undefined') {
+        map.on('click', () => {
+            if (sidebar && sidebar.classList.contains('active')) { 
+                sidebar.classList.remove('active'); 
+                toggleBtn.innerText = '▼ 한월메뉴 열기'; 
+            }
+            const searchRes = document.getElementById('search-results');
+            if (searchRes) searchRes.style.display = 'none';
+        });
+    }
 });
-}
 
 // 아코디언 로직
 function bindAccordion(btnId, contentId) {
-const btn = document.getElementById(btnId);
-const content = document.getElementById(contentId);
-if (btn && content) {
-btn.addEventListener('click', function() {
-content.classList.toggle('active');
-this.querySelector('span').innerText = content.classList.contains('active') ? '▲' : '▼';
-});
-}
+    const btn = document.getElementById(btnId);
+    const content = document.getElementById(contentId);
+    if (btn && content) {
+        btn.addEventListener('click', function() {
+            content.classList.toggle('active');
+            this.querySelector('span').innerText = content.classList.contains('active') ? '▲' : '▼';
+        });
+    }
 }
 bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
 bindAccordion('herb-accordion-btn', 'herb-accordion-content');
 
-// [보안] 로직
+// [보안] 우클릭 및 개발자도구 차단 로직
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault(); // 우클릭 방지
 }, false);
@@ -290,7 +309,6 @@ document.addEventListener('keydown', function(e) {
         return false;
     }
 }, false);
-    
 </script>
 </body>
 </html>
