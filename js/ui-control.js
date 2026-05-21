@@ -525,6 +525,53 @@ npcData.forEach((npc) => {
     marker.bindPopup(popupContent, { autoPan: true, keepInView: true, closeButton: false, offset: L.point(0, -5) });
 });
 
+
+// --- [히든 퀘스트 NPC 소메뉴 생성 및 연동 (화면 이동 제거)] ---
+const hiddenNpcNames = ["상단주", "도사", "해무사승려", "해진", "심마니"];
+const hiddenNpcContainer = document.getElementById('hidden-npc-content'); // HTML 소메뉴 컨테이너 ID
+
+if (hiddenNpcContainer) {
+    // npcData에서 지정된 5명의 NPC만 필터링
+    const hiddenNpcs = npcData.filter(npc => hiddenNpcNames.includes(npc.name));
+
+    hiddenNpcs.forEach((npc) => {
+        const targetPos = mcToPx(npc.x, npc.z);
+
+        // 소메뉴에 들어갈 NPC 리스트 아이템 생성
+        const div = document.createElement('div');
+        div.className = 'control-item npc-sub-item';
+        div.style.cssText = 'cursor: pointer; padding: 6px 10px; font-size: 12px; color: #b0a59a; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s;';
+        div.innerHTML = `
+            <span style="font-weight: 800; color: #c5a368;">${npc.name}</span>
+            <span style="font-size: 10px; color: #888;">${npc.lv ? 'Lv.' + npc.lv : '히든'}</span>
+        `;
+
+        // 마우스 오버 시 하이라이트 효과
+        div.onmouseover = () => { div.style.background = '#2a211a'; };
+        div.onmouseout = () => { div.style.background = 'none'; };
+
+        // 클릭 시 화면 이동 없이 팝업만 노출
+        div.onclick = () => {
+            // NPC 레이어가 꺼져있다면 마커가 표시되도록 강제로 켜주는 예외처리
+            const npcCheckbox = document.getElementById('check-npc');
+            if (npcCheckbox && !npcCheckbox.checked) {
+                npcCheckbox.checked = true;
+                npcCheckbox.dispatchEvent(new Event('change'));
+            }
+
+            // 화면 이동(flyTo) 없이, 지도상에 렌더링된 해당 NPC 마커를 찾아 즉시 팝업 오픈
+            layers.npc.eachLayer(layer => {
+                if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
+                    layer.openPopup();
+                }
+            });
+        };
+
+        hiddenNpcContainer.appendChild(div);
+    });
+}
+
+
 // [14] 사냥터 영역 및 마커 생성 (혈교도, 화검문, 흑운회 개별 팝업 좌표 복사 기능 구현)
 const huntingImageBounds = [[0, 0], [7300, 7300]]; 
 const huntingListContainer = document.getElementById('hunt-accordion-content');
