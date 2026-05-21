@@ -291,15 +291,30 @@ function bindAccordion(btnId, contentId) {
     const btn = document.getElementById(btnId);
     const content = document.getElementById(contentId);
     if (btn && content) {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation(); // 이벤트 버블링 차단 (NPC 위치 체크박스 간섭 방지)
+            
             content.classList.toggle('active');
-            this.querySelector('span').innerText = content.classList.contains('active') ? '▲' : '▼';
+            
+            // 토글 상태에 따라 display 속성 직접 제어 보완
+            if (content.classList.contains('active')) {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+            
+            // 오른쪽 화살표(▲/▼) 변경 처리 예외 예방 구조
+            const arrowSpan = this.querySelector('span:last-child');
+            if (arrowSpan) {
+                arrowSpan.innerText = content.classList.contains('active') ? '▲' : '▼';
+            }
         });
     }
 }
+    
 bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
 bindAccordion('herb-accordion-btn', 'herb-accordion-content');
-
+bindAccordion('hidden-npc-accordion-btn', 'hidden-npc-content');
 
 </script>
 </body>
