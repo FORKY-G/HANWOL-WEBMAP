@@ -590,7 +590,7 @@ const danData = [
     { name: "청환단", info: "공격력 +3, 보스공격력(%) +1", source: "대장장이 제작", file: "dan7.png" },
     { name: "명월단", info: "보스공격력(%) +1, 행운 +3", source: "오공 레이드 보상", file: "dan8.png" },
     { name: "적환단", info: "체력 +15, 체력(%) +1", source: "탐험 획득 (현재 1개 남음)", file: "dan9.png" },
-    { name: "용혈단", info: "체력(%) +3, 생명력 +5", source: "문파레이드", file: "dan10.png" },
+    { name: "용혈단", info: "체력(%) +3, 생명력 +5", source: "우물영기100개, 우물혈석1개, 토끼내단, 대장장이불 10개", file: "dan10.png" },
     { name: "매화단", info: "치명타공격력(%) +3, 체력 +5", source: "수련의 탑 퀘스트", file: "dan11.png" },
     { name: "흑환단", info: "저항(%) +3, 물약회복량(%) +3", source: "약초 제작(조합법 미공개)", file: "dan12.png" },
     { name: "백환단", info: "경험치획득량(%) +1, 드랍율(%) +1", source: "항아리에서 확률적 드랍", file: "dan13.png" },
