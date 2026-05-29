@@ -895,18 +895,27 @@ window.toggleMainQuestWindow = function() {
 
 function renderMainQuestData() {
     const container = document.getElementById('main-quest-list-content');
-    if (!container || typeof mainQuestData === 'undefined') return;
+    if (!container) return;
 
-    container.innerHTML = mainQuestData.map(q => `
-        <div style="margin-bottom: 20px; border-bottom: 1px solid #3d3129; padding-bottom: 15px;">
-            <div style="font-weight: 900; color: #c5a368; font-size: 14px; margin-bottom: 8px;">
-                <span style="color: #d4af37; margin-right: 5px;">[메인]</span> ${q.title}
+    // 정보창 내부에 fishing.png 이미지가 꽉 차게 들어가도록 HTML 삽입
+    // 이미지 클릭 시 새 창으로 크게 볼 수 있는 기능도 넣어뒀어
+    container.innerHTML = `
+        <div style="text-align: center; padding: 5px 0;">
+            <div style="font-size: 13px; color: #c5a368; font-weight: 800; margin-bottom: 10px; text-align: left; padding-left: 5px;">
+                ⚓ 배 낚시 가이드
             </div>
-            <div style="font-size: 12px; color: #b0a59a; line-height: 1.6; word-break: keep-all;">
-                ${q.info}
+            <div style="border: 1px solid #4a3d33; background: #15110e; padding: 4px; border-radius: 4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.8);">
+                <img src="images/fishing.png" 
+                     style="width: 100%; height: auto; display: block; cursor: zoom-in;" 
+                     title="클릭하면 크게 보기"
+                     onclick="window.open('images/fishing.png', '_blank')"
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'padding:20px; color:#6d5a4a; font-size:12px;\'>낚시 이미지를 찾을 수 없습니다. (images/fishing.png)</div>';">
+            </div>
+            <div style="font-size: 11px; color: #8c837a; margin-top: 8px; text-align: left; padding-left: 5px; line-height: 1.4;">
+                ※ 이미지를 클릭하면 원본 크기로 새 창에서 확인할 수 있습니다.
             </div>
         </div>
-    `).join('');
+    `;
 }
 
 // [18] 비급 정보 제어 기능
