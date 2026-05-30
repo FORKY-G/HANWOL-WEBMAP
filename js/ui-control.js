@@ -276,6 +276,39 @@ redItems.forEach((item) => {
     if (typeof item.n === "string") return; 
     const pos = mcToPx(item.x, item.z);
     const marker = L.marker(pos, { icon: redIcon }).addTo(layers.red);
+    
+    // 1. 주요 위치 복사 버튼 세팅 (승려 NPC와 완전 동일 로직)
+    let recordsHtml = '';
+    if (item.records && item.records.length > 0) {
+        recordsHtml = `
+            <div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">
+                <div style="font-weight:800; font-size:13px; color:#d00; margin-bottom:5px;">[주요 위치 복사]</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    ${item.records.map(rec => `
+                        <button onclick="copyCoords(${rec.x}, ${rec.y}, ${rec.z})" 
+                                style="padding:4px; font-size:11px; background:#f8f9fa; border:1px solid #ccc; cursor:pointer; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                            ${typeof rec.n === 'number' ? '기록서 ' + rec.n : rec.n}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // 2. 가이드 영상 세팅 (10번일 때 red10.mp4 출력)
+    let videoHtml = '';
+    if (item.n === 10) {
+        videoHtml = `
+            <div style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;">
+                <div style="font-weight:800; font-size:13px; color:#007bff; margin-bottom:5px;">[퀘스트 가이드 영상]</div>
+                <video width="100%" height="auto" controls playsinline style="border-radius:4px; border:1px solid #ddd; display:block; background:#000;">
+                    <source src="images/red10.mp4" type="video/mp4">
+                </video>
+            </div>
+        `;
+    }
+
+    // 3. 최종 팝업창 바인딩 (1~9번은 recordsHtml, videoHtml이 빈 값이라 원래대로 나옴)
     const popupContent = `
         <div style="text-align:center; min-width:200px; color:#000; padding: 0;">
             <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px;">적환단</div>
@@ -286,9 +319,17 @@ redItems.forEach((item) => {
             <div style="margin-top: 5px; border: 1px solid #ccc; padding: 2px; background: #fff;">
                 <img src="images/${item.file}" style="width:100%; max-width:180px; height:auto; cursor:zoom-in; display:block; margin:0 auto;" onclick="window.open('images/${item.file}', '_blank')">
             </div>
+            ${recordsHtml}
+            ${videoHtml}
         </div>
     `;
-    marker.bindPopup(popupContent, { autoPan: false, keepInView: true, closeButton: false, offset: L.point(0, -5) });
+
+    marker.bindPopup(popupContent, { 
+        autoPan: item.n === 10 ? true : false, // 10번은 기니까 화면 가림 방지 켬
+        keepInView: true, 
+        closeButton: false, 
+        offset: L.point(0, -5) 
+    });
 });
 
 // [9] 동상 마커 생성
