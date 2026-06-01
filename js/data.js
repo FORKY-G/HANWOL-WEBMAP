@@ -233,6 +233,7 @@ const npcData = [
 // 사냥터 데이터
 
 const huntingGrounds = [
+    { name: "녹림", lv: "100~117", monsters: " ", file: "map19.png", x: -4696, y: 143, z: -1436, x:-4094, y: 118, z: -1048 },
     { name: "혈교도", lv: "100", monsters: "혈교도(lv.100)", file: "map16.png", x: -3980, y: 80, z: 2496 },
     { name: "화검문", lv: "90", monsters: "봉원숭이(lv.90), 곤봉원숭이(lv.90)", memo: "*화검문포탈(화검문열쇠) / [히든] 심마니(원숭이 각50마리 사냥)", file: "map17.png", x: -3297, y: 116, z:-1696 },
     { name: "흑운회", lv: "90", monsters: "흑운회무인(lv.90)", memo: "몰락한소가주-가문재건", file: "map18.png", x: 2461, y: 88, z:-1879 },
