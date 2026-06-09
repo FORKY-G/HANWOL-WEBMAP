@@ -256,7 +256,13 @@ align-items: center;
                 </div>
                 <div class="accordion-content" id="herb-accordion-content"></div>
             </div>
-        </div> </div> </div> <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        </div> </div> </div> 
+
+<div id="image-modal" style="display:none; position:fixed; z-index:25000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.9); cursor:pointer; align-items:center; justify-content:center;">
+    <img id="modal-img" style="max-width:95%; max-height:95%; border:2px solid #c5a368; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="js/data.js"></script>
 <script src="js/map-logic.js"></script>
 <script src="js/ui-control.js"></script>  
@@ -328,7 +334,17 @@ bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
 bindAccordion('herb-accordion-btn', 'herb-accordion-content');
 bindAccordion('hidden-npc-accordion-btn', 'hidden-npc-content');
 
-    // [보안] 우클릭 및 개발자도구 차단 로직
+// ★ [추가] 모달 이미지 닫기 기능 (바탕 검은색 클릭 시 닫힘)
+window.addEventListener('DOMContentLoaded', () => {
+    const imgModal = document.getElementById('image-modal');
+    if (imgModal) {
+        imgModal.onclick = function() {
+            imgModal.style.display = 'none';
+        };
+    }
+});
+
+// [보안] 우클릭 및 개발자도구 차단 로직
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault(); // 우클릭 방지
 }, false);
