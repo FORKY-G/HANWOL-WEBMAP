@@ -610,7 +610,10 @@ const danData = [
     { name: "백환단", info: "경험치획득량(%) +1, 드랍율(%) +1", source: "항아리에서 확률적 드랍", file: "dan13.png" },
     { name: "은환단", info: "최종공격력(%) +1", source: "장로쥐 레이드 보상", file: "dan14.png" },
     { name: "금환단", info: "스킬피해량(%) +1", source: "레벨 보상 및 히든 퀘스트", file: "dan15.png" },
-    { name: "옥환단", info: "공격력(%) +1", source: "해상포인트", file: "dan16.png" }
+    { name: "옥환단", info: "공격력(%) +1", source: "해상포인트", file: "dan16.png" },
+    { name: "청룡단", info: "경험치획득량(%) +1, 힘 +4", source: "희귀 약초 드랍(낫으로 캘 시 2개 획득 확률 올라감)", file: "dan17.png" },
+    { name: "주작단", info: "경험치획득량(%) +1, 생명력 +4", source: "조선장 NPC 제작(고래기름 1개, 10만전)", file: "dan18.png" },
+    { name: "현무단", info: "경험치획득량(%) +1, 행운 +4", source: "주작단 제작 실패시 획득(5%확률)", fime: "dan19.png" }
 ];
 
 
