@@ -978,7 +978,13 @@ window.renderSkillList = function() {
     if (!container) return;
 
     container.innerHTML = skillData.map(skill => {
-        const imageTag = skill.image ? `<img src="${skill.image}" style="width:100%; border-radius:4px; margin-top:8px; border:1px solid #5e4b3c; display:block;">` : '';
+        // 이미지 태그에 onclick 이벤트와 cursor 스타일 추가
+        const imageTag = skill.image ? 
+            `<img src="${skill.image}" 
+                  onclick="openImageModal('${skill.image}')" 
+                  style="width:100%; border-radius:4px; margin-top:8px; border:1px solid #5e4b3c; display:block; cursor:pointer;"
+                  title="클릭하여 크게 보기">` : '';
+        
         return `
             <div style="margin-bottom: 20px; border-bottom: 1px solid #3d3129; padding-bottom: 15px;">
                 <div style="font-weight: 900; color: #c5a368; font-size: 15px; margin-bottom: 8px; display: flex; align-items: center;">
@@ -993,6 +999,26 @@ window.renderSkillList = function() {
         `;
     }).join('');
 };
+
+// 모달 열기 함수
+window.openImageModal = function(src) {
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-img');
+    if (modal && modalImg) {
+        modalImg.src = src;
+        modal.style.display = 'flex'; // flex로 설정해야 중앙 정렬됨
+    }
+};
+
+// 모달 닫기 이벤트 (검은 배경 클릭 시 닫힘)
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('image-modal');
+    if (modal) {
+        modal.onclick = function() {
+            modal.style.display = 'none';
+        };
+    }
+});
 
 // [18-2] 영단 정보 제어 기능
 window.toggleDanWindow = function() {
