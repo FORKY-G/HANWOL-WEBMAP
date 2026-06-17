@@ -308,7 +308,7 @@ redItems.forEach((item) => {
         `;
     }
 
-    // 3. 최종 팝업창 바인딩 (1~9번은 recordsHtml, videoHtml이 빈 값이라 원래대로 나옴)
+    // 3. 최종 팝업창 바인딩 (이미지 클릭 시 index.html에 추가한 모달 띄우기)
     const popupContent = `
         <div style="text-align:center; min-width:200px; color:#000; padding: 0;">
             <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px;">적환단</div>
@@ -317,7 +317,10 @@ redItems.forEach((item) => {
                 <div style="color:#aaa; font-size:9px;">(클릭하여 좌표 복사)</div>
             </div>
             <div style="margin-top: 5px; border: 1px solid #ccc; padding: 2px; background: #fff;">
-                <img src="images/${item.file}" style="width:100%; max-width:180px; height:auto; cursor:zoom-in; display:block; margin:0 auto;" onclick="window.open('images/${item.file}', '_blank')">
+                <img src="images/${item.file}" 
+                     style="width:100%; max-width:180px; height:auto; cursor:pointer; display:block; margin:0 auto;" 
+                     onclick="openImageModal('images/${item.file}')"
+                     title="클릭하여 크게 보기">
             </div>
             ${recordsHtml}
             ${videoHtml}
