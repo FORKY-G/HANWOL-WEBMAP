@@ -932,6 +932,7 @@ bindCheckbox('check-animals', layers.animals);
 bindCheckbox('check-stones', layers.stones);
 bindCheckbox('check-npc', layers.npc);
 bindCheckbox('check-red', layers.red);
+bindCheckbox('check-haetae', layers.hae);
 bindCheckbox('check-pot', layers.pot);
 bindCheckbox('check-box', layers.box);
 bindCheckbox('mine-녹', layers.mines["녹"]);
@@ -966,7 +967,7 @@ searchInput.addEventListener('input', function() {
         if (area.name.toLowerCase().includes(query) || area.monsters.toLowerCase().includes(query)) currentFilteredData.push({ name: area.name, category: '사냥터', x: area.x, y: area.y, z: area.z, type: 'hunting', areaName: area.name });
     });
     const extras = [
-        { data: npcData, cat: 'NPC' }, { data: redItems, cat: '적환단' }, { data: statues, cat: '동상/산' }, { data: mountains, cat: '동상/산' }, { data: potItems, cat: '탐색' }, { data: mysteryBoxes, cat: '의문의 상자' }
+        { data: npcData, cat: 'NPC' }, { data: redItems, cat: '적환단' }, { data: haeItems, cat: '해태단' }, { data: statues, cat: '동상/산' }, { data: mountains, cat: '동상/산' }, { data: potItems, cat: '탐색' }, { data: mysteryBoxes, cat: '의문의 상자' }
     ];
     extras.forEach(group => {
         group.data.forEach(item => {
@@ -986,7 +987,6 @@ searchInput.addEventListener('input', function() {
             }
         });
     });
-
     if (currentFilteredData.length > 0) {
         searchResults.style.display = 'block';
         currentFilteredData.forEach(item => {
@@ -1007,7 +1007,7 @@ function moveToLocation(target) {
 
     setTimeout(() => {
         let foundMarker = null;
-        const allGroups = [layers.spawn, layers.animals, layers.stones, layers.npc, layers.red, layers.pot, layers.box, layers.huntingMarkers];
+        const allGroups = [layers.spawn, layers.animals, layers.stones, layers.npc, layers.red, layers.hae, layers.pot, layers.box, layers.huntingMarkers];
         allGroups.forEach(group => {
             if (group.eachLayer) {
                 group.eachLayer(layer => {
@@ -1057,8 +1057,6 @@ function renderMainQuestData() {
     const container = document.getElementById('main-quest-list-content');
     if (!container) return;
 
-    // 정보창 내부에 fishing.png 이미지가 꽉 차게 들어가도록 HTML 삽입
-    // 이미지 클릭 시 새 창으로 크게 볼 수 있는 기능도 넣어뒀어
     container.innerHTML = `
         <div style="text-align: center; padding: 5px 0;">
             <div style="font-size: 13px; color: #c5a368; font-weight: 800; margin-bottom: 10px; text-align: left; padding-left: 5px;">
