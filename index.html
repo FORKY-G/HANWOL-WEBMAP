@@ -330,13 +330,15 @@ align-items: center;
 <script src="js/ui-control.js"></script>  
 
 <script>
-// [추가] PDF 내부 모달창 열기 및 닫기 자바스크립트 로직
+// PDF 내부 모달창 열기 및 닫기 자바스크립트 로직
 const pdfModal = document.getElementById('pdf-modal');
 const pdfIframe = document.getElementById('pdf-iframe');
 
 window.openPdfModal = function(pdfUrl) {
     if (pdfModal && pdfIframe) {
-        pdfIframe.src = pdfUrl; // 아이프레임에 PDF 경로 주입
+        // #navpanes=0 : 왼쪽 페이지 목록/사이드바 접기
+        // &view=FitH : 가로 폭에 맞추어 메인을 꽉 차게 보여주기
+        pdfIframe.src = pdfUrl + "#navpanes=0&view=FitH"; 
         pdfModal.style.display = 'flex'; // 모달 정중앙 노출
     }
 };
@@ -347,7 +349,7 @@ window.closePdfModal = function() {
         pdfIframe.src = ''; // 메모리 절약을 위해 경로 비우기
     }
 };
-
+    
 // 공지사항 로직
 const modal = document.getElementById('notice-modal');
 window.closeNotice = function() {
