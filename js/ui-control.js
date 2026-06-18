@@ -340,6 +340,57 @@ redItems.forEach((item) => {
     });
 });
 
+
+// [8-1] 해태단 마커 생성
+haeItems.forEach((item) => {
+    if (typeof item.n === "string") return; 
+    const pos = mcToPx(item.x, item.z);
+    
+    // 정의한 haeIcon을 적용하여 layers.hae 레이어에 추가
+    const marker = L.marker(pos, { icon: haeIcon }).addTo(layers.hae);
+    
+    // 1. 주요 위치 복사 버튼 세팅 (첫 번째 사진 테마의 깔끔한 텍스트 스타일)
+    let recordsHtml = '';
+    if (item.records && item.records.length > 0) {
+        recordsHtml = `
+            <div style="margin-top:10px; border-top:1px solid #000; padding-top:10px; text-align:left;">
+                <div style="font-weight:800; font-size:13px; color:#d00; margin-bottom:5px;">[주요 위치 복사]</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    ${item.records.map(rec => `
+                        <button onclick="copyCoords(${rec.x}, ${rec.y}, ${rec.z})" 
+                                style="padding:4px; font-size:11px; background:#f8f9fa; border:1px solid #ccc; cursor:pointer; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#000;">
+                            ${typeof rec.n === 'number' ? '기록서 ' + rec.n : rec.n}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // 2. 최종 팝업창 바인딩 (완전 검은색 폰트 및 투박하고 깔끔한 레이아웃 복원)
+    const popupContent = `
+        <div style="text-align:center; min-width:200px; color:#000; padding: 0; line-height: 1.4;">
+            <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px; color:#000;">
+                해태단 <span style="font-size:13px; color:#555; font-weight:normal;">(${item.name})</span>
+            </div>
+            
+            <div style="background:#333; border-radius:4px; padding: 5px 0; margin-bottom: 5px; cursor:pointer;" onclick="copyCoords(${item.x}, ${item.y}, ${item.z})">
+                <div style="color:#FFD700; font-size:15px; font-weight:700;">${item.x}, ${item.y}, ${item.z}</div>
+                <div style="color:#aaa; font-size:9px;">(클릭하여 좌표 복사)</div>
+            </div>
+            
+            ${recordsHtml}
+        </div>
+    `;
+
+    marker.bindPopup(popupContent, { 
+        autoPan: (item.records && item.records.length > 0) ? true : false, // 하위 버튼이 많으면 가림 방지 활성화
+        keepInView: true, 
+        closeButton: false, 
+        offset: L.point(0, -5) 
+    });
+});
+
 // [9] 동상 마커 생성
 const hanwolManual = statues.find(st => st.name === "한월동상");
 if (hanwolManual) {
