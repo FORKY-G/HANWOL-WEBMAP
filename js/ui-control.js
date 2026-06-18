@@ -37,6 +37,11 @@ const redIcon = L.icon({
     iconSize: [36, 36], iconAnchor: [18, 18], popupAnchor: [0, -15]
 });
 
+const haetaeIcon = L.icon({
+    iconUrl: 'images/haetae.png',
+    iconSize: [36, 36], iconAnchor: [18, 18], popupAnchor: [0, -15]
+});
+
 const stoneIcon = L.icon({ 
     iconUrl: 'images/stone.png', 
     iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -12] 
