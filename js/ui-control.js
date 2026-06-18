@@ -344,17 +344,16 @@ redItems.forEach((item) => {
 // 1. [해태단 아이콘 정의] 마커 생성보다 무조건 이 코드가 위에 있어야 합니다!
 const haeIcon = L.icon({
     iconUrl: 'images/haetae.png', 
-    iconSize: [40, 40],           
-    iconAnchor: [20, 20],         
-    popupAnchor: [0, -20]         
+    iconSize: [36, 36],           
+    iconAnchor: [18, 18],         
+    popupAnchor: [0, -15]         
 });
 
-// 2. [해태단 마커 생성] (기존 346번째 줄 코드 구역)
+// 2. [해태단 마커 생성]
 haeItems.forEach((item) => {
     if (typeof item.n === "string") return; 
     const pos = mcToPx(item.x, item.z);
-    
-    // 이제 상단에서 haeIcon을 먼저 읽었기 때문에 에러가 발생하지 않습니다.
+
     const marker = L.marker(pos, { icon: haeIcon }).addTo(layers.hae);
     
     let recordsHtml = '';
@@ -377,12 +376,14 @@ haeItems.forEach((item) => {
     const popupContent = `
         <div style="text-align:center; min-width:200px; color:#000; padding: 0; line-height: 1.4;">
             <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px; color:#000;">
-                해태단 <span style="font-size:13px; color:#555; font-weight:normal;">(${item.name})</span>
+                ${item.name}
             </div>
+            
             <div style="background:#333; border-radius:4px; padding: 5px 0; margin-bottom: 5px; cursor:pointer;" onclick="copyCoords(${item.x}, ${item.y}, ${item.z})">
                 <div style="color:#FFD700; font-size:15px; font-weight:700;">${item.x}, ${item.y}, ${item.z}</div>
                 <div style="color:#aaa; font-size:9px;">(클릭하여 좌표 복사)</div>
             </div>
+            
             ${recordsHtml}
         </div>
     `;
