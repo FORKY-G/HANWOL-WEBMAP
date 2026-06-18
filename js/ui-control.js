@@ -6,6 +6,7 @@ const layers = {
     npc: L.layerGroup(),
     red: L.layerGroup(),
     hae: L.layerGroup(),
+    qilin: L.layerGroup(),
     pot: L.layerGroup(),
     box: L.layerGroup(),
     mines: {
@@ -341,7 +342,7 @@ redItems.forEach((item) => {
     });
 });
 
-// 1. [해태단 아이콘 정의] 마커 생성보다 무조건 이 코드가 위에 있어야 합니다!
+// 8-1. [해태단 아이콘 정의] 
 const haeIcon = L.icon({
     iconUrl: 'images/haetae.png', 
     iconSize: [36, 36],           
@@ -349,7 +350,7 @@ const haeIcon = L.icon({
     popupAnchor: [0, -15]         
 });
 
-// 2. [해태단 마커 생성]
+// 8-2. [해태단 마커 생성]
 haeItems.forEach((item) => {
     if (typeof item.n === "string") return; 
     const pos = mcToPx(item.x, item.z);
@@ -395,6 +396,64 @@ haeItems.forEach((item) => {
         offset: L.point(0, -5) 
     });
 });
+
+// [8-3] 기린단 전용 아이콘 정의
+const qilinIcon = L.icon({
+    iconUrl: 'images/qilin.png', // 기린단 이미지 경로 맞춤
+    iconSize: [36, 36],           
+    iconAnchor: [18, 18],         
+    popupAnchor: [0, -15]         
+});
+
+// [9-2] 기린단 마커 생성
+qilinItems.forEach((item) => {
+    if (typeof item.n === "string") return; 
+    const pos = mcToPx(item.x, item.z);
+    
+    const marker = L.marker(pos, { icon: qilinIcon }).addTo(layers.qilin);
+    
+    // 주요 위치 복사 버튼 세팅
+    let recordsHtml = '';
+    if (item.records && item.records.length > 0) {
+        recordsHtml = `
+            <div style="margin-top:10px; border-top:1px solid #000; padding-top:10px; text-align:left;">
+                <div style="font-weight:800; font-size:13px; color:#d00; margin-bottom:5px;">[위치 복사]</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                    ${item.records.map(rec => `
+                        <button onclick="copyCoords(${rec.x}, ${rec.y}, ${rec.z})" 
+                                style="padding:4px; font-size:11px; background:#f8f9fa; border:1px solid #ccc; cursor:pointer; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#000;">
+                            ${typeof rec.n === 'number' ? '기록서 ' + rec.n : rec.n}
+                        </button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // 최종 팝업창 바인딩 (해태단과 동일하게 '기린단' 글자 없이 이름만 출력)
+    const popupContent = `
+        <div style="text-align:center; min-width:200px; color:#000; padding: 0; line-height: 1.4;">
+            <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px; color:#000;">
+                ${item.name}
+            </div>
+            
+            <div style="background:#333; border-radius:4px; padding: 5px 0; margin-bottom: 5px; cursor:pointer;" onclick="copyCoords(${item.x}, ${item.y}, ${item.z})">
+                <div style="color:#FFD700; font-size:15px; font-weight:700;">${item.x}, ${item.y}, ${item.z}</div>
+                <div style="color:#aaa; font-size:9px;">(클릭하여 좌표 복사)</div>
+            </div>
+            
+            ${recordsHtml}
+        </div>
+    `;
+
+    marker.bindPopup(popupContent, { 
+        autoPan: (item.records && item.records.length > 0) ? true : false, 
+        keepInView: true, 
+        closeButton: false, 
+        offset: L.point(0, -5) 
+    });
+});
+
 
 // [9] 동상 마커 생성
 const hanwolManual = statues.find(st => st.name === "한월동상");
@@ -938,6 +997,7 @@ bindCheckbox('check-stones', layers.stones);
 bindCheckbox('check-npc', layers.npc);
 bindCheckbox('check-red', layers.red);
 bindCheckbox('check-haetae', layers.hae);
+bindCheckbox('check-qilin', layers.qilin);
 bindCheckbox('check-pot', layers.pot);
 bindCheckbox('check-box', layers.box);
 bindCheckbox('mine-녹', layers.mines["녹"]);
@@ -972,7 +1032,7 @@ searchInput.addEventListener('input', function() {
         if (area.name.toLowerCase().includes(query) || area.monsters.toLowerCase().includes(query)) currentFilteredData.push({ name: area.name, category: '사냥터', x: area.x, y: area.y, z: area.z, type: 'hunting', areaName: area.name });
     });
     const extras = [
-        { data: npcData, cat: 'NPC' }, { data: redItems, cat: '적환단' }, { data: haeItems, cat: '해태단' }, { data: statues, cat: '동상/산' }, { data: mountains, cat: '동상/산' }, { data: potItems, cat: '탐색' }, { data: mysteryBoxes, cat: '의문의 상자' }
+        { data: npcData, cat: 'NPC' }, { data: redItems, cat: '적환단' }, { data: haeItems, cat: '해태단' }, { data: qilinItems, cat: '기린단' }, { data: statues, cat: '동상/산' }, { data: mountains, cat: '동상/산' }, { data: potItems, cat: '탐색' }, { data: mysteryBoxes, cat: '의문의 상자' }
     ];
     extras.forEach(group => {
         group.data.forEach(item => {
@@ -1012,7 +1072,7 @@ function moveToLocation(target) {
 
     setTimeout(() => {
         let foundMarker = null;
-        const allGroups = [layers.spawn, layers.animals, layers.stones, layers.npc, layers.red, layers.hae, layers.pot, layers.box, layers.huntingMarkers];
+        const allGroups = [layers.spawn, layers.animals, layers.stones, layers.npc, layers.red, layers.hae, layers.qilin, layers.pot, layers.box, layers.huntingMarkers];
         allGroups.forEach(group => {
             if (group.eachLayer) {
                 group.eachLayer(layer => {
