@@ -5,6 +5,7 @@ const layers = {
     stones: L.layerGroup(),     
     npc: L.layerGroup(),
     red: L.layerGroup(),
+    hae: L.layerGroup(),
     pot: L.layerGroup(),
     box: L.layerGroup(),
     mines: {
