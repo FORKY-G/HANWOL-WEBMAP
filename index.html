@@ -75,7 +75,7 @@ align-items: center;
 /* [아이템 박스 및 버튼 스타일] */
 .game-item-box { width: 54px; height: 54px; background: radial-gradient(circle, #5e4b3c 0%, #1a1512 100%); border: 2px solid #000; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 0 8px rgba(0,0,0,0.8); cursor: pointer; transition: all 0.1s; }
 .game-item-box:hover, .game-item-box.selected { border-color: #b8860b !important; box-shadow: 0 0 12px rgba(184, 134, 11, 0.4); }
-.game-item-name { margin-top: 8px; font-size: 11px; font-weight: 900; color: #ffffff; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; text-align: center; word-break: keep-all; width: 60px; }
+.game-item-name { margin-top: 8px; font-size: 11px; font-weight: 900; color: #ffffff; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, -1px 1px 0 #000; text-align: center; word-break: keep-all; width: 60px; }
 .level-btn-style { background: #2a241f !important; border: 2px solid #4a3d33 !important; color: #b0a59a !important; padding: 15px 5px; text-align: center; font-weight: 900; cursor: pointer; box-shadow: 3px 3px 0px rgba(0,0,0,0.3); }
 .level-btn-style.active { background: #8d735c !important; border-color: #d4af37 !important; color: #fff !important; }
 
@@ -110,7 +110,41 @@ align-items: center;
     max-height: 85vh;     /* 세로 높이도 화면의 85%까지 확장 */
     top: 90px;
     right: calc(50% - 300px); /* 화면 정중앙 쪽에 가깝게 배치하여 시인성 확보 */
-}    
+}
+
+/* [추가] PDF 전용 내부 모달창 디자인 */
+#pdf-modal {
+    display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.7); 
+    z-index: 30000; /* 모든 창 위에 노출 */
+    justify-content: center; 
+    align-items: center;
+}
+#pdf-modal-content {
+    background: #1e1a17; 
+    border: 2px solid #6d5a4a;
+    box-shadow: 0 0 25px rgba(0,0,0,0.9);
+    width: 80%; 
+    height: 85%; 
+    max-width: 1000px; 
+    display: flex; 
+    flex-direction: column;
+}
+.pdf-btn-close {
+    background: #2a241f; 
+    color: #fff; 
+    border: none; 
+    border-bottom: 2px solid #4a3d33;
+    padding: 10px 15px; 
+    font-weight: 900; 
+    cursor: pointer; 
+    text-align: right;
+    font-size: 16px;
+}
+.pdf-btn-close:hover { color: #d4af37; }
     
 </style>
 </head>
@@ -165,6 +199,13 @@ align-items: center;
 
 <div id="copy-toast"><img src="images/forky.png" style="width: 25px; height: 25px;"><span id="toast-text">복사 완료!</span></div>
 
+<div id="pdf-modal">
+    <div id="pdf-modal-content">
+        <button class="pdf-btn-close" onclick="closePdfModal()">창 닫기 ✖</button>
+        <iframe id="pdf-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+</div>
+
 <div id="controls-wrapper">
     <div id="main-quest-btn" onclick="toggleMainQuestWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
         <img src="images/quest.png" class="top-bar-icon" title="배 낚시">
@@ -203,50 +244,47 @@ align-items: center;
             </div>
             <div class="divider"></div>
             
-           <div class="control-group">
-    <label class="control-item"><input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상</label>
-    
-    <div class="accordion-item" style="margin-top: 5px;">
-        <label class="control-item">
-            <input type="checkbox" id="check-npc"> <img src="images/forky.png"> <span>NPC 위치</span>
-        </label>
-        
-        <div style="padding-left: 15px; border-left: 2px solid #3d3129; margin-left: 10px; margin-top: 4px;">
-            <div class="accordion-header" id="hidden-npc-accordion-btn" style="padding: 4px 10px; font-size: 11px; color: #8c837a; font-weight: 900; background: none; border: none; justify-content: space-between;">
-                <span>히든 퀘스트 NPC</span> <span style="font-size: 9px;">▼</span>
-            </div>
-            <div class="accordion-content" id="hidden-npc-content" style="display: none; padding: 0; border: none;">
-                </div>
+            <div class="control-group">
+                <label class="control-item"><input type="checkbox" id="check-stones"> <img src="images/stone.png"> 산/동상</label>
+                
+                <div class="accordion-item" style="margin-top: 5px;">
+                    <label class="control-item">
+                        <input type="checkbox" id="check-npc"> <img src="images/forky.png"> <span>NPC 위치</span>
+                    </label>
+                    
+                    <div style="padding-left: 15px; border-left: 2px solid #3d3129; margin-left: 10px; margin-top: 4px;">
+                        <div class="accordion-header" id="hidden-npc-accordion-btn" style="padding: 4px 10px; font-size: 11px; color: #8c837a; font-weight: 900; background: none; border: none; justify-content: space-between;">
+                            <span>히든 퀘스트 NPC</span> <span style="font-size: 9px;">▼</span>
+                        </div>
+                        <div class="accordion-content" id="hidden-npc-content" style="display: none; padding: 0; border: none;"></div>
                     </div>
                 </div>
             </div>
             <div class="divider"></div>
-
-    <div class="control-group">
-    <label class="control-item">
-        <input type="checkbox" id="check-red"> 
-        <img src="images/red.png"> 적환단
-    </label>
-    
-    <!-- 해태단 + images 폴더 PDF 연결 -->
-    <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <span style="display: flex; align-items: center;">
-            <input type="checkbox" id="check-haetae"> 
-            <img src="images/haetae.png"> 해태단
-        </span>
-        <a href="images/haetae_guide.pdf" target="_blank" style="font-size: 11px; color: #d00; font-weight: 800; text-decoration: none; border: 1px solid #d00; padding: 1px 4px; border-radius: 3px; background: #fff; margin-left: 10px;">공략 PDF ◀</a>
-    </label>
-    
-    <!-- 기린단 + images 폴더 PDF 연결 -->
-    <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <span style="display: flex; align-items: center;">
-            <input type="checkbox" id="check-qilin"> 
-            <img src="images/qilin.png"> 기린단
-        </span>
-        <a href="images/qilin_guide.pdf" target="_blank" style="font-size: 11px; color: #d00; font-weight: 800; text-decoration: none; border: 1px solid #d00; padding: 1px 4px; border-radius: 3px; background: #fff; margin-left: 10px;">공략 PDF ◀</a>
-    </label>
-</div>
-             <div class="divider"></div>
+            
+            <div class="control-group">
+                <label class="control-item">
+                    <input type="checkbox" id="check-red"> 
+                    <img src="images/red.png"> 적환단
+                </label>
+                
+                <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span style="display: flex; align-items: center;">
+                        <input type="checkbox" id="check-haetae"> 
+                        <img src="images/haetae.png"> 해태단
+                    </span>
+                    <span onclick="openPdfModal('images/haetae_guide.pdf')" style="font-size: 11px; color: #d00; font-weight: 800; border: 1px solid #d00; padding: 1px 4px; border-radius: 3px; background: #fff; margin-left: 10px; cursor: pointer;">공략 PDF ◀</span>
+                </label>
+                
+                <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span style="display: flex; align-items: center;">
+                        <input type="checkbox" id="check-qilin"> 
+                        <img src="images/qilin.png"> 기린단
+                    </span>
+                    <span onclick="openPdfModal('images/qilin_guide.pdf')" style="font-size: 11px; color: #d00; font-weight: 800; border: 1px solid #d00; padding: 1px 4px; border-radius: 3px; background: #fff; margin-left: 10px; cursor: pointer;">공략 PDF ◀</span>
+                </label>
+            </div>
+            <div class="divider"></div>
             
             <div class="control-group">
                 <label class="control-item"><input type="checkbox" id="check-pot"> <img src="images/pot.png"> 탐색(항아리)</label>
@@ -278,7 +316,9 @@ align-items: center;
                 </div>
                 <div class="accordion-content" id="herb-accordion-content"></div>
             </div>
-        </div> </div> </div> 
+        </div> 
+    </div> 
+</div> 
 
 <div id="image-modal" style="display:none; position:fixed; z-index:25000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.9); cursor:pointer; align-items:center; justify-content:center;">
     <img id="modal-img" style="max-width:95%; max-height:95%; border:2px solid #c5a368; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
@@ -290,6 +330,24 @@ align-items: center;
 <script src="js/ui-control.js"></script>  
 
 <script>
+// [추가] PDF 내부 모달창 열기 및 닫기 자바스크립트 로직
+const pdfModal = document.getElementById('pdf-modal');
+const pdfIframe = document.getElementById('pdf-iframe');
+
+window.openPdfModal = function(pdfUrl) {
+    if (pdfModal && pdfIframe) {
+        pdfIframe.src = pdfUrl; // 아이프레임에 PDF 경로 주입
+        pdfModal.style.display = 'flex'; // 모달 정중앙 노출
+    }
+};
+
+window.closePdfModal = function() {
+    if (pdfModal && pdfIframe) {
+        pdfModal.style.display = 'none'; // 모달 숨기기
+        pdfIframe.src = ''; // 메모리 절약을 위해 경로 비우기
+    }
+};
+
 // 공지사항 로직
 const modal = document.getElementById('notice-modal');
 window.closeNotice = function() {
@@ -365,8 +423,6 @@ window.addEventListener('DOMContentLoaded', () => {
         };
     }
 });
-
-
 </script>
 </body>
 </html>
