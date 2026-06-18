@@ -221,11 +221,30 @@ align-items: center;
                 </div>
             </div>
             <div class="divider"></div>
-            
-            <div class="control-group">
-    <label class="control-item"><input type="checkbox" id="check-red"> <img src="images/red.png"> 적환단</label>
-    <label class="control-item"><input type="checkbox" id="check-haetae"> <img src="images/haetae.png"> 해태단</label>
-    <label class="control-item"><input type="checkbox" id="check-qilin"> <img src="images/qilin.png"> 기린단</label>
+
+    <div class="control-group">
+    <label class="control-item">
+        <input type="checkbox" id="check-red"> 
+        <img src="images/red.png"> 적환단
+    </label>
+    
+    <!-- 해태단 + images 폴더 PDF 연결 -->
+    <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <span style="display: flex; align-items: center;">
+            <input type="checkbox" id="check-haetae"> 
+            <img src="images/haetae.png"> 해태단
+        </span>
+        <a href="images/haetae_guide.pdf" target="_blank" style="font-size: 11px; color: #d00; font-weight: 800; text-decoration: none; border: 1px solid #d00; padding: 1px 4px; border-radius: 3px; background: #fff; margin-left: 10px;">공략 PDF ◀</a>
+    </label>
+    
+    <!-- 기린단 + images 폴더 PDF 연결 -->
+    <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <span style="display: flex; align-items: center;">
+            <input type="checkbox" id="check-qilin"> 
+            <img src="images/qilin.png"> 기린단
+        </span>
+        <a href="images/qilin_guide.pdf" target="_blank" style="font-size: 11px; color: #d00; font-weight: 800; text-decoration: none; border: 1px solid #d00; padding: 1px 4px; border-radius: 3px; background: #fff; margin-left: 10px;">공략 PDF ◀</a>
+    </label>
 </div>
              <div class="divider"></div>
             
