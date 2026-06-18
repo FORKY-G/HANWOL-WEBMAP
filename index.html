@@ -132,6 +132,15 @@ align-items: center;
     max-width: 1000px; 
     display: flex; 
     flex-direction: column;
+    overflow: hidden; /* ★ 중요: 영역을 벗어나는 툴바를 잘라버림 */
+}
+
+/* iframe 자체를 위로 대략 50px만큼 밀어 올리고 높이를 늘려서 툴바 감추기 */
+#pdf-iframe {
+    width: 100%;
+    height: calc(100% + 56px); /* 툴바 높이만큼 더 늘려줌 */
+    margin-top: -56px;         /* 위로 밀어서 툴바를 화면 밖으로 컷 */
+    border: none;
 }
 .pdf-btn-close {
     background: #2a241f; 
