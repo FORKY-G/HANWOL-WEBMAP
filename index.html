@@ -112,49 +112,7 @@ align-items: center;
     right: calc(50% - 300px); /* 화면 정중앙 쪽에 가깝게 배치하여 시인성 확보 */
 }
 
-/* [추가] PDF 전용 내부 모달창 디자인 */
-#pdf-modal {
-    display: none; 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.7); 
-    z-index: 30000; /* 모든 창 위에 노출 */
-    justify-content: center; 
-    align-items: center;
-}
-#pdf-modal-content {
-    background: #1e1a17; 
-    border: 2px solid #6d5a4a;
-    box-shadow: 0 0 25px rgba(0,0,0,0.9);
-    width: 80%; 
-    height: 85%; 
-    max-width: 1000px; 
-    display: flex; 
-    flex-direction: column;
-    overflow: hidden; /* ★ 중요: 영역을 벗어나는 툴바를 잘라버림 */
-}
 
-/* iframe 자체를 위로 대략 50px만큼 밀어 올리고 높이를 늘려서 툴바 감추기 */
-#pdf-iframe {
-    width: 100%;
-    height: calc(100% + 56px); /* 툴바 높이만큼 더 늘려줌 */
-    margin-top: -56px;         /* 위로 밀어서 툴바를 화면 밖으로 컷 */
-    border: none;
-}
-.pdf-btn-close {
-    background: #2a241f; 
-    color: #fff; 
-    border: none; 
-    border-bottom: 2px solid #4a3d33;
-    padding: 10px 15px; 
-    font-weight: 900; 
-    cursor: pointer; 
-    text-align: right;
-    font-size: 16px;
-}
-.pdf-btn-close:hover { color: #d4af37; }
-    
 </style>
 </head>
 
@@ -284,17 +242,13 @@ align-items: center;
                     <span style="display: flex; align-items: center;">
                         <input type="checkbox" id="check-haetae"> 
                         <img src="images/haetae.png"> 해태단
-                    </span>
-                    <span onclick="openPdfModal('images/haetae_guide.pdf')" style="font-size: 11px; color: #d00; font-weight: 800; border: 1px solid #d00; padding: 1px 4px; border-radius: 3px; background: #fff; margin-left: 10px; cursor: pointer;">공략 PDF ◀</span>
-                </label>
+                 </label>
                 
                 <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                     <span style="display: flex; align-items: center;">
                         <input type="checkbox" id="check-qilin"> 
                         <img src="images/qilin.png"> 기린단
-                    </span>
-                    <span onclick="openPdfModal('images/qilin_guide.pdf')" style="font-size: 11px; color: #d00; font-weight: 800; border: 1px solid #d00; padding: 1px 4px; border-radius: 3px; background: #fff; margin-left: 10px; cursor: pointer;">공략 PDF ◀</span>
-                </label>
+                 </label>
             </div>
             <div class="divider"></div>
             
