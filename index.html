@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>한월환해도 (히든영단 업데이트)</title>
+<title>한월환해도 (히든영단 공략 업데이트)</title>
 <link rel="icon" type="image/png" href="images/hanwol-icon.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <style>
@@ -112,7 +112,23 @@ align-items: center;
     right: calc(50% - 300px); /* 화면 정중앙 쪽에 가깝게 배치하여 시인성 확보 */
 }
 
-
+/* [추가] 서브 세부 가이드 리스트 아이템 스타일 */
+.sub-guide-item {
+    padding: 6px 8px;
+    font-size: 11px;
+    color: #444;
+    font-weight: 800;
+    cursor: pointer;
+    border-bottom: 1px dashed #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sub-guide-item:hover {
+    background: #f5f5f5;
+    color: #d00;
+}
+    
 </style>
 </head>
 
@@ -165,16 +181,6 @@ align-items: center;
 </div>
 
 <div id="copy-toast"><img src="images/forky.png" style="width: 25px; height: 25px;"><span id="toast-text">복사 완료!</span></div>
-
-<div id="pdf-modal">
-    <div id="pdf-modal-content" style="position: relative; overflow: hidden;">
-        <button class="pdf-btn-close" onclick="closePdfModal()" style="position: relative; z-index: 10; width: 100%;">창 닫기 ✖</button>
-        
-        <div style="width: 100%; height: 100%; overflow: hidden; position: relative;">
-            <iframe id="pdf-iframe" src="" style="width: 100%; height: calc(100% + 56px); margin-top: -56px; border: none; position: absolute; top: 0; left: 0;"></iframe>
-        </div>
-    </div>
-</div>
 
 <div id="controls-wrapper">
     <div id="main-quest-btn" onclick="toggleMainQuestWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
@@ -238,17 +244,47 @@ align-items: center;
                     <img src="images/red.png"> 적환단
                 </label>
                 
-                <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                    <span style="display: flex; align-items: center;">
-                        <input type="checkbox" id="check-haetae"> 
-                        <img src="images/haetae.png"> 해태단
-                 </label>
+                <div style="margin-top: 4px;">
+                    <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 0;">
+                        <span style="display: flex; align-items: center;">
+                            <input type="checkbox" id="check-haetae"> 
+                            <img src="images/haetae.png"> 해태단
+                        </span>
+                        <span id="haetae-guide-btn" style="font-size: 11px; color: #d00; font-weight: 800; border: 1px solid #d00; padding: 1px 5px; border-radius: 3px; background: #fff; margin-left: 10px; cursor: pointer; user-select: none;">공략 ▼</span>
+                    </label>
+                    <div id="haetae-guide-content" style="display: none; padding-left: 15px; border-left: 2px solid #d00; margin-left: 10px; margin-top: 4px; background: #fafafa;">
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_2.jpg'])">낡은 비문 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_3.jpg'])">제자의 수기 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_4.jpg'])">누군가의 일지 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_5.jpg'])">풍화된 기록 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_6.jpg'])">낡은 두루마리 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_7.jpg', 'images/haetae_guide_8.jpg'])"><span style="color:#b8860b;">무의 길 (2장)</span> <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_9.jpg'])">장인의 일지 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_10.jpg', 'images/haetae_guide_11.jpg'])"><span style="color:#b8860b;">오인의 진법 (2장)</span> <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/haetae_guide_12.jpg'])">검을 뽑아라 <span>▶</span></div>
+                    </div>
+                </div>
                 
-                <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                    <span style="display: flex; align-items: center;">
-                        <input type="checkbox" id="check-qilin"> 
-                        <img src="images/qilin.png"> 기린단
-                 </label>
+                <div style="margin-top: 8px;">
+                    <label class="control-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 0;">
+                        <span style="display: flex; align-items: center;">
+                            <input type="checkbox" id="check-qilin"> 
+                            <img src="images/qilin.png"> 기린단
+                        </span>
+                        <span id="qilin-guide-btn" style="font-size: 11px; color: #d00; font-weight: 800; border: 1px solid #d00; padding: 1px 5px; border-radius: 3px; background: #fff; margin-left: 10px; cursor: pointer; user-select: none;">공략 ▼</span>
+                    </label>
+                    <div id="qilin-guide-content" style="display: none; padding-left: 15px; border-left: 2px solid #d00; margin-left: 10px; margin-top: 4px; background: #fafafa;">
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_2.jpg', 'images/qilin_guide_3.jpg', 'images/qilin_guide_4.jpg'])"><span style="color:#b8860b;">무인의 기록 (3장)</span> <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_5.jpg'])">의원의 부탁 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_6.jpg'])">수색기록 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_7.jpg'])">황신극명 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_8.jpg'])">기지의양 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_9.jpg'])">미니게임(태고) <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_10.jpg'])">망월록 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_11.jpg'])">명혼비약 <span>▶</span></div>
+                        <div class="sub-guide-item" onclick="openMultiImageModal(['images/qilin_guide_12.jpg', 'images/qilin_guide_13.jpg', 'images/qilin_guide_14.jpg'])"><span style="color:#b8860b;">간수의 수기 (3장)</span> <span>▶</span></div>
+                    </div>
+                </div>
             </div>
             <div class="divider"></div>
             
@@ -278,7 +314,7 @@ align-items: center;
             <div class="control-group">
                 <div style="display: flex; gap: 5px; margin-bottom: 8px;">
                     <div class="accordion-header" id="herb-accordion-btn" style="flex: 1;">약초 목록 <span>▼</span></div>
-                    <button id="reset-herb" style="border: 2px solid #000; background: #fff; font-weight: 800; cursor: pointer; padding: 2px 6px;">초기화</button>
+                    <button id="reset-herb" style="border: 2px solid #000; background: #fff; font-weight: 800; pointer; padding: 2px 6px;">초기화</button>
                 </div>
                 <div class="accordion-content" id="herb-accordion-content"></div>
             </div>
@@ -286,8 +322,10 @@ align-items: center;
     </div> 
 </div> 
 
-<div id="image-modal" style="display:none; position:fixed; z-index:25000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.9); cursor:pointer; align-items:center; justify-content:center;">
-    <img id="modal-img" style="max-width:95%; max-height:95%; border:2px solid #c5a368; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+<div id="image-modal" style="display:none; position:fixed; z-index:25000; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.9); cursor:pointer; align-items:center; justify-content:center; overflow-y:auto; padding:40px 0; box-sizing:border-box;">
+    <div id="modal-img-container" style="display:flex; flex-direction:column; align-items:center; gap:20px; max-width:95%;">
+        <img id="modal-img" style="max-width:100%; max-height:none; border:2px solid #c5a368; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+    </div>
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -296,6 +334,31 @@ align-items: center;
 <script src="js/ui-control.js"></script>  
 
 <script>
+// ★ [신규 추가] 여러 장의 가이드 이미지를 모달창 내부에 순서대로 아래로 이어 붙여 출력하는 핵심 엔진 함수
+window.openMultiImageModal = function(imgArray) {
+    const imgModal = document.getElementById('image-modal');
+    const container = document.getElementById('modal-img-container');
+    
+    if (!imgModal || !container) return;
+    
+    // 내부 초기 비우기
+    container.innerHTML = '';
+    
+    // 배열 내부 이미지 수만큼 태그 동적 동시 렌더링
+    imgArray.forEach((src) => {
+        const imgElement = document.createElement('img');
+        imgElement.src = src;
+        imgElement.style.maxWidth = '100%';
+        imgElement.style.height = 'auto';
+        imgElement.style.border = '2px solid #c5a368';
+        imgElement.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+        container.appendChild(imgElement);
+    });
+    
+    // 스크롤 탑 위치 복구 후 모달 활성화
+    imgModal.scrollTop = 0;
+    imgModal.style.display = 'flex';
+};
 
 // 공지사항 로직
 const modal = document.getElementById('notice-modal');
@@ -333,27 +396,27 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// 아코디언 로직
+// 아코디언 공용 제어 함수
 function bindAccordion(btnId, contentId) {
     const btn = document.getElementById(btnId);
     const content = document.getElementById(contentId);
     if (btn && content) {
         btn.addEventListener('click', function(e) {
-            e.stopPropagation(); // 이벤트 버블링 차단 (NPC 위치 체크박스 간섭 방지)
+            e.stopPropagation(); // 이벤트 전파 방지
             
             content.classList.toggle('active');
-            
-            // 토글 상태에 따라 display 속성 직접 제어 보완
             if (content.classList.contains('active')) {
                 content.style.display = 'block';
             } else {
                 content.style.display = 'none';
             }
             
-            // 오른쪽 화살표(▲/▼) 변경 처리 예외 예방 구조
-            const arrowSpan = this.querySelector('span:last-child');
-            if (arrowSpan) {
+            const arrowSpan = this.querySelector('span:last-child') || this;
+            if (arrowSpan && arrowSpan !== this) {
                 arrowSpan.innerText = content.classList.contains('active') ? '▲' : '▼';
+            } else if (btnId.includes('guide-btn')) {
+                // 해태/기린단 텍스트 가이드 전용 글자 토글 변환
+                btn.innerText = content.classList.contains('active') ? '공략 ▲' : '공략 ▼';
             }
         });
     }
@@ -363,7 +426,11 @@ bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
 bindAccordion('herb-accordion-btn', 'herb-accordion-content');
 bindAccordion('hidden-npc-accordion-btn', 'hidden-npc-content');
 
-// ★ [추가] 모달 이미지 닫기 기능 (바탕 검은색 클릭 시 닫힘)
+// 신규 해태단/기린단 상세 공략 아코디언 매핑 등록
+bindAccordion('haetae-guide-btn', 'haetae-guide-content');
+bindAccordion('qilin-guide-btn', 'qilin-guide-content');
+
+// 모달 이미지 닫기 기능 (바탕 클릭 시 닫힘 보존)
 window.addEventListener('DOMContentLoaded', () => {
     const imgModal = document.getElementById('image-modal');
     if (imgModal) {
