@@ -495,39 +495,38 @@ npcData.forEach((npc) => {
         } 
     });
 
-    // [제작 아이템 목록 컴포넌트 화]
+    // [제작 아이템 목록 - 첫 번째 스타일 반영]
     let craftHtml = '';
     if (npc.crafting && npc.crafting.length > 0) {
         craftHtml = `
-            <div style="margin-top:12px; border-top:1px solid #ddd; padding-top:10px;">
-                <div style="font-weight:800; font-size:12px; color:#111; margin-bottom:6px; text-align:left;">📦 제작 아이템 목록</div>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background:#f8f9fa; padding:4px; border:1px solid #ddd; border-radius:4px;">
+            <div style="margin-top:10px; border-top:2px solid #000; padding-top:10px;">
+                <div style="font-weight:900; font-size:13px; color:#000; margin-bottom:8px; text-align:left;">[제작 아이템 목록]</div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background:#333; padding:4px; border:1px solid #000;">
                     ${npc.crafting.map((item, index) => `
                         <div onclick="showRecipe('${npc.name}', ${index})" 
-                            style="aspect-ratio: 1/1; background:#fff; border:1px solid #ccc; border-radius:3px; cursor:pointer; display:flex; align-items:center; justify-content:center;"
-                            onmouseover="this.style.border='1px solid #c5a368'" 
-                            onmouseout="this.style.border='1px solid #ccc'">
+                            style="aspect-ratio: 1/1; background:#1a1a1a; border:1px solid #555; cursor:pointer; display:flex; align-items:center; justify-content:center;"
+                            onmouseover="this.style.border='1px solid #ffd700'" 
+                            onmouseout="this.style.border='1px solid #555'">
                             <img src="images/${item.img}" style="width:85%; height:85%; object-fit:contain;" title="${item.name}">
                         </div>
                     `).join('')}
                 </div>
-                <div id="recipe-display-${npc.name.replace(/\s+/g, '')}" style="margin-top:6px; padding:8px; background:#fff; border:1px solid #ddd; border-radius:4px; font-size:11px; font-weight:700; display:none; color:#333; text-align:left; line-height:1.4;">
+                <div id="recipe-display-${npc.name.replace(/\s+/g, '')}" style="margin-top:8px; padding:10px; background:#eee; border:1px solid #000; font-size:12px; font-weight:700; display:none; color:#000; text-align:left; line-height:1.4;">
                 </div>
             </div>
         `;
     }
 
-    // [주요 위치 복사 버튼 컴포넌트 화]
+    // [주요 위치 복사 버튼 - 첫 번째 스타일 반영]
     let recordsHtml = '';
     if (npc.records && npc.records.length > 0) {
         recordsHtml = `
-            <div style="margin-top:12px; border-top:1px solid #ddd; padding-top:10px;">
-                <div style="font-weight:800; font-size:12px; color:#d00; margin-bottom:6px; text-align:left;">📍 주요 위치 복사</div>
+            <div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px; text-align:left;">
+                <div style="font-weight:800; font-size:13px; color:#d00; margin-bottom:5px;">[주요 위치 복사]</div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
                     ${npc.records.map(rec => `
                         <button onclick="copyCoords(${rec.x}, ${rec.y}, ${rec.z})" 
-                                style="padding:5px; font-size:11px; background:#fff; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#333;"
-                                onmouseover="this.style.background='#f1f3f5'" onmouseout="this.style.background='#fff'">
+                                style="padding:4px; font-size:11px; background:#f8f9fa; border:1px solid #ccc; cursor:pointer; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#000;">
                             ${typeof rec.n === 'number' ? '기록서 ' + rec.n : rec.n}
                         </button>
                     `).join('')}
@@ -536,12 +535,12 @@ npcData.forEach((npc) => {
         `;
     }
 
-    // [동영상 가이드 컴포넌트 화]
+    // [동영상 가이드 - 첫 번째 스타일 반영]
     let videoHtml = '';
     if (npc.name === "해무사승려") {
         videoHtml = `
-            <div style="margin-top:12px; border-top:1px dashed #ccc; padding-top:10px;">
-                <div style="font-weight:800; font-size:12px; color:#007bff; margin-bottom:6px; text-align:left;">🎬 퀘스트 가이드 영상</div>
+            <div style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px; text-align:left;">
+                <div style="font-weight:800; font-size:13px; color:#007bff; margin-bottom:5px;">[퀘스트 가이드 영상]</div>
                 <video width="100%" height="auto" controls playsinline style="border-radius:4px; border:1px solid #ddd; display:block; background:#000;">
                     <source src="images/haemusa.mp4" type="video/mp4">
                 </video>
@@ -550,10 +549,10 @@ npcData.forEach((npc) => {
     }
 
     // ===================================================
-    // ✨ 실시간 가독성 데이터 가공 레이어 (data.js 수정 방지용)
+    // ✨ 실시간 가독성 데이터 가공 레이어 (디자인 복원 버전)
     // ===================================================
     
-    // 1. 다중 퀘스트 깔끔하게 리스트 포맷팅 (쉼표 및 <br> 지원)
+    // 1. 다중 퀘스트 리스트 분리 처리 (텍스트 디자인 원본 복원)
     let questListHtml = '';
     if (npc.quest) {
         const cleanQuest = npc.quest.replace(/<br\s*\/?>/gi, ',');
@@ -561,11 +560,11 @@ npcData.forEach((npc) => {
         questListHtml = quests
             .map(q => q.trim())
             .filter(q => q.length > 0)
-            .map(q => `<div style="margin-bottom:2px; font-weight:700; color:#222;">• ${q}</div>`)
+            .map(q => `<div style="margin-bottom:2px;">• ${q}</div>`)
             .join('');
     }
 
-    // 2. 필요 재료 가독성 처리 (복잡한 괄호쌍 및 컴마 나열 분리)
+    // 2. 필요 재료 가독성 처리 (회색 박스 빼고 줄바꿈만 원본 디자인으로 복원)
     let itemBoxHtml = '';
     if (npc.item) {
         let items = [];
@@ -583,13 +582,13 @@ npcData.forEach((npc) => {
         const formattedItems = items
             .map(it => it.trim())
             .filter(it => it.length > 0)
-            .map(it => `<div style="margin-bottom:3px; color:#495057; line-height:1.4;">✔ ${it}</div>`)
+            .map(it => `<div style="margin-bottom:2px;">${it}</div>`)
             .join('');
 
         itemBoxHtml = `
-            <div style="margin-top:8px; padding:8px; background:#f8f9fa; border:1px solid #e9ecef; border-radius:4px; font-size:11px; text-align:left;">
-                <div style="font-weight:800; color:#4dabf7; margin-bottom:5px;">[필요 재료]</div>
-                ${formattedItems}
+            <div style="margin-top:4px;">
+                <span style="color:#007bff; font-weight:800;">[필요재료]</span> 
+                <div style="margin-top:2px; padding-left:2px;">${formattedItems}</div>
             </div>
         `;
     }
@@ -601,41 +600,39 @@ npcData.forEach((npc) => {
         routeListHtml = routes
             .map(r => r.trim())
             .filter(r => r.length > 0)
-            .map(r => `<div style="margin-top:2px; color:#2b8a3e; font-weight:700;">${r}</div>`)
+            .map(r => `<div style="margin-top:2px;">${r}</div>`)
             .join('');
     }
 
-    // [최종 가독성 개선 팝업 UI 레이아웃]
+    // [최종 첫 번째 사진 테마 복원 팝업 UI]
     const popupContent = `
-        <div style="text-align:center; min-width:250px; color:#000; padding: 3px; line-height: 1.5; font-family:-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;">
-            <div style="font-size:17px; font-weight:800; border-bottom:2px solid #222; padding-bottom: 6px; margin-bottom: 8px; color:#111;">
-                ${npc.name}${npc.lv ? `<span style="font-size:11px; color:#868e96; font-weight:normal;"> (Lv.${npc.lv})</span>` : ''}
+        <div style="text-align:center; min-width:240px; color:#000; padding: 0; line-height: 1.4;">
+            <div style="font-size:18px; font-weight:800; border-bottom:2px solid #000; padding: 5px 0; margin-bottom: 10px;">
+                ${npc.name}${npc.lv ? `<span style="font-size:12px; color:#666; font-weight:normal;"> (lv.${npc.lv})</span>` : ''}
             </div>
             
-            <div style="background:#212529; border-radius:4px; padding: 5px 0; margin-bottom: 10px; cursor:pointer; transition:background 0.2s;" 
-                 onclick="copyCoords(${npc.x}, ${npc.y}, ${npc.z})"
-                 onmouseover="this.style.background='#343a40'" onmouseout="this.style.background='#212529'">
-                <div style="color:#FFD700; font-size:14px; font-weight:700; letter-spacing:0.5px;">${npc.x}, ${npc.y}, ${npc.z}</div>
-                <div style="color:#ced4da; font-size:9px; font-weight:normal; margin-top:1px;">(클릭하여 인게임 좌표 복사)</div>
+            <div style="background:#333; border-radius:4px; padding: 6px 0; margin-bottom: 10px; cursor:pointer;" onclick="copyCoords(${npc.x}, ${npc.y}, ${npc.z})">
+                <div style="color:#FFD700; font-size:15px; font-weight:700;">${npc.x}, ${npc.y}, ${npc.z}</div>
+                <div style="color:#aaa; font-size:9px;">(클릭하여 인게임 좌표 복사)</div>
             </div>
             
-            <div style="text-align:left; font-size:12px;">
+            <div style="text-align:left; font-size:12px; color:#333;">
                 ${questListHtml ? `
-                    <div style="margin-bottom:8px;">
-                        <span style="color:#e03131; font-weight:800; font-size:11px; display:block; margin-bottom:2px;">[수행 퀘스트]</span>
-                        ${questListHtml}
+                    <div style="margin-bottom:4px;">
+                        <span style="color:#d00; font-weight:800;">[수행 퀘스트]</span>
+                        <div style="margin-top:2px; padding-left:2px; color:#000;">${questListHtml}</div>
                     </div>
                 ` : ''}
                 
-                ${routeListHtml ? `<div style="margin-top:6px;"><span style="color:#2b8a3e; font-weight:800; display:block; font-size:11px;">[동선]</span>${routeListHtml}</div>` : ''}
-                ${npc.reward ? `<div style="margin-top:6px;"><span style="color:#f59f00; font-weight:800;">[보상]</span> <span style="font-weight:700; color:#555;">${npc.reward}</span></div>` : ''}
-                
                 ${itemBoxHtml}
                 
-                ${npc.materials ? `<div style="margin-top:8px; padding:8px; background:#e8f4fd; border:1px solid #d0ebff; border-radius:4px; color:#1c7ed6; font-size:11px;"><span style="font-weight:800;">🔨 [제작 필수 재료]</span><br><div style="margin-top:4px; color:#0b7285; font-weight:700;">${npc.materials}</div></div>` : ''}
+                ${npc.materials ? `<div style="margin-top:8px; padding:8px; background:#f4faff; border:1px solid #cce5ff; border-radius:4px; color:#004085;"><span style="font-weight:800;">[제작재료]</span><br>${npc.materials}</div>` : ''}
                 
-                ${craftHtml}
-                ${npc.memo ? `<div style="margin-top:8px; border-top:1px dashed #dee2e6; padding-top:6px; color:#868e96; font-size:11px; line-height:1.4; word-break:keep-all;">※ ${npc.memo}</div>` : ''}
+                ${craftHtml} 
+                ${routeListHtml ? `<div style="margin-top:4px;"><span style="color:#28a745; font-weight:800;">[동선]</span><div style="margin-top:2px; padding-left:2px; color:#000;">${routeListHtml}</div></div>` : ''}
+                ${npc.reward ? `<div style="margin-top:4px;"><span style="color:#f39c12; font-weight:800;">[보상]</span> <span style="color:#000;">${npc.reward}</span></div>` : ''}
+                
+                ${npc.memo ? `<div style="margin-top:6px; border-top:1px dashed #ccc; padding-top:6px; color:#666; font-size:11px;">※ ${npc.memo}</div>` : ''}
                 ${recordsHtml}
                 ${videoHtml}
             </div>
