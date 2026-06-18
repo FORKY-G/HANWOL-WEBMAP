@@ -530,12 +530,23 @@ potItems.forEach((pot) => {
 });
 
 // [12] 의문의 상자 마커 생성
-mysteryBoxes.forEach((box) => {
+mysteryBoxes.forEach((box, index) => {
     const pos = mcToPx(box.x, box.z);
 
-    // [수정] 모든 상자에 동일한 기본 아이콘 적용
+    // 기본값은 무조건 기존 이미지(box.png)로 설정
+    let currentBoxIconUrl = 'images/box.png';
+
+    // "x: 7139, y: 157, z: -4734" 상자가 위치한 배열 인덱스를 기준으로 
+    // 해당 상자를 포함한 그 이후의 최신 상자들만 box1.png로 변경
+    const targetIndex = mysteryBoxes.findIndex(b => b.x === 7139 && b.y === 157 && b.z === -4734);
+    
+    if (targetIndex !== -1 && index >= targetIndex) {
+        currentBoxIconUrl = 'images/box1.png'; // 최신 상자용 이미지
+    }
+
+    // Leaflet 아이콘 객체 생성
     const boxIcon = L.icon({
-        iconUrl: 'images/box.png',
+        iconUrl: currentBoxIconUrl,
         iconSize: [36, 36],
         iconAnchor: [18, 18],
         popupAnchor: [0, -15]
