@@ -45,11 +45,6 @@ font-family: 'Pretendard', sans-serif;
 color: #eee7c5;
 }
 
-/* 유튜브 정보창은 인게임 내 동영상 플레이어 비율 확보를 위해 가로폭을 확장 */
-#youtube-window {
-    width: 400px;
-}
-
 /* 스크롤바 디자인 */ 
 #skill-window::-webkit-scrollbar, #blacksmith-window::-webkit-scrollbar, #dan-window::-webkit-scrollbar, #prob-window::-webkit-scrollbar, #main-quest-window::-webkit-scrollbar, #youtube-window::-webkit-scrollbar { width: 6px; }
 #skill-window::-webkit-scrollbar-thumb, #blacksmith-window::-webkit-scrollbar-thumb, #dan-window::-webkit-scrollbar-thumb, #prob-window::-webkit-scrollbar-thumb, #main-quest-window::-webkit-scrollbar-thumb, #youtube-window::-webkit-scrollbar-thumb { 
@@ -159,6 +154,12 @@ align-items: center;
     display: block; background: #222;
 }
 
+.youtube-window-content {
+    background: #1e1a17; border: 3px solid #6d5a4a; width: 90%; max-width: 760px; /* 기존 500px에서 영상을 위해 대폭 확장 */
+    box-shadow: 0 0 25px rgba(0,0,0,0.8); font-family: 'Pretendard', sans-serif; color: #eee7c5;
+    display: flex; flex-direction: column; max-height: 85vh;
+}
+    
 /* 인게임 유튜브 플레이어용 반응형 컨테이너 스타일 */
 .video-container {
     position: relative;
@@ -227,23 +228,27 @@ align-items: center;
     <div id="prob-list-content" style="padding: 12px;"></div>
 </div>
 
-<!-- 인게임 브라우저 지원용 내부 유튜브 플레이어 탑재 창 -->
-<div id="youtube-window">
-    <div><span> 성장 가이드 </span><span class="win-close" onclick="toggleYoutubeWindow()">✖</span></div>
-    <div id="youtube-list-content" style="padding: 12px;">
-        <div style="margin-bottom: 12px; border-bottom: 1px dashed #4a3d33; padding-bottom: 8px;">
-            <span style="color: #ff4b4b; font-weight: 800; font-size: 14px; display: block; margin-bottom: 4px;">▶ 한월서버 홍보 영상</span>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/0lHcR-SzKDI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <span style="font-size: 11px; color: #a89f84;">한월서버 트레일러</span>
+<div id="youtube-modal-window" onclick="closeYoutubeModalWindow()">
+    <div class="youtube-window-content" onclick="event.stopPropagation()">
+        <div class="guide-window-header">
+            <span>한월서버 성장 가이드 </span>
+            <span class="win-close" onclick="closeYoutubeModalWindow()">✖</span>
         </div>
-        <div style="margin-bottom: 12px; border-bottom: 1px dashed #4a3d33; padding-bottom: 8px;">
-            <span style="color: #ff4b4b; font-weight: 800; font-size: 14px; display: block; margin-bottom: 4px;">▶ 한월서버 인게임 영상</span>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/G4eTPgmkoI4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="guide-scroll-body">
+            <div style="margin-bottom: 20px; border-bottom: 2px dashed #4a3d33; padding-bottom: 15px;">
+                <span style="color: #ffd700; font-weight: 900; font-size: 16px; display: block; margin-bottom: 6px;">▶ 한월서버 공식 홍보 영상</span>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/0lHcR-SzKDI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <span style="font-size: 12px; color: #a89f84; font-weight: 700;">한월 공식 트레일러 </span>
             </div>
-            <span style="font-size: 11px; color: #a89f84;">한월서버 플레이 영상</span>
+            <div style="margin-bottom: 10px; padding-bottom: 5px;">
+                <span style="color: #ffd700; font-weight: 900; font-size: 16px; display: block; margin-bottom: 6px;">▶ 한월서버 실제 인게임 트레일러</span>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/G4eTPgmkoI4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <span style="font-size: 12px; color: #a89f84; font-weight: 700;">인게임 플레이 영상</span>
+            </div>
         </div>
     </div>
 </div>
@@ -252,7 +257,7 @@ align-items: center;
 
 
 <div id="controls-wrapper">
-    <div id="youtube-btn" onclick="toggleYoutubeWindow()" class="game-item-box" style="margin-right: 15px;" title="성장 가이드">
+   <div id="youtube-btn" onclick="openYoutubeModalWindow()" class="game-item-box" style="margin-right: 15px;" title="성장 가이드">
         <img src="images/youtube.png" style="width: 38px; height: 38px; object-fit: contain;">
     </div>
     <div id="main-quest-btn" onclick="toggleMainQuestWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 4px;">
@@ -543,27 +548,28 @@ window.closeImageViewerModal = function() {
     if (viewModal) viewModal.style.display = 'none';
 };
 
-window.toggleYoutubeWindow = function() {
-    const ytWin = document.getElementById('youtube-window');
-    if (!ytWin) return;
-
-    const windows = ['skill-window', 'blacksmith-window', 'dan-window', 'prob-window', 'main-quest-window'];
-    windows.forEach(id => {
-        const win = document.getElementById(id);
-        if (win) win.style.display = 'none';
-    });
-    
-    if (ytWin.style.display === 'block') {
-        ytWin.style.display = 'none';
-        const iframes = ytWin.querySelectorAll('iframe');
-        iframes.forEach(iframe => {
-            const currentSrc = iframe.src;
-            iframe.src = '';
-            iframe.src = currentSrc;
-        });
-    } else {
-        ytWin.style.display = 'block';
+// 📺 [업데이트] 유튜브 전용 모달창 열기 함수 (전체화면 오버레이)
+window.openYoutubeModalWindow = function() {
+    const ytModal = document.getElementById('youtube-modal-window');
+    if (ytModal) {
+        ytModal.style.display = 'flex';
     }
+};
+
+// 📺 [업데이트] 유튜브 전용 모달창 닫기 함수 (닫을 때 사운드 강제 컷오프 포함)
+window.closeYoutubeModalWindow = function() {
+    const ytModal = document.getElementById('youtube-modal-window');
+    if (!ytModal) return;
+    
+    ytModal.style.display = 'none';
+    
+    // 내부 모든 iframe의 src를 재할당하여 닫힘과 동시에 영상 재생을 완전히 중단시킴
+    const iframes = ytModal.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+        const currentSrc = iframe.src;
+        iframe.src = '';
+        iframe.src = currentSrc;
+    });
 };
 </script>
 </body>
