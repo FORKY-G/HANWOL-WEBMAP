@@ -45,6 +45,11 @@ font-family: 'Pretendard', sans-serif;
 color: #eee7c5;
 }
 
+/* 유튜브 정보창은 인게임 내 동영상 플레이어 비율 확보를 위해 가로폭을 확장 */
+#youtube-window {
+    width: 400px;
+}
+
 /* 스크롤바 디자인 */ 
 #skill-window::-webkit-scrollbar, #blacksmith-window::-webkit-scrollbar, #dan-window::-webkit-scrollbar, #prob-window::-webkit-scrollbar, #main-quest-window::-webkit-scrollbar, #youtube-window::-webkit-scrollbar { width: 6px; }
 #skill-window::-webkit-scrollbar-thumb, #blacksmith-window::-webkit-scrollbar-thumb, #dan-window::-webkit-scrollbar-thumb, #prob-window::-webkit-scrollbar-thumb, #main-quest-window::-webkit-scrollbar-thumb, #youtube-window::-webkit-scrollbar-thumb { 
@@ -153,6 +158,24 @@ align-items: center;
     max-height: none !important; border: 3px solid #c5a368; box-shadow: 0 0 25px rgba(0,0,0,0.8);
     display: block; background: #222;
 }
+
+/* 인게임 유튜브 플레이어용 반응형 컨테이너 스타일 */
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 비율 유지 */
+    height: 0;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    border: 2px solid #4a3d33;
+}
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
 </style>
 </head>
 
@@ -203,15 +226,23 @@ align-items: center;
     <div><span> 확률 정보</span><span class="win-close" onclick="toggleProbWindow()">✖</span></div>
     <div id="prob-list-content" style="padding: 12px;"></div>
 </div>
+
+<!-- 인게임 브라우저 지원용 내부 유튜브 플레이어 탑재 창 -->
 <div id="youtube-window">
     <div><span> 성장 가이드 </span><span class="win-close" onclick="toggleYoutubeWindow()">✖</span></div>
     <div id="youtube-list-content" style="padding: 12px;">
         <div style="margin-bottom: 12px; border-bottom: 1px dashed #4a3d33; padding-bottom: 8px;">
-            <a href="https://youtu.be/0lHcR-SzKDI?si=P5IBJ-t9raBy16Q_" target="_blank" style="color: #ff4b4b; font-weight: 800; text-decoration: none; font-size: 14px; display: block; margin-bottom: 4px;">▶ 한월서버 홍보 영상</a>
+            <span style="color: #ff4b4b; font-weight: 800; font-size: 14px; display: block; margin-bottom: 4px;">▶ 한월서버 홍보 영상</span>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/0lHcR-SzKDI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
             <span style="font-size: 11px; color: #a89f84;">한월서버 트레일러</span>
         </div>
         <div style="margin-bottom: 12px; border-bottom: 1px dashed #4a3d33; padding-bottom: 8px;">
-            <a href="https://youtu.be/G4eTPgmkoI4?si=nm0V4zeXjFZl7_Qq" target="_blank" style="color: #ff4b4b; font-weight: 800; text-decoration: none; font-size: 14px; display: block; margin-bottom: 4px;">▶ 한월서버 인게임 트레일러</a>
+            <span style="color: #ff4b4b; font-weight: 800; font-size: 14px; display: block; margin-bottom: 4px;">▶ 한월서버 인게임 영상</span>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/G4eTPgmkoI4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
             <span style="font-size: 11px; color: #a89f84;">한월서버 플레이 영상</span>
         </div>
     </div>
@@ -453,7 +484,6 @@ bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
 bindAccordion('herb-accordion-btn', 'herb-accordion-content');
 bindAccordion('hidden-npc-accordion-btn', 'hidden-npc-content');
 
-// ★ [기존 코드 보존] 단일 모달 이미지 닫기 기능 (바탕 검은색 클릭 시 닫힘)
 window.addEventListener('DOMContentLoaded', () => {
     const imgModal = document.getElementById('image-modal');
     if (imgModal) {
@@ -463,7 +493,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ⚡ [신규 연동] 1차 공략 목록 팝업창 제어 - 인자값 분기식 필터링 엔진
 window.openGuideListModal = function(type) {
     const listModal = document.getElementById('guide-list-modal');
     const title = document.getElementById('guide-modal-title');
@@ -490,7 +519,6 @@ window.closeGuideListModal = function() {
     if (listModal) listModal.style.display = 'none';
 };
 
-// ⚡ [신규 연동] 고화질 다중 이미지 뷰어 연동 스크립트
 window.openMultiImageModal = function(imgArray) {
     const viewModal = document.getElementById('image-viewer-modal');
     const container = document.getElementById('viewer-img-container');
@@ -515,21 +543,24 @@ window.closeImageViewerModal = function() {
     if (viewModal) viewModal.style.display = 'none';
 };
 
-// 📺 [추가] 유튜브 영상 공략 정보창 토글 함수
 window.toggleYoutubeWindow = function() {
     const ytWin = document.getElementById('youtube-window');
     if (!ytWin) return;
-    
-    // 다른 창이 켜져있다면 연쇄 닫기 처리하여 레이아웃 꼬임 방지
+
     const windows = ['skill-window', 'blacksmith-window', 'dan-window', 'prob-window', 'main-quest-window'];
     windows.forEach(id => {
         const win = document.getElementById(id);
         if (win) win.style.display = 'none';
     });
     
-    // 토글 제어
     if (ytWin.style.display === 'block') {
         ytWin.style.display = 'none';
+        const iframes = ytWin.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+            const currentSrc = iframe.src;
+            iframe.src = '';
+            iframe.src = currentSrc;
+        });
     } else {
         ytWin.style.display = 'block';
     }
