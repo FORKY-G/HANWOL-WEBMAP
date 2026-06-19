@@ -29,7 +29,7 @@ padding-right: 20px; z-index: 1500; border-bottom: 2px solid #5e4b3c; box-sizing
 }
 
 /* [모든 정보창 스타일 통일] */
-#skill-window, #blacksmith-window, #dan-window, #prob-window, #main-quest-window {
+#skill-window, #blacksmith-window, #dan-window, #prob-window, #main-quest-window, #youtube-window {
 display: none; 
 position: fixed; 
 top: 80px; 
@@ -46,18 +46,19 @@ color: #eee7c5;
 }
 
 /* 스크롤바 디자인 */ 
-#skill-window::-webkit-scrollbar, #blacksmith-window::-webkit-scrollbar, #dan-window::-webkit-scrollbar, #prob-window::-webkit-scrollbar, #main-quest-window::-webkit-scrollbar { width: 6px; }
-#skill-window::-webkit-scrollbar-thumb, #blacksmith-window::-webkit-scrollbar-thumb, #dan-window::-webkit-scrollbar-thumb, #prob-window::-webkit-scrollbar-thumb, #main-quest-window::-webkit-scrollbar-thumb { 
+#skill-window::-webkit-scrollbar, #blacksmith-window::-webkit-scrollbar, #dan-window::-webkit-scrollbar, #prob-window::-webkit-scrollbar, #main-quest-window::-webkit-scrollbar, #youtube-window::-webkit-scrollbar { width: 6px; }
+#skill-window::-webkit-scrollbar-thumb, #blacksmith-window::-webkit-scrollbar-thumb, #dan-window::-webkit-scrollbar-thumb, #prob-window::-webkit-scrollbar-thumb, #main-quest-window::-webkit-scrollbar-thumb, #youtube-window::-webkit-scrollbar-thumb { 
 background: #5e4b3c; border-radius: 10px; 
 }
-#skill-window::-webkit-scrollbar-track, #blacksmith-window::-webkit-scrollbar-track, #dan-window::-webkit-scrollbar-track, #prob-window::-webkit-scrollbar-track, #main-quest-window::-webkit-scrollbar-track { background: #1a1512; }
+#skill-window::-webkit-scrollbar-track, #blacksmith-window::-webkit-scrollbar-track, #dan-window::-webkit-scrollbar-track, #prob-window::-webkit-scrollbar-track, #main-quest-window::-webkit-scrollbar-track, #youtube-window::-webkit-scrollbar-track { background: #1a1512; }
 
 /* 제목 표시줄 스타일 통일 */
 #skill-window > div:first-child, 
 #blacksmith-window > div:first-child, 
 #dan-window > div:first-child, 
 #prob-window > div:first-child,
-#main-quest-window > div:first-child {
+#main-quest-window > div:first-child,
+#youtube-window > div:first-child {
 background: #2a241f !important; 
 border-bottom: 2px solid #4a3d33;
 color: #d4af37 !important; 
@@ -202,6 +203,19 @@ align-items: center;
     <div><span> 확률 정보</span><span class="win-close" onclick="toggleProbWindow()">✖</span></div>
     <div id="prob-list-content" style="padding: 12px;"></div>
 </div>
+<div id="youtube-window">
+    <div><span> 성장 가이드 </span><span class="win-close" onclick="toggleYoutubeWindow()">✖</span></div>
+    <div id="youtube-list-content" style="padding: 12px;">
+        <div style="margin-bottom: 12px; border-bottom: 1px dashed #4a3d33; padding-bottom: 8px;">
+            <a href="https://youtu.be/0lHcR-SzKDI?si=P5IBJ-t9raBy16Q_" target="_blank" style="color: #ff4b4b; font-weight: 800; text-decoration: none; font-size: 14px; display: block; margin-bottom: 4px;">▶ 한월서버 초반 가이드 영상</a>
+            <span style="font-size: 11px; color: #a89f84;">한월서버 트레일러</span>
+        </div>
+        <div style="margin-bottom: 12px; border-bottom: 1px dashed #4a3d33; padding-bottom: 8px;">
+            <a href="hhttps://youtu.be/G4eTPgmkoI4?si=nm0V4zeXjFZl7_Qq" target="_blank" style="color: #ff4b4b; font-weight: 800; text-decoration: none; font-size: 14px; display: block; margin-bottom: 4px;">▶ 영단 획득 및 히든 퀘스트 공략</a>
+            <span style="font-size: 11px; color: #a89f84;">한월서버 플레이 영상</span>
+        </div>
+    </div>
+</div>
 
 <div id="copy-toast"><img src="images/forky.png" style="width: 25px; height: 25px;"><span id="toast-text">복사 완료!</span></div>
 
@@ -225,11 +239,14 @@ align-items: center;
     <div id="dan-btn" onclick="toggleDanWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
         <img src="images/youngdan.png" class="top-bar-icon" title="영단 정보">
     </div>
-    <div id="blacksmith-btn" onclick="toggleBlacksmithWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 15px;">
+    <div id="blacksmith-btn" onclick="toggleBlacksmithWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
         <img src="images/blacksmith.png" class="top-bar-icon" title="대장장이">
     </div>
-    <div id="prob-btn" onclick="toggleProbWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 12px;">
+    <div id="prob-btn" onclick="toggleProbWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 15px;">
         <img src="images/prob.png" class="top-bar-icon" title="확률 공개표">
+    </div>
+    <div id="youtube-btn" onclick="toggleYoutubeWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 15px;">
+        <img src="images/youtube.png" class="top-bar-icon" title="성장가이드">
     </div>
 
     <a href="https://jeongsh214.github.io/herb_calculator/index.html" target="_blank" style="display: flex; align-items: center; gap: 6px; text-decoration: none; color: #000; margin-right: 15px;">
@@ -505,6 +522,26 @@ window.openMultiImageModal = function(imgArray) {
 window.closeImageViewerModal = function() {
     const viewModal = document.getElementById('image-viewer-modal');
     if (viewModal) viewModal.style.display = 'none';
+};
+
+// 📺 [추가] 유튜브 영상 공략 정보창 토글 함수
+window.toggleYoutubeWindow = function() {
+    const ytWin = document.getElementById('youtube-window');
+    if (!ytWin) return;
+    
+    // 다른 창이 켜져있다면 연쇄 닫기 처리하여 레이아웃 꼬임 방지
+    const windows = ['skill-window', 'blacksmith-window', 'dan-window', 'prob-window', 'main-quest-window'];
+    windows.forEach(id => {
+        const win = document.getElementById(id);
+        if (win) win.style.display = 'none';
+    });
+    
+    // 토글 제어
+    if (ytWin.style.display === 'block') {
+        ytWin.style.display = 'none';
+    } else {
+        ytWin.style.display = 'block';
+    }
 };
 </script>
 </body>
