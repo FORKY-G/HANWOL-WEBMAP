@@ -161,7 +161,7 @@ align-items: center;
 }
 
 .youtube-window-content {
-    background: #1e1a17; border: 3px solid #6d5a4a; width: 90%; max-width: 760px; /* 기존 500px에서 영상을 위해 대폭 확장 */
+    background: #1e1a17; border: 3px solid #6d5a4a; width: 90%; max-width: 760px; 
     box-shadow: 0 0 25px rgba(0,0,0,0.8); font-family: 'Pretendard', sans-serif; color: #eee7c5;
     display: flex; flex-direction: column; max-height: 85vh;
 }
@@ -184,9 +184,11 @@ align-items: center;
     height: 100%;
 }
 
-    .yt-link-title {
-    color: #ffd700; 
-    font-weight: 900; 
+/* 유튜브 모달 내 링크 텍스트 스타일을 일괄 '빨간색, 굵게, 굴림체'로 변경 */
+.yt-link-title {
+    color: #ff0000 !important;       /* 빨간색 */
+    font-weight: bold !important;    /* 굵게 */
+    font-family: 'Gulim', '굴림', sans-serif !important; /* 굴림체 */
     font-size: 16px; 
     display: inline-block; 
     margin-bottom: 6px; 
@@ -194,13 +196,31 @@ align-items: center;
     text-decoration: underline;
 }
 .yt-link-title:hover {
-    color: #fff;
-}
-
-.yt-link-official:hover {
     color: #ff5555 !important;       /* 마우스 올렸을 때 살짝 밝은 빨강 */
 }
-    
+
+/* [추가] 텍스트 형태의 성장 가이드 버튼 스타일 */
+.text-guide-btn {
+    background: #fff;
+    border: 2px solid #000;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 13px;
+    color: #000;
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+    height: 38px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition: transform 0.2s ease-in-out, border-color 0.2s;
+}
+.text-guide-btn:hover {
+    transform: scale(1.05);
+    border-color: #d4af37;
+    background: #fdfaf2;
+}
 </style>
 </head>
 
@@ -255,20 +275,18 @@ align-items: center;
 <div id="youtube-modal-window" onclick="closeYoutubeModalWindow()">
     <div class="youtube-window-content" onclick="event.stopPropagation()">
         <div class="guide-window-header">
-            <span>한월서버 성장 가이드 </span>
+            <span>한월서버 성장 가이드</span>
             <span class="win-close" onclick="closeYoutubeModalWindow()">✖</span>
         </div>
         <div class="guide-scroll-body">
             <div style="margin-bottom: 20px; border-bottom: 2px dashed #4a3d33; padding-bottom: 15px;">
-                <!-- 제목을 클릭하면 유튜브 주소로 이동하도록 하이퍼링크(a태그) 적용 -->
                 <a href="https://youtu.be/0lHcR-SzKDI" target="_blank" class="yt-link-title">▶ 한월서버 공식 홍보 영상</a>
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/0lHcR-SzKDI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
-                <span style="font-size: 12px; color: #a89f84; font-weight: 700;">한월 공식 트레일러 </span>
+                <span style="font-size: 12px; color: #a89f84; font-weight: 700;">한월 공식 트레일러</span>
             </div>
             <div style="margin-bottom: 10px; padding-bottom: 5px;">
-                <!-- 인게임 트레일러 제목도 동일하게 새창 열기 링크 적용 -->
                 <a href="https://youtu.be/G4eTPgmkoI4" target="_blank" class="yt-link-title">▶ 한월서버 실제 인게임 트레일러</a>
                 <div class="video-container">
                     <iframe src="https://www.youtube.com/embed/G4eTPgmkoI4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -283,10 +301,11 @@ align-items: center;
 
 
 <div id="controls-wrapper">
-   <!-- 유튜브 버튼 버그 전면 수정: z-index 추가 및 커서 재강조 -->
-   <div id="youtube-btn" onclick="openYoutubeModalWindow()" class="game-item-box" style="margin-right: 15px; position: relative; z-index: 10; cursor: pointer;" title="성장 가이드">
-        <img src="images/youtube.png" style="width: 38px; height: 38px; object-fit: contain; pointer-events: none;">
+    <!-- [변경] 기존 마인크래프트 아이템 박스 형태를 제거하고 약초계산기 버튼과 통일성 있는 글씨 버튼으로 교체했습니다 -->
+    <div id="youtube-btn" onclick="openYoutubeModalWindow()" class="text-guide-btn" style="margin-right: 15px;" title="성장 가이드">
+        [성장 가이드]
     </div>
+    
     <div id="main-quest-btn" onclick="toggleMainQuestWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 4px;">
         <img src="images/quest.png" class="top-bar-icon" title="배 낚시">
     </div>
@@ -492,18 +511,13 @@ function bindAccordion(btnId, contentId) {
     const content = document.getElementById(contentId);
     if (btn && content) {
         btn.addEventListener('click', function(e) {
-            e.stopPropagation(); // 이벤트 버블링 차단 (NPC 위치 체크박스 간섭 방지)
-            
+            e.stopPropagation(); 
             content.classList.toggle('active');
-            
-            // 토글 상태에 따라 display 속성 직접 제어 보완
             if (content.classList.contains('active')) {
                 content.style.display = 'block';
             } else {
                 content.style.display = 'none';
             }
-            
-            // 오른쪽 화살표(▲/▼) 변경 처리 예외 예방 구조
             const arrowSpan = this.querySelector('span:last-child');
             if (arrowSpan) {
                 arrowSpan.innerText = content.classList.contains('active') ? '▲' : '▼';
@@ -557,7 +571,7 @@ window.openMultiImageModal = function(imgArray) {
     
     if (!viewModal || !container) return;
     
-    container.innerHTML = ''; // 기존 이미지 청소
+    container.innerHTML = ''; 
     
     imgArray.forEach((src) => {
         const imgElement = document.createElement('img');
@@ -575,7 +589,7 @@ window.closeImageViewerModal = function() {
     if (viewModal) viewModal.style.display = 'none';
 };
 
-// 📺 [업데이트] 유튜브 전용 모달창 열기 함수 (전체화면 오버레이)
+// 📺 유튜브 전용 모달창 열기 함수
 window.openYoutubeModalWindow = function() {
     const ytModal = document.getElementById('youtube-modal-window');
     if (ytModal) {
@@ -583,14 +597,13 @@ window.openYoutubeModalWindow = function() {
     }
 };
 
-// 📺 [업데이트] 유튜브 전용 모달창 닫기 함수 (닫을 때 사운드 강제 컷오프 포함)
+// 📺 유튜브 전용 모달창 닫기 함수
 window.closeYoutubeModalWindow = function() {
     const ytModal = document.getElementById('youtube-modal-window');
     if (!ytModal) return;
     
     ytModal.style.display = 'none';
     
-    // 내부 모든 iframe의 src를 재할당하여 닫힘과 동시에 영상 재생을 완전히 중단시킴
     const iframes = ytModal.querySelectorAll('iframe');
     iframes.forEach(iframe => {
         const currentSrc = iframe.src;
