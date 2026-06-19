@@ -154,7 +154,7 @@ align-items: center;
     display: block; background: #222;
 }
 
-/* 성장 가이드 모달 구조 고정 세팅 (영상 요소 제거 완료) */
+/* 성장 가이드 모달 구조 고정 세팅 */
 #youtube-modal-window {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(0, 0, 0, 0.8); z-index: 25000; justify-content: center; align-items: center;
@@ -166,24 +166,64 @@ align-items: center;
     display: flex; flex-direction: column; max-height: 85vh;
 }
 
+/* 📜 목록 박스 마우스오버 및 피드백 효과 강화 버전 */
 .guide-list-item-box {
     margin-bottom: 18px;
-    padding: 10px;
-    background: rgba(42, 36, 31, 0.5);
-    border: 1px solid #4a3d33;
+    padding: 12px;
+    background: rgba(42, 36, 31, 0.6);
+    border: 2px solid #4a3d33;
     border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
+/* 마우스 올렸을 때 확실한 시각 피드백 추가 */
+.guide-list-item-box:hover {
+    background: rgba(94, 75, 60, 0.5); /* 배경 살짝 더 밝게 */
+    border-color: #ffd700;             /* 테두리 한월 황금색 마감 */
+    transform: translateY(-2px);       /* 위로 살짝 떠오르는 효과 */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7); /* 그림자 깊이감 추가 */
+}
+/* 클릭하는 순간 꾹 눌리는 효과 추가 */
+.guide-list-item-box:active {
+    transform: translateY(1px);        /* 아래로 살짝 내려감 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
 .guide-list-main-title {
     font-size: 15px; 
     font-weight: 900; 
     color: #ffd700; 
     margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s;
 }
+.guide-list-item-box:hover .guide-list-main-title {
+    color: #ffffff; /* 마우스오버 시 제목 텍스트 화이트로 발광 */
+}
+
+/* 링크 느낌을 주기 위해 화살표 아이콘 우측 추가 */
+.guide-list-main-title::after {
+    content: '🔗';
+    font-size: 12px;
+    opacity: 0.5;
+    transition: transform 0.2s, opacity 0.2s;
+}
+.guide-list-item-box:hover .guide-list-main-title::after {
+    opacity: 1;
+    transform: scale(1.2); /* 링크 아이콘 크기 살짝 확대 */
+}
+
 .guide-list-sub-tip {
     font-size: 13px; 
     color: #eee7c5; 
     padding-left: 12px; 
     font-weight: 700;
+    transition: color 0.2s;
+}
+.guide-list-item-box:hover .guide-list-sub-tip {
+    color: #ffd700; /* 마우스오버 시 서브 팁 폰트 컬러 강조 */
 }
 
 .text-guide-btn {
@@ -279,33 +319,32 @@ align-items: center;
     <div id="prob-list-content" style="padding: 12px;"></div>
 </div>
 
-<!-- 📜 영상 제거 후 깔끔한 목록 팝업으로 재탄생한 가이드 모달창 -->
+<!-- 📜 마우스오버 애니메이션 및 액티브 효과가 적용된 팝업 본문 -->
 <div id="youtube-modal-window" onclick="closeYoutubeModalWindow()">
     <div class="youtube-window-content" onclick="event.stopPropagation()">
         <div class="guide-window-header">
-            <span>한월서버 성장 가이드 목록</span>
+            <span>한월서버 성장 가이드 </span>
             <span class="win-close" onclick="closeYoutubeModalWindow()">✖</span>
         </div>
         <div class="guide-scroll-body" style="padding: 20px;">
             
-            <!-- 각 항목별 onclick 이벤트에 window.open(링크) 연동 -->
             <div class="guide-list-item-box" onclick="window.open('https://youtu.be/0lHcR-SzKDI', '_blank')">
-                <div class="guide-list-main-title">▶성장가이드 [Lv.1~80]</div>
+                <div class="guide-list-main-title">▶ 성장가이드 [Lv.1~80]</div>
                 <div class="guide-list-sub-tip">tip. 재련하는 법</div>
             </div>
 
             <div class="guide-list-item-box" onclick="window.open('https://youtu.be/0lHcR-SzKDI', '_blank')">
-                <div class="guide-list-main-title">▶성장가이드 [Lv.81~110]</div>
+                <div class="guide-list-main-title">▶ 성장가이드 [Lv.81~110]</div>
                 <div class="guide-list-sub-tip">tip. 진열대</div>
             </div>
 
             <div class="guide-list-item-box" onclick="window.open('https://youtu.be/0lHcR-SzKDI', '_blank')">
-                <div class="guide-list-main-title">▶성장가이드 [Lv111~150]</div>
+                <div class="guide-list-main-title">▶ 성장가이드 [Lv111~150]</div>
                 <div class="guide-list-sub-tip">tip. 스텟 세팅방법</div>
             </div>
 
             <div class="guide-list-item-box" style="margin-bottom: 5px;" onclick="window.open('https://youtu.be/0lHcR-SzKDI', '_blank')">
-                <div class="guide-list-main-title">▶성장가이드 [Lv150 이후]</div>
+                <div class="guide-list-main-title">▶ 성장가이드 [Lv150 이후]</div>
                 <div class="guide-list-sub-tip">tip. 재화, 보석 버는 법</div>
             </div>
 
@@ -348,10 +387,9 @@ align-items: center;
         <div id="controls" class="active"> 
             <div class="control-header"><h3 class="control-title">한월서버</h3></div>
             
-            <!-- 사이드바 성장 가이드 전용 아코디언 메뉴 버튼 명칭 수정 -->
             <div class="control-group" style="margin-bottom: 15px;">
                 <div class="accordion-header sidebar-guide-header" id="sidebar-guide-btn">
-                    <span>💡 [성장 가이드] 목록 보기</span> <span>▼</span>
+                    <span>💡 [성장 가이드] </span> <span>▼</span>
                 </div>
                 <div class="accordion-content sidebar-guide-content" id="sidebar-guide-content" style="padding: 10px;">
                     <button onclick="openYoutubeModalWindow()" class="text-guide-btn" style="width: 100%; justify-content: center; height: 42px; font-size: 14px;">
