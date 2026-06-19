@@ -154,52 +154,40 @@ align-items: center;
     display: block; background: #222;
 }
 
-/* 유튜브 모달 구조 고정 세팅 */
+/* 성장 가이드 모달 구조 고정 세팅 (영상 요소 제거 완료) */
 #youtube-modal-window {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(0, 0, 0, 0.8); z-index: 25000; justify-content: center; align-items: center;
 }
 
 .youtube-window-content {
-    background: #1e1a17; border: 3px solid #6d5a4a; width: 90%; max-width: 760px; 
+    background: #1e1a17; border: 3px solid #6d5a4a; width: 90%; max-width: 420px; 
     box-shadow: 0 0 25px rgba(0,0,0,0.8); font-family: 'Pretendard', sans-serif; color: #eee7c5;
     display: flex; flex-direction: column; max-height: 85vh;
 }
-    
-/* 인게임 유튜브 플레이어용 반응형 컨테이너 스타일 */
-.video-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* 16:9 비율 유지 */
-    height: 0;
-    margin-top: 6px;
-    margin-bottom: 12px;
-    border: 2px solid #4a3d33;
-}
-.video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
 
-/* 유튜브 모달 내 링크 텍스트 스타일 */
-.yt-link-title {
-    color: #ffd700; 
-    font-weight: 900; 
-    font-size: 16px; 
-    display: inline-block; 
-    margin-bottom: 6px; 
-    cursor: pointer; 
-    text-decoration: underline;
+.guide-list-item-box {
+    margin-bottom: 18px;
+    padding: 10px;
+    background: rgba(42, 36, 31, 0.5);
+    border: 1px solid #4a3d33;
+    border-radius: 4px;
 }
-.yt-link-title:hover {
-    color: #fff;
+.guide-list-main-title {
+    font-size: 15px; 
+    font-weight: 900; 
+    color: #ffd700; 
+    margin-bottom: 6px;
+}
+.guide-list-sub-tip {
+    font-size: 13px; 
+    color: #eee7c5; 
+    padding-left: 12px; 
+    font-weight: 700;
 }
 
 .text-guide-btn {
-    background: radial-gradient(circle, #5e4b3c 0%, #1a1512 100%); /* 기존 인게임 아이템 박스와 동일한 그라데이션 */
+    background: radial-gradient(circle, #5e4b3c 0%, #1a1512 100%); /* 인게임 아이템 박스 동기화 그라데이션 */
     border: 2px solid #000;
     padding: 7px 16px;
     cursor: pointer;
@@ -212,17 +200,17 @@ align-items: center;
     align-items: center;
     box-sizing: border-box;
     white-space: nowrap;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); /* 텍스트 가독성용 그림자 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); 
     transition: transform 0.1s, border-color 0.1s, box-shadow 0.1s;
 }
 .text-guide-btn:hover {
     transform: scale(1.05);
-    border-color: #b8860b !important; /* 마우스 올렸을 때 다른 아이템 박스들처럼 금빛으로 동기화 */
+    border-color: #b8860b !important; 
     box-shadow: inset 0 0 5px rgba(0,0,0,0.6), 0 0 12px rgba(184, 134, 11, 0.5);
     color: #fff;
 }
 
-/* [추가] 사이드바 내 성장 가이드 전용 아코디언 스타일 세팅 */
+/* 사이드바 내 성장 가이드 전용 아코디언 스타일 세팅 */
 .sidebar-guide-header {
     background: linear-gradient(135deg, #1e1a17 0%, #2a241f 100%);
     color: #ffd700;
@@ -291,27 +279,36 @@ align-items: center;
     <div id="prob-list-content" style="padding: 12px;"></div>
 </div>
 
+<!-- 📜 영상 제거 후 깔끔한 목록 팝업으로 재탄생한 가이드 모달창 -->
 <div id="youtube-modal-window" onclick="closeYoutubeModalWindow()">
     <div class="youtube-window-content" onclick="event.stopPropagation()">
         <div class="guide-window-header">
-            <span>한월서버 성장 가이드</span>
+            <span>한월서버 성장 가이드 목록</span>
             <span class="win-close" onclick="closeYoutubeModalWindow()">✖</span>
         </div>
-        <div class="guide-scroll-body">
-            <div style="margin-bottom: 20px; border-bottom: 2px dashed #4a3d33; padding-bottom: 15px;">
-                <a href="https://youtu.be/0lHcR-SzKDI" target="_blank" class="yt-link-title">▶ 한월서버 공식 홍보 영상</a>
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/0lHcR-SzKDI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <span style="font-size: 12px; color: #a89f84; font-weight: 700;">한월 공식 트레일러</span>
+        <div class="guide-scroll-body" style="padding: 20px;">
+            
+            <!-- 각 항목별 onclick 이벤트에 window.open(링크) 연동 -->
+            <div class="guide-list-item-box" onclick="window.open('https://youtu.be/0lHcR-SzKDI', '_blank')">
+                <div class="guide-list-main-title">▶성장가이드 [Lv.1~80]</div>
+                <div class="guide-list-sub-tip">tip. 재련하는 법</div>
             </div>
-            <div style="margin-bottom: 10px; padding-bottom: 5px;">
-                <a href="https://youtu.be/G4eTPgmkoI4" target="_blank" class="yt-link-title">▶ 한월서버 실제 인게임 트레일러</a>
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/G4eTPgmkoI4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <span style="font-size: 12px; color: #a89f84; font-weight: 700;">인게임 플레이 영상</span>
+
+            <div class="guide-list-item-box" onclick="window.open('https://youtu.be/0lHcR-SzKDI', '_blank')">
+                <div class="guide-list-main-title">▶성장가이드 [Lv.81~110]</div>
+                <div class="guide-list-sub-tip">tip. 진열대</div>
             </div>
+
+            <div class="guide-list-item-box" onclick="window.open('https://youtu.be/0lHcR-SzKDI', '_blank')">
+                <div class="guide-list-main-title">▶성장가이드 [Lv111~150]</div>
+                <div class="guide-list-sub-tip">tip. 스텟 세팅방법</div>
+            </div>
+
+            <div class="guide-list-item-box" style="margin-bottom: 5px;" onclick="window.open('https://youtu.be/0lHcR-SzKDI', '_blank')">
+                <div class="guide-list-main-title">▶성장가이드 [Lv150 이후]</div>
+                <div class="guide-list-sub-tip">tip. 재화, 보석 버는 법</div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -320,8 +317,6 @@ align-items: center;
 
 
 <div id="controls-wrapper">
-    <!-- [변경] 가시성을 저해하던 상단바의 [성장 가이드] 텍스트 버튼을 제거했습니다 -->
-    
     <div id="main-quest-btn" onclick="toggleMainQuestWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 4px;">
         <img src="images/quest.png" class="top-bar-icon" title="배 낚시">
     </div>
@@ -353,14 +348,14 @@ align-items: center;
         <div id="controls" class="active"> 
             <div class="control-header"><h3 class="control-title">한월서버</h3></div>
             
-            <!-- [추가] 메뉴 열려 있는 왼쪽 공간(사이드바 최상단)에 크게 배치한 접고 열 수 있는 성장 가이드 아코디언 메뉴 -->
+            <!-- 사이드바 성장 가이드 전용 아코디언 메뉴 버튼 명칭 수정 -->
             <div class="control-group" style="margin-bottom: 15px;">
                 <div class="accordion-header sidebar-guide-header" id="sidebar-guide-btn">
-                    <span>💡 [성장 가이드] </span> <span>▼</span>
+                    <span>💡 [성장 가이드] 목록 보기</span> <span>▼</span>
                 </div>
                 <div class="accordion-content sidebar-guide-content" id="sidebar-guide-content" style="padding: 10px;">
                     <button onclick="openYoutubeModalWindow()" class="text-guide-btn" style="width: 100%; justify-content: center; height: 42px; font-size: 14px;">
-                        가이드 영상 목록
+                        📜 가이드 목록 열기
                     </button>
                 </div>
             </div>
@@ -558,7 +553,6 @@ function bindAccordion(btnId, contentId) {
 bindAccordion('hunt-accordion-btn', 'hunt-accordion-content');
 bindAccordion('herb-accordion-btn', 'herb-accordion-content');
 bindAccordion('hidden-npc-accordion-btn', 'hidden-npc-content');
-// [추가] 새로 만든 사이드바 성장 가이드 전용 아코디언 바인딩 추가
 bindAccordion('sidebar-guide-btn', 'sidebar-guide-content');
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -620,7 +614,7 @@ window.closeImageViewerModal = function() {
     if (viewModal) viewModal.style.display = 'none';
 };
 
-// 📺 유튜브 전용 모달창 열기 함수
+// 📜 가이드 팝업 열기 함수
 window.openYoutubeModalWindow = function() {
     const ytModal = document.getElementById('youtube-modal-window');
     if (ytModal) {
@@ -628,19 +622,12 @@ window.openYoutubeModalWindow = function() {
     }
 };
 
-// 📺 유튜브 전용 모달창 닫기 함수
+// 📜 가이드 팝업 닫기 함수
 window.closeYoutubeModalWindow = function() {
     const ytModal = document.getElementById('youtube-modal-window');
-    if (!ytModal) return;
-    
-    ytModal.style.display = 'none';
-    
-    const iframes = ytModal.querySelectorAll('iframe');
-    iframes.forEach(iframe => {
-        const currentSrc = iframe.src;
-        iframe.src = '';
-        iframe.src = currentSrc;
-    });
+    if (ytModal) {
+        ytModal.style.display = 'none';
+    }
 };
 </script>
 </body>
