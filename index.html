@@ -154,6 +154,12 @@ align-items: center;
     display: block; background: #222;
 }
 
+/* 유튜브 모달 구조 고정 세팅 */
+#youtube-modal-window {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0, 0, 0, 0.8); z-index: 25000; justify-content: center; align-items: center;
+}
+
 .youtube-window-content {
     background: #1e1a17; border: 3px solid #6d5a4a; width: 90%; max-width: 760px; /* 기존 500px에서 영상을 위해 대폭 확장 */
     box-shadow: 0 0 25px rgba(0,0,0,0.8); font-family: 'Pretendard', sans-serif; color: #eee7c5;
@@ -257,8 +263,9 @@ align-items: center;
 
 
 <div id="controls-wrapper">
-   <div id="youtube-btn" onclick="openYoutubeModalWindow()" class="game-item-box" style="margin-right: 15px;" title="성장 가이드">
-        <img src="images/youtube.png" style="width: 38px; height: 38px; object-fit: contain;">
+   <!-- 유튜브 버튼 버그 전면 수정: z-index 추가 및 커서 재강조 -->
+   <div id="youtube-btn" onclick="openYoutubeModalWindow()" class="game-item-box" style="margin-right: 15px; position: relative; z-index: 10; cursor: pointer;" title="성장 가이드">
+        <img src="images/youtube.png" style="width: 38px; height: 38px; object-fit: contain; pointer-events: none;">
     </div>
     <div id="main-quest-btn" onclick="toggleMainQuestWindow()" style="display: flex; align-items: center; cursor: pointer; margin-right: 4px;">
         <img src="images/quest.png" class="top-bar-icon" title="배 낚시">
