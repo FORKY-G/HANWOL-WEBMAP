@@ -894,7 +894,7 @@ huntingGrounds.forEach((area) => {
     }
 
     // [특정 3대 사냥터 분기 처리 조립 완료]
-    const targetGrounds = ["혈교도", "화검문", "흑운회"];
+    const targetGrounds = ["혈교도", "화검문", "흑운회", "녹림", "해적섬"];
     let coordinateLayoutHtml = '';
 
     if (targetGrounds.includes(area.name)) {
