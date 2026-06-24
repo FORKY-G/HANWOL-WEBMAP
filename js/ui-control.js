@@ -937,7 +937,7 @@ huntingGrounds.forEach((area) => {
 
 // 1. 7300x7300 크기와 파일명으로 오버레이 설정 (변수명 중복 회피)
 const globalHuntingBounds = [[0, 0], [7300, 7300]];
-const huntingNamesOverlay = L.imageOverlay('mapname.png', globalHuntingBounds, {
+const huntingNamesOverlay = L.imageOverlay('images/mapname.png', globalHuntingBounds, {
     opacity: 1.0,  // 글자가 선명하게 보이도록 불투명도 100%
     zIndex: 500    // 지도 타일 위, 일반 마커 아래에 오도록 설정
 });
