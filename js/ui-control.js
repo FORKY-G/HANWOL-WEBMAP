@@ -936,10 +936,9 @@ huntingGrounds.forEach((area) => {
 });
 
 // 사냥터 이름
-const huntingImageBounds = [[0, 0], [7300, 7300]];
 const huntingNamesOverlay = L.imageOverlay('mapname.png', huntingImageBounds, {
-    opacity: 1.0,  // 글자가 선명하게 보이도록 불투명도 100%
-    zIndex: 500    // 지도 타일 위, 일반 마커 아래에 오도록 레이어 순서 지정
+    opacity: 1.0,
+    zIndex: 500
 });
 
 // 2. HTML 내 사냥터이름 체크박스 Element 가져오기
