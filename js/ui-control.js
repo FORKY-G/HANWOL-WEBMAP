@@ -935,27 +935,28 @@ huntingGrounds.forEach((area) => {
     });
 });
 
-// 사냥터 이름
-const huntingNamesOverlay = L.imageOverlay('mapname.png', huntingImageBounds, {
-    opacity: 1.0,
-    zIndex: 500
+// 1. 7300x7300 크기와 파일명으로 오버레이 설정 (변수명 중복 회피)
+const globalHuntingBounds = [[0, 0], [7300, 7300]];
+const huntingNamesOverlay = L.imageOverlay('mapname.png', globalHuntingBounds, {
+    opacity: 1.0,  // 글자가 선명하게 보이도록 불투명도 100%
+    zIndex: 500    // 지도 타일 위, 일반 마커 아래에 오도록 설정
 });
 
-// 2. HTML 내 사냥터이름 체크박스 Element 가져오기
+// 2. HTML의 체크박스 엘리먼트 가져오기
 const checkHuntingNames = document.getElementById('check-hunting-names');
 
-// 3. 페이지가 처음 로드되었을 때 체크박스가 켜져 있다면 맵에 이미지 바로 표시
+// 3. 페이지가 처음 로드되었을 때 체크박스가 켜져 있다면(checked) 지도에 즉시 표시
 if (checkHuntingNames && checkHuntingNames.checked) {
     huntingNamesOverlay.addTo(map);
 }
 
-// 4. 체크박스를 켜고 끌 때 이미지가 토글되도록 이벤트 리스너 등록
+// 4. 체크박스를 끄고 켤 때 오버레이 이미지가 토글되는 이벤트 리스너 등록
 if (checkHuntingNames) {
     checkHuntingNames.addEventListener('change', function() {
         if (this.checked) {
-            huntingNamesOverlay.addTo(map);      // 체크하면 이미지 띄우기
+            huntingNamesOverlay.addTo(map);       // 체크 시 이미지 표시
         } else {
-            map.removeLayer(huntingNamesOverlay); // 체크 해제하면 이미지 지우기
+            map.removeLayer(huntingNamesOverlay); // 체크 해제 시 이미지 숨김
         }
     });
 }
