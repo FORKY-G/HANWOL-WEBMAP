@@ -935,6 +935,32 @@ huntingGrounds.forEach((area) => {
     });
 });
 
+// 사냥터 이름
+const huntingImageBounds = [[0, 0], [7300, 7300]];
+const huntingNamesOverlay = L.imageOverlay('mapname.png', huntingImageBounds, {
+    opacity: 1.0,  // 글자가 선명하게 보이도록 불투명도 100%
+    zIndex: 500    // 지도 타일 위, 일반 마커 아래에 오도록 레이어 순서 지정
+});
+
+// 2. HTML 내 사냥터이름 체크박스 Element 가져오기
+const checkHuntingNames = document.getElementById('check-hunting-names');
+
+// 3. 페이지가 처음 로드되었을 때 체크박스가 켜져 있다면 맵에 이미지 바로 표시
+if (checkHuntingNames && checkHuntingNames.checked) {
+    huntingNamesOverlay.addTo(map);
+}
+
+// 4. 체크박스를 켜고 끌 때 이미지가 토글되도록 이벤트 리스너 등록
+if (checkHuntingNames) {
+    checkHuntingNames.addEventListener('change', function() {
+        if (this.checked) {
+            huntingNamesOverlay.addTo(map);      // 체크하면 이미지 띄우기
+        } else {
+            map.removeLayer(huntingNamesOverlay); // 체크 해제하면 이미지 지우기
+        }
+    });
+}
+
 // [15] 약초 시스템
 const herbListContainer = document.getElementById('herb-accordion-content');
 layers.herbs = {};
