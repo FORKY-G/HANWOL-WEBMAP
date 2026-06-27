@@ -30,20 +30,13 @@ const webImgSize = 7300;
 const originalImgWidth = 7300;  
 const originalImgHeight = 7300; 
 
-const imageBounds = [[0, 0], [webImgSize, webImgSize]];
+// [수정] 단순 배열을 Leaflet LatLngBounds 객체로 변환하여 pad() 함수가 작동 가능하도록 수정
+const imageBounds = L.latLngBounds([[0, 0], [webImgSize, webImgSize]]);
 L.imageOverlay('images/map.jpg', imageBounds).addTo(map);
 
-function fitMapToScreen() {
-    map.setMinZoom(-10);
-    map.fitBounds(imageBounds);
-    map.setMinZoom(map.getZoom());
-}
 
-fitMapToScreen();
-map.setMaxBounds(imageBounds.pad(0.2)); 
-window.addEventListener('resize', () => fitMapToScreen());
-
-// --- [좌표 동기화 (영점 조절) 로직] ---
+// --- [좌표 동기화 (영점 조절) 로직 위치 격상] ---
+// 순서 오류(Initialization Error)를 막기 위해 함수와 변수 선언을 초기화보다 위로 올렸습니다.
 
 // X축(동서) 배율, Z축(남북) 배율
 const scaleX = 0.445733; 
@@ -66,3 +59,19 @@ function mcToPx(mcX, mcZ) {
     // Leaflet Simple CRS의 Y축 반전 대응 [Y, X]
     return [(webImgSize - webPxY), webPxX];
 }
+
+
+// --- [지도 화면 맞춤 및 바운드 제한 실행] ---
+
+function fitMapToScreen() {
+    map.setMinZoom(-10);
+    map.fitBounds(imageBounds);
+    map.setMinZoom(map.getZoom());
+}
+
+fitMapToScreen();
+
+// [수정] 정상적으로 .pad(0.2)를 적용하여 아래쪽 팝업이 잘리지 않도록 공간 확보
+map.setMaxBounds(imageBounds.pad(0.2));
+
+window.addEventListener('resize', () => fitMapToScreen());
