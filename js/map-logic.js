@@ -40,7 +40,7 @@ function fitMapToScreen() {
 }
 
 fitMapToScreen();
-map.setMaxBounds(imageBounds);
+map.setMaxBounds(imageBounds.pad(0.2)); 
 window.addEventListener('resize', () => fitMapToScreen());
 
 // --- [좌표 동기화 (영점 조절) 로직] ---
