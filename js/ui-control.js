@@ -1102,49 +1102,80 @@ searchResults.appendChild(div);
 } else searchResults.style.display = 'none';
 });
 
+// [15] 모든 마커 통합 검색 시스템 (렉 방지를 위해 화면 이동 없이 팝업창만 즉시 생성)
 function moveToLocation(target) {
+    // 좌표 변환만 수행
     const targetPos = mcToPx(target.x, target.z);
-    if (target.type !== 'herb') {
-        map.flyTo(targetPos, -0.5, { animate: true, duration: 0.5 });
+
+    // [최적화] map.flyTo 구문을 완전히 제거하여 화면 강제 이동으로 인한 렉(Lag)을 원천 차단합니다.
+    // 클릭하는 순간, 대기 시간(setTimeout) 없이 즉시 팝업이 뜨도록 로직을 전환합니다.
+    let foundMarker = null;
+
+    // 1. 지도에 등록된 모든 레이어 그룹 통합 배열
+    const allGroups = [
+        layers.spawn, 
+        layers.animals, 
+        layers.stones, 
+        layers.npc, 
+        layers.red, 
+        layers.hae, 
+        layers.qilin, 
+        layers.pot, 
+        layers.box, 
+        layers.huntingMarkers,
+        layers.mines["녹"], 
+        layers.mines["청"], 
+        layers.mines["황"], 
+        layers.mines["적"]
+    ];
+
+    // 2. 모든 레이어 그룹을 순회하며 검색 좌표와 완벽하게 일치하는 원본 마커 찾기
+    allGroups.forEach(group => {
+        if (group && typeof group.eachLayer === 'function') {
+            group.eachLayer(layer => {
+                if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
+                    foundMarker = layer;
+                }
+            });
+        }
+    });
+
+    // 3. 만약 레이어 그룹에서 찾지 못했다면 개별 레이어인 전용 사냥터 검색 레이어 재검증
+    if (!foundMarker && layers.hunting && target.areaName) {
+        const huntGroup = layers.huntingMarkers;
+        if (huntGroup && typeof huntGroup.eachLayer === 'function') {
+            huntGroup.eachLayer(layer => {
+                if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
+                    foundMarker = layer;
+                }
+            });
+        }
     }
 
-    setTimeout(() => {
-        let foundMarker = null;
-        const allGroups = [layers.spawn, layers.animals, layers.stones, layers.npc, layers.red, layers.hae, layers.qilin, layers.pot, layers.box, layers.huntingMarkers];
-        
-        allGroups.forEach(group => {
-            if (group && group.eachLayer) {
-                group.eachLayer(layer => {
-                    if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
-                        foundMarker = layer;
-                    }
-                });
-            }
-        });
-
-        if (foundMarker) {
-            // [보안/개선] 검색한 사냥터 마커가 현재 지도 레이어에 꺼져있더라도 강제로 보이게 함
-            if (!map.hasLayer(foundMarker)) {
-                foundMarker.addTo(map);
-            }
-            foundMarker.openPopup();
-        } else {
-            // 사냥터 외의 기타 일반 위치용 기본 팝업
-            L.popup()
-            .setLatLng(targetPos)
-            .setContent(`
-                   <div style="text-align:center; min-width:180px; color:#000;">
-                       <div style="font-size:16px; font-weight:800; border-bottom:2px solid #000; padding-bottom:5px; margin-bottom:8px;">[${target.category}] ${target.name}</div>
-                       <div style="background:#333; color:#FFD700; border-radius:4px; padding:8px; cursor:pointer; font-size:14px; font-weight:700;" 
-                            onclick="copyCoords(${target.x}, ${target.y}, ${target.z})">
-                           ${target.x}, ${target.y}, ${target.z}
-                           <div style="color:#aaa; font-size:10px; font-weight:normal; margin-top:2px;">(클릭하여 좌표 복사)</div>
-                       </div>
-                   </div>
-                `)
-            .openOn(map);
+    // 4. 원본 커스텀 마커를 찾은 경우 처리
+    if (foundMarker) {
+        // 사이드바에서 체크박스가 꺼져 있어 지도에 없는 상태라면 강제로 보이게 추가
+        if (!map.hasLayer(foundMarker)) {
+            foundMarker.addTo(map);
         }
-    }, 600);
+        // 원래 지정되어 있던 이쁜 커스텀 팝업창을 화면 이동 없이 즉시 오픈합니다.
+        foundMarker.openPopup();
+    } else {
+        // 5. 백업용 기본 팝업 작동 (데이터 불일치 등으로 마커를 못 찾았을 때만 가동)
+        L.popup()
+        .setLatLng(targetPos)
+        .setContent(`
+               <div style="text-align:center; min-width:180px; color:#000;">
+                   <div style="font-size:16px; font-weight:800; border-bottom:2px solid #000; padding-bottom:5px; margin-bottom:8px;">[${target.category || target.type}] ${target.name}</div>
+                   <div style="background:#333; color:#FFD700; border-radius:4px; padding:8px; cursor:pointer; font-size:14px; font-weight:700;" 
+                        onclick="copyCoords(${target.x}, ${target.y}, ${target.z})">
+                       ${target.x}, ${target.y}, ${target.z}
+                       <div style="color:#aaa; font-size:10px; font-weight:normal; margin-top:2px;">(클릭하여 좌표 복사)</div>
+                   </div>
+               </div>
+            `)
+        .openOn(map);
+    }
 }
 
 // [메인 퀘스트 정보창 제어]
