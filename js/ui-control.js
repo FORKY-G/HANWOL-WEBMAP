@@ -857,6 +857,7 @@ layers.hunting[area.name] = overlay;
 
 const targetPos = mcToPx(area.x, area.z);
 const hMarker = L.marker(targetPos, { icon: transparentIcon, zIndexOffset: -500 });
+layers.huntingMarkers.addLayer(hMarker);
 
 const label = document.createElement('label');
 label.className = 'control-item';
@@ -1102,43 +1103,48 @@ searchResults.appendChild(div);
 });
 
 function moveToLocation(target) {
-const targetPos = mcToPx(target.x, target.z);
-if (target.type !== 'herb') {
-map.flyTo(targetPos, -0.5, { animate: true, duration: 0.5 });
-}
+    const targetPos = mcToPx(target.x, target.z);
+    if (target.type !== 'herb') {
+        map.flyTo(targetPos, -0.5, { animate: true, duration: 0.5 });
+    }
 
-setTimeout(() => {
-let foundMarker = null;
-const allGroups = [layers.spawn, layers.animals, layers.stones, layers.npc, layers.red, layers.hae, layers.qilin, layers.pot, layers.box, layers.huntingMarkers];
-allGroups.forEach(group => {
-if (group.eachLayer) {
-group.eachLayer(layer => {
-if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
-foundMarker = layer;
-}
-});
-}
-});
+    setTimeout(() => {
+        let foundMarker = null;
+        const allGroups = [layers.spawn, layers.animals, layers.stones, layers.npc, layers.red, layers.hae, layers.qilin, layers.pot, layers.box, layers.huntingMarkers];
+        
+        allGroups.forEach(group => {
+            if (group && group.eachLayer) {
+                group.eachLayer(layer => {
+                    if (layer instanceof L.Marker && layer.getLatLng().equals(targetPos)) {
+                        foundMarker = layer;
+                    }
+                });
+            }
+        });
 
-if (foundMarker) {
-if (!map.hasLayer(foundMarker)) foundMarker.addTo(map);
-foundMarker.openPopup();
-} else {
-L.popup()
-.setLatLng(targetPos)
-.setContent(`
-                  <div style="text-align:center; min-width:180px; color:#000;">
-                      <div style="font-size:16px; font-weight:800; border-bottom:2px solid #000; padding-bottom:5px; margin-bottom:8px;">[${target.category}] ${target.name}</div>
-                      <div style="background:#333; color:#FFD700; border-radius:4px; padding:8px; cursor:pointer; font-size:14px; font-weight:700;" 
-                           onclick="copyCoords(${target.x}, ${target.y}, ${target.z})">
-                          ${target.x}, ${target.y}, ${target.z}
-                          <div style="color:#aaa; font-size:10px; font-weight:normal; margin-top:2px;">(클릭하여 좌표 복사)</div>
-                      </div>
-                  </div>
-               `)
-.openOn(map);
-}
-}, 600);
+        if (foundMarker) {
+            // [보안/개선] 검색한 사냥터 마커가 현재 지도 레이어에 꺼져있더라도 강제로 보이게 함
+            if (!map.hasLayer(foundMarker)) {
+                foundMarker.addTo(map);
+            }
+            foundMarker.openPopup();
+        } else {
+            // 사냥터 외의 기타 일반 위치용 기본 팝업
+            L.popup()
+            .setLatLng(targetPos)
+            .setContent(`
+                   <div style="text-align:center; min-width:180px; color:#000;">
+                       <div style="font-size:16px; font-weight:800; border-bottom:2px solid #000; padding-bottom:5px; margin-bottom:8px;">[${target.category}] ${target.name}</div>
+                       <div style="background:#333; color:#FFD700; border-radius:4px; padding:8px; cursor:pointer; font-size:14px; font-weight:700;" 
+                            onclick="copyCoords(${target.x}, ${target.y}, ${target.z})">
+                           ${target.x}, ${target.y}, ${target.z}
+                           <div style="color:#aaa; font-size:10px; font-weight:normal; margin-top:2px;">(클릭하여 좌표 복사)</div>
+                       </div>
+                   </div>
+                `)
+            .openOn(map);
+        }
+    }, 600);
 }
 
 // [메인 퀘스트 정보창 제어]
